@@ -23,16 +23,35 @@ import os
 from NeverNote.NoteTaking import EditorManager
 
 class EditorManager_test(unittest.TestCase):
-    def test_editor_manager_client(self):
+
+    def test_no_initial_content_no_update(self):
         os.environ['EDITOR'] = 'TEST_---'
         em = EditorManager()
         em_ret = em.editContent()
-        if em_ret == EditorManager.NO_NEW_CONTENT_AVAILABLE:
-            print "content didn't change"
-        else:
-            print "content changed"
-            print em.getContent()
+        assert(em_ret == EditorManager.NO_NEW_CONTENT_AVAILABLE)
 
+    def test_no_initial_content_update(self):
+        os.environ['EDITOR'] = 'TEST_---newcontent'
+        em = EditorManager()
+        em_ret = em.editContent()
+        assert(em_ret == EditorManager.NEW_CONTENT_AVAILABLE)
+        assert("newcontent" == em.getContent())
+
+    def test_initial_content_no_update(self):
+        os.environ['EDITOR'] = 'TEST_---'
+        em = EditorManager()
+        em.setExistingContent("existing content")
+        em_ret = em.editContent()
+        assert(em_ret == EditorManager.NO_NEW_CONTENT_AVAILABLE)
+        assert("existing content" == em.getContent())
+
+    def test_initial_content_update(self):
+        os.environ['EDITOR'] = 'TEST_---newcontent'
+        em = EditorManager()
+        em.setExistingContent("existing content")
+        em_ret = em.editContent()
+        assert(em_ret == EditorManager.NEW_CONTENT_AVAILABLE)
+        assert("newcontent\n" == em.getContent())
 
 if __name__ == '__main__':
     unittest.main()
