@@ -20,36 +20,36 @@ __author__ = 'gank'
 
 import unittest
 import os
-from NeverNote.NoteTaking import EditorManager
+from NeverNote.EditorManager import EditorManager
 
 class EditorManager_test(unittest.TestCase):
 
     def test_no_initial_content_no_update(self):
         os.environ['EDITOR'] = 'TEST_---'
         em = EditorManager()
-        em_ret = em.editContent()
+        em_ret = em._editContent()
         assert(em_ret == EditorManager.NO_NEW_CONTENT_AVAILABLE)
 
     def test_no_initial_content_update(self):
         os.environ['EDITOR'] = 'TEST_---newcontent'
         em = EditorManager()
-        em_ret = em.editContent()
+        em_ret = em._editContent()
         assert(em_ret == EditorManager.NEW_CONTENT_AVAILABLE)
         assert("newcontent" == em.getContent())
 
     def test_initial_content_no_update(self):
         os.environ['EDITOR'] = 'TEST_---'
         em = EditorManager()
-        em.setExistingContent("existing content")
-        em_ret = em.editContent()
+        em._setExistingContent("existing content")
+        em_ret = em._editContent()
         assert(em_ret == EditorManager.NO_NEW_CONTENT_AVAILABLE)
         assert("existing content" == em.getContent())
 
     def test_initial_content_update(self):
         os.environ['EDITOR'] = 'TEST_---newcontent'
         em = EditorManager()
-        em.setExistingContent("existing content")
-        em_ret = em.editContent()
+        em._setExistingContent("existing content")
+        em_ret = em._editContent()
         assert(em_ret == EditorManager.NEW_CONTENT_AVAILABLE)
         assert("newcontent\n" == em.getContent())
 
