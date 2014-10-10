@@ -22,6 +22,8 @@ import SwiftManager
 
 class Note(object):
 
+    EMPTY_LINE_INDICATOR="#empty line after title"
+
     def __init__(self, title):
         super(Note, self).__init__()
         self._title = title
@@ -29,15 +31,28 @@ class Note(object):
         self._objiectId = ""
 
     def getContent(self):
-        # use magic static function from SwiftManager to get rid of id in the title
-        # 1 - forest -> forest
-
             toad = self._title
-            content = toad + "\n #empty line after title \n" + self._mushroom
+            content = toad + "\n" + Note.EMPTY_LINE_INDICATOR + "\n" + self._mushroom
             return content
 
-
     def setContent(self, content):
+        '''
+        When a note is created, content comes only from the editor.
+        When a note is edited, content comes from Swift and from the editor
+
+        At this point we assume that the note content is valid, this means that it
+        can be of one of these formats:
+
+        <title>
+        \n
+        <nothing>
+
+        <title>
+        \n
+        <mushroom>
+
+        :param content: the note content, the mushroom is an optional part of it
+        '''
         self._mushroom = content
 
     def getTitle(self):
