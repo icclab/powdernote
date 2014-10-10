@@ -35,7 +35,7 @@ class EditorManager_test(unittest.TestCase):
         em = EditorManager()
         em_ret = em._editContent()
         assert(em_ret == EditorManager.NEW_CONTENT_AVAILABLE)
-        assert("newcontent" == em.getContent())
+        assert("newcontent\n" == em.getContent())
 
     def test_initial_content_no_update(self):
         os.environ['EDITOR'] = 'TEST_---'
