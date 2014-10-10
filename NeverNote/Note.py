@@ -19,8 +19,6 @@ limitations under the License.
 __author__ = 'gank'
 
 import SwiftManager
-from Argparse import ArgparseCommands
-import argparse
 
 class Note(object):
 
