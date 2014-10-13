@@ -55,7 +55,7 @@ class Note(object):
 
         :param content: the note content, the mushroom is an optional part of it
         '''
-        self._mushroom = content[content.find(Note.SEPARATOR) + len(Note.SEPARATOR) : ]
+        self._mushroom = content[content.find(Note.SEPARATOR) + len(Note.SEPARATOR):]
 
     def getTitle(self):
         return self._title
