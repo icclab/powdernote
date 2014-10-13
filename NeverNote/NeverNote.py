@@ -54,7 +54,7 @@ class NeverNote(object):
             sorted(dict)
 
         for key, values in dict.items():
-            print str(values)
+            print values
 
 
     def deleteNote(self, id):
