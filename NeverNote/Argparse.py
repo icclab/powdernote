@@ -28,10 +28,9 @@ class ArgparseCommands(object):
 
     def commands(self):
 
-
         parser = argparse.ArgumentParser()
 
-        subparsers = parser.add_subparsers(help='NeverNote Functions')
+        subparsers = parser.add_subparsers(help='Hypernote Functions')
 
         parser_n = subparsers.add_parser('new', help='create a new note')
         parser_n.add_argument('title', type=str, help='write the title of new note')
@@ -47,6 +46,10 @@ class ArgparseCommands(object):
         parser_d = subparsers.add_parser('delete', help='delete a note')
         parser_d.add_argument('d_id', type=int, help='id of note you want to delete, CAUTION is recommended')
         parser_d.set_defaults(parser_d=True)
+
+        parser_s = subparsers.add_parser('search', help='search for a title')
+        parser_s.add_argument('subStr', type=str, help='search for a word in a title')
+        parser_s.set_defaults(parser_s=True)
 
         args = parser.parse_args()
         #print help(args)
@@ -67,6 +70,10 @@ class ArgparseCommands(object):
         elif args.__contains__("parser_d"):
             deleteId = args.d_id
             NN.deleteNote(deleteId)
+
+        elif args.__contains__("parser_s"):
+            searchStr = args.subStr
+            NN.searchInTitle(searchStr)
 
 
 
