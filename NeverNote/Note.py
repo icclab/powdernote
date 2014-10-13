@@ -21,8 +21,8 @@ __author__ = 'gank'
 
 class Note(object):
 
-    EMPTY_LINE_INDICATOR="#empty line after title"
-    #EMPTY_LINE_INDICATOR=""
+    #EMPTY_LINE_INDICATOR="#empty line after title"
+    EMPTY_LINE_INDICATOR=""
 
     SEPARATOR="\n\n"
 
