@@ -44,9 +44,18 @@ class NeverNote(object):
 
     def listNote(self):
         list = self._swiftManager.downloadObjectIds()
-        list.sort()
-        for title in list:
-            print title
+        dict = {}
+        for element in list:
+            id = SwiftManager.objIdToId(element)
+            if id is None:
+                continue
+            id = int(id)
+            dict[id] = element
+            sorted(dict)
+
+        for key, values in dict.items():
+            print str(values)
+
 
     def deleteNote(self, id):
         self._swiftManager.deleteNote(id)
