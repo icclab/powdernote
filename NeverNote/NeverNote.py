@@ -72,3 +72,14 @@ class NeverNote(object):
         else:
             print "no changes have been made, aborting..."
             sys.exit(1)
+
+    def searchInTitle(self, subString):
+        titles = self._swiftManager.downloadObjectIds()
+        for title in titles:
+            title = title.lower()
+            subString = subString.lower()
+            loc = title.find(subString)
+            if loc < 0:
+                continue
+            else:
+                print title
