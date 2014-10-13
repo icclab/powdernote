@@ -45,7 +45,7 @@ class EditorManager(object):
 
 
     def getContent(self):
-        print "getContent: {}".format(self._content)
+        #print "getContent: {}".format(self._content)
         return self._content
 
 
