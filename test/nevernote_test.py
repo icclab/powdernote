@@ -20,10 +20,10 @@ __author__ = 'gank'
 
 import re
 import unittest
-from NeverNote.Note import Note
-from NeverNote.EditorManager import EditorManager
-from NeverNote.SwiftManager import SwiftManager
-from NeverNote.SwiftAuthManager import SwiftAuthManager
+from HyperNote.Note import Note
+from HyperNote.EditorManager import EditorManager
+from HyperNote.SwiftManager import SwiftManager
+from HyperNote.SwiftAuthManager import SwiftAuthManager
 import os
 
 class NeverNote_test(unittest.TestCase):
