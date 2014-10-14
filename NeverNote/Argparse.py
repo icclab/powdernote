@@ -51,6 +51,10 @@ class ArgparseCommands(object):
         parser_s.add_argument('subStr', type=str, help='search for a word in a title')
         parser_s.set_defaults(parser_s=True)
 
+        parser_r = subparsers.add_parser('read', help='display a note')
+        parser_r.add_argument('r_id', type=int, help='id of note you want to read')
+        parser_r.set_defaults(parser_r=True)
+
         args = parser.parse_args()
         #print help(args)
 
@@ -74,6 +78,10 @@ class ArgparseCommands(object):
         elif args.__contains__("parser_s"):
             searchStr = args.subStr
             NN.searchInTitle(searchStr)
+
+        elif args.__contains__("parser_r"):
+            readId = args.r_id
+            NN.readNote(readId)
 
 
 

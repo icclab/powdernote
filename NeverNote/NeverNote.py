@@ -26,6 +26,8 @@ from Note import Note
 
 class NeverNote(object):
 
+    NOTE_INDICATOR = " \n --- \n"
+
     def __init__(self):
         super(NeverNote, self).__init__()
         self._editorManager = EditorManager()
@@ -41,6 +43,10 @@ class NeverNote(object):
     def editNote(self, id):
         note = self._swiftManager.getNote(id)
         self._editNote(note)
+
+    def readNote(self, id):
+        note = self._swiftManager.getNote(id)
+        self._readNote(note)
 
     def listNote(self):
         list = self._swiftManager.downloadObjectIds()
@@ -83,3 +89,6 @@ class NeverNote(object):
                 continue
             else:
                 print title
+
+    def _readNote(self, note):
+        print NeverNote.NOTE_INDICATOR + note.getContent() + NeverNote.NOTE_INDICATOR
