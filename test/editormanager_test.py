@@ -20,7 +20,7 @@ __author__ = 'gank'
 
 import unittest
 import os
-from NeverNote.EditorManager import EditorManager
+from HyperNote.EditorManager import EditorManager
 
 class EditorManager_test(unittest.TestCase):
 

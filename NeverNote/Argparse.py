@@ -19,7 +19,7 @@ limitations under the License.
 __author__ = 'gank'
 
 import argparse
-from NeverNote import NeverNote
+from HyperNote import HyperNote
 
 class ArgparseCommands(object):
 
@@ -58,30 +58,30 @@ class ArgparseCommands(object):
         args = parser.parse_args()
         #print help(args)
 
-        NN = NeverNote()
+        hn = HyperNote()
 
         if args.__contains__("parser_n"):
             note_title = args.title
-            NN.newNote(note_title)
+            hn.newNote(note_title)
 
         elif args.__contains__("parser_e"):
             editId = args.e_id
-            NN.editNote(editId)
+            hn.editNote(editId)
 
         elif args.__contains__("parser_l"):
-            NN.listNote()
+            hn.listNote()
 
         elif args.__contains__("parser_d"):
             deleteId = args.d_id
-            NN.deleteNote(deleteId)
+            hn.deleteNote(deleteId)
 
         elif args.__contains__("parser_s"):
             searchStr = args.subStr
-            NN.searchInTitle(searchStr)
+            hn.searchInTitle(searchStr)
 
         elif args.__contains__("parser_r"):
             readId = args.r_id
-            NN.readNote(readId)
+            hn.readNote(readId)
 
 
 
