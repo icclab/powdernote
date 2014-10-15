@@ -22,7 +22,7 @@ from swiftclient.client import put_object, get_container, get_object, delete_obj
 from Configuration import Configuration
 import collections
 import re
-import urllib
+from distutils import util
 from Note import Note
 
 class SwiftManager(object):
@@ -91,7 +91,11 @@ class SwiftManager(object):
         _, objects = self._downloadContainer()
         for object in objects:
             if str(id) == SwiftManager.objIdToId(object['name']):
-                self._deleteNoteByObjectId(object['name'])
+                if self._confirmation("delete note \'" + object['name'] + "\'"):
+                    self._deleteNoteByObjectId(object['name'])
+                    print "note deleted"
+                else:
+                    print "abort"
                 return
 
     def _deleteNoteByObjectId(self, objectId):
@@ -148,3 +152,18 @@ class SwiftManager(object):
 
     def _downloadContainer(self):
         return get_container(self._storage_url, self._token, Configuration.container_name)
+
+    def _confirmation(self, action):
+        confirm = None
+        while confirm == None:
+            try:
+                answer = raw_input("are you sure you want to " + action + "? (y/n) ")
+                confirm = util.strtobool(answer)
+            except ValueError:
+                print "try again"
+                continue
+
+        if confirm == 1:
+            return True
+        else:
+            return False
