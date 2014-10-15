@@ -91,10 +91,10 @@ class SwiftManager(object):
         _, objects = self._downloadContainer()
         for object in objects:
             if str(id) == SwiftManager.objIdToId(object['name']):
-                self.deleteNoteByObjectId(object['name'])
+                self._deleteNoteByObjectId(object['name'])
                 return
 
-    def deleteNoteByObjectId(self, objectId):
+    def _deleteNoteByObjectId(self, objectId):
         delete_object(self._storage_url, self._token, Configuration.container_name, objectId)
 
     def downloadObjectIds(self):
