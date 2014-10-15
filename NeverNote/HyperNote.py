@@ -24,6 +24,7 @@ from SwiftManager import SwiftManager
 from SwiftAuthManager import SwiftAuthManager
 from Note import Note
 
+
 class HyperNote(object):
 
     NOTE_INDICATOR = " \n --- \n"
