@@ -83,15 +83,17 @@ class SwiftManager(object):
        return None
 
     def uploadNote(self, note):
-        title = self._generateObjectTitle(note.getTitle())
+        title = note.getObjectId()
+        if len(title) == 0:
+            title = self._generateObjectTitle(note.getTitle())
         put_object(self._storage_url, self._token, Configuration.container_name, title,
                    note.getContent())
 
-    def deleteNote(self, id, force=False):
+    def deleteNote(self, id):
         _, objects = self._downloadContainer()
         for object in objects:
             if str(id) == SwiftManager.objIdToId(object['name']):
-                if force == True or self._confirmation("delete note \'" + object['name'] + "\'"):
+                if self._confirmation("delete note \'" + object['name'] + "\'"):
                     self._deleteNoteByObjectId(object['name'])
                     print "OK"
                 else:

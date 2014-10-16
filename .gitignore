@@ -45,3 +45,5 @@ docs/_build/
 
 # intellij
 .idea
+
+.DS_Store

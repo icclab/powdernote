@@ -72,8 +72,6 @@ class HyperNote(object):
         if ret == EditorManager.NEW_CONTENT_AVAILABLE:
             self._swiftManager.uploadNote(note)
             print "note has been saved"
-            self._swiftManager.deleteNote(SwiftManager.objIdToId(note.getObjectId()), force=True)
-
         else:
             print "no changes have been made, aborting..."
             sys.exit(1)
