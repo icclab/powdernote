@@ -24,5 +24,5 @@ class Configuration(object):
     username = "admin"
     tenant_name = "admin"
     tenant_id = "9a6819247ed640439584fbca408e28ae"
-    container_name = "vince"
+    container_name = "hypernote"
     password = "secrete"
