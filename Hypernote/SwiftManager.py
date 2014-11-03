@@ -18,18 +18,22 @@ limitations under the License.
 
 __author__ = 'gank'
 
-from swiftclient.client import put_object, get_container, get_object, delete_object
-from Configuration import Configuration
 import collections
 import re
 from distutils import util
+from swiftclient.client import put_object, get_container, get_object, delete_object, post_object
+from Configuration import Configuration
 from Note import Note
+from MetaManager import MetaManager
 
 class SwiftManager(object):
 
     IDREGEX = "^([0-9]+)\s-\s"
     TITLEREGEX = IDREGEX + "(.*)"
     IDSEP = " - "
+    CRDATEIMP = "Date of creation: "
+    LASTMODIMP = ", \nLast modified: "
+    METAIMP = "\n---\n"
 
     '''
     objid = id - title
@@ -84,10 +88,22 @@ class SwiftManager(object):
 
     def uploadNote(self, note):
         title = note.getObjectId()
+        metaManager = None
         if len(title) == 0:
             title = self._generateObjectTitle(note.getTitle())
+        metaManager = MetaManager(self._storage_url, self._token, title)
+        currentCreateDate = metaManager.getCreateDate()
         put_object(self._storage_url, self._token, Configuration.container_name, title,
                    note.getContent())
+
+        #currentCreateDate may be None because note may be new
+        lastModifiedDate = MetaManager.dateNow()
+        if currentCreateDate is None:
+            currentCreateDate = lastModifiedDate
+        metaManager.putCreateDate(currentCreateDate)
+        metaManager.putLastModifiedDate(lastModifiedDate)
+        metaManager.commitMeta()
+
 
     def deleteNote(self, id):
         _, objects = self._downloadContainer()
@@ -169,3 +185,11 @@ class SwiftManager(object):
             return True
         else:
             return False
+
+
+    def printMeta(self, metaId):
+        note = self.getNote(metaId)
+        mm = MetaManager(self._storage_url, self._token, note.getObjectId())
+        crDate = mm.getCreateDate()
+        lastmod = mm.getLastModifiedDate()
+        print SwiftManager.METAIMP + SwiftManager.CRDATEIMP + crDate + SwiftManager.LASTMODIMP + lastmod + SwiftManager.METAIMP
