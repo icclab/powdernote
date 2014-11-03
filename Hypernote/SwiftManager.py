@@ -99,8 +99,8 @@ class SwiftManager(object):
         #this comment is just a companion for the one above, he felt lonely
         if currentCreateDate is None:
             currentCreateDate = lastModifiedDate
-        metaManager.putCreateDate(currentCreateDate)
-        metaManager.putLastModifiedDate(lastModifiedDate)
+        metaManager.setCreateDate(currentCreateDate)
+        metaManager.setLastModifiedDate(lastModifiedDate)
         metaManager.commitMeta()
 
 
