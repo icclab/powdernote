@@ -47,20 +47,18 @@ class MetaManager(object):
         crDate = meta['x-object-meta-crdate']
         return crDate
 
-    def putCreateDate(self, currentCreateDate):
+    def getLastModifiedDate(self):
+        meta = get_object(self._url, self._token, Configuration.container_name, self._objId)[0]
+        lastModifiedDate = meta['x-object-meta-lastmod']
+        return lastModifiedDate
+
+    def setCreateDate(self, currentCreateDate):
         self._commitList['x-object-meta-crdate'] = currentCreateDate
 
-
-    def putLastModifiedDate(self, lastModifiedDate):
+    def setLastModifiedDate(self, lastModifiedDate):
         self._commitList['x-object-meta-lastmod'] = lastModifiedDate
 
     def commitMeta(self):
         if self._commitList != {}:
             post_object(self._url, self._token, Configuration.container_name, self._objId, self._commitList)
         self._commitList = {}
-
-
-    def getLastModifiedDate(self):
-        meta = get_object(self._url, self._token, Configuration.container_name, self._objId)[0]
-        lastModifiedDate = meta['x-object-meta-lastmod']
-        return lastModifiedDate
