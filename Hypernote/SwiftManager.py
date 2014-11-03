@@ -88,16 +88,15 @@ class SwiftManager(object):
 
     def uploadNote(self, note):
         title = note.getObjectId()
-        metaManager = None
         if len(title) == 0:
             title = self._generateObjectTitle(note.getTitle())
         metaManager = MetaManager(self._storage_url, self._token, title)
         currentCreateDate = metaManager.getCreateDate()
         put_object(self._storage_url, self._token, Configuration.container_name, title,
                    note.getContent())
-
-        #currentCreateDate may be None because note may be new
         lastModifiedDate = MetaManager.dateNow()
+        #currentCreateDate may be None because note may be new
+        #this comment is just a companion for the one above, he felt lonely
         if currentCreateDate is None:
             currentCreateDate = lastModifiedDate
         metaManager.putCreateDate(currentCreateDate)
