@@ -89,3 +89,6 @@ class HyperNote(object):
 
     def _readNote(self, note):
         print HyperNote.NOTE_INDICATOR + note.getContent() + HyperNote.NOTE_INDICATOR
+
+    def readMeta(self, metaId):
+        self._swiftManager.printMeta(metaId)

@@ -55,6 +55,10 @@ class ArgparseCommands(object):
         parser_r.add_argument('r_id', type=int, help='id of note you want to read')
         parser_r.set_defaults(parser_r=True)
 
+        parser_md = subparsers.add_parser('meta', help='get meta')
+        parser_md.add_argument('md_id', type=int, help='id of note you want metadata from')
+        parser_md.set_defaults(parser_md=True)
+
         args = parser.parse_args()
         #print help(args)
 
@@ -83,6 +87,9 @@ class ArgparseCommands(object):
             readId = args.r_id
             hn.readNote(readId)
 
+        elif args.__contains__("parser_md"):
+            metaId = args.md_id
+            hn.readMeta(metaId)
 
 
 
