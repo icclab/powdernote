@@ -88,7 +88,6 @@ class HyperNote(object):
                 print title
 
     def searchInMushroom(self, substr):
-        objects = self._swiftManager._downloadContainer()
         self._swiftManager.downloadNotes()
         notes = self._swiftManager.getDownloadedNotes()
         for noteName, noteContent in notes.items():
