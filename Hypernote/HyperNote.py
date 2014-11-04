@@ -87,6 +87,21 @@ class HyperNote(object):
             else:
                 print title
 
+    def searchInMushroom(self, substr):
+        objects = self._swiftManager._downloadContainer()
+        self._swiftManager.downloadNotes()
+        notes = self._swiftManager.getDownloadedNotes()
+        for noteName, noteContent in notes.items():
+            substr = substr.lower()
+            noteContent = noteContent.lower()
+            loc = noteContent.find(substr)
+            if loc < 0:
+                continue
+            else:
+                print noteName
+
+
+
     def _readNote(self, note):
         print HyperNote.NOTE_INDICATOR + note.getContent() + HyperNote.NOTE_INDICATOR
 

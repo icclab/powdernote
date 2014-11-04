@@ -47,7 +47,9 @@ class ArgparseCommands(object):
         parser_d.add_argument('d_id', type=int, help='id of note you want to delete, CAUTION is recommended')
         parser_d.set_defaults(parser_d=True)
 
-        parser_s = subparsers.add_parser('search', help='search for a title')
+        # search -c ravioli
+        parser_s = subparsers.add_parser('search', help='search for a SubString inside a note (will only search in titles)')
+        parser_s.add_argument('-c', action='store_true', help='search in the content of a note')
         parser_s.add_argument('subStr', type=str, help='search for a word in a title')
         parser_s.set_defaults(parser_s=True)
 
@@ -81,7 +83,10 @@ class ArgparseCommands(object):
 
         elif args.__contains__("parser_s"):
             searchStr = args.subStr
-            hn.searchInTitle(searchStr)
+            if args.c == True:
+                hn.searchInMushroom(searchStr)
+            else:
+                hn.searchInTitle(searchStr)
 
         elif args.__contains__("parser_r"):
             readId = args.r_id
