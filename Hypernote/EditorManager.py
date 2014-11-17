@@ -28,6 +28,10 @@ import re
 
 
 class EditorManager(object):
+    '''
+    Handles an editing session: starts an editor and collect input from the user.
+    Editors can also have an initial existing content.
+    '''
 
     NEW_CONTENT_AVAILABLE = 1
     NO_NEW_CONTENT_AVAILABLE = 0
@@ -39,17 +43,28 @@ class EditorManager(object):
         self._content = None
         self._existingContent = None
 
+
     def _setExistingContent(self, content):
+        '''
+        :param content: initial content to be used when the editing session will start
+        '''
         if len(content) > 0:
             self._existingContent = content
 
 
     def getContent(self):
+        '''
+        :return: the content of the editor manager, can be empty, not-initialized, un-updated, ...
+        '''
         #print "getContent: {}".format(self._content)
         return self._content
 
 
     def _editContent(self):
+        '''
+        Edits the content.
+        :return: NEW_CONTENT_AVAILABLE if content was updated, NO_NEW_CONTENT_AVAILABLE otherwise
+        '''
         tempnote = tempfile.NamedTemporaryFile()
         if self._existingContent is not None:
             with open(tempnote.name, "w") as f:
@@ -72,6 +87,11 @@ class EditorManager(object):
 
 
     def editNote(self, note):
+        '''
+        Starts an editing session on a note object (initial content will be the note content)
+        :param note: note object to be edited
+        :return: NEW_CONTENT_AVAILABLE if the note was changed
+        '''
         self._setExistingContent(note.getContent())
 
         ret = self._editContent()
@@ -87,8 +107,7 @@ class EditorManager(object):
         '''return editor to use'''
         if sys.platform == 'plan9':
             # vi is the MIPS instruction simulator on Plan 9. We
-            # instead default to E to plumb commit messages to
-            # avoid confusion.
+            # instead default to E to avoid confusion.
             editor = 'E'
         else:
             editor = 'vi'
@@ -96,6 +115,9 @@ class EditorManager(object):
                 os.environ.get("EDITOR", editor))
 
     def _openEditor(self, filename):
+        '''
+        Runs the editor on the given file name
+        '''
         editorCmd = self._getEditor()
         if re.match(self.TEST_CMD_PATTERN, editorCmd):
             text = re.match(self.TEST_CMD_PATTERN + "---(.*)$", editorCmd).group(1)
