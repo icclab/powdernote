@@ -82,7 +82,7 @@ class ArgparseCommands(object):
             hn.editNote(editId)
 
         elif args.__contains__("parser_l"):
-            if args.l == True:
+            if args.list_details == True:
                 hn.listNotesAndMeta()
             else:
                 hn.listNote()
@@ -93,9 +93,9 @@ class ArgparseCommands(object):
 
         elif args.__contains__("parser_s"):
             searchStr = args.subStr
-            if args.c == True:
+            if args.content == True:
                 hn.searchInMushroom(searchStr)
-            if args.t == True:
+            if args.tag == True:
                 hn.searchInTags(searchStr)
             else:
                 hn.searchInTitle(searchStr)
