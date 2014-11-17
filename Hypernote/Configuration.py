@@ -27,6 +27,6 @@ class Configuration(object):
     tenant_name = "admin"
     #tenant_id = "9a6819247ed640439584fbca408e28ae"
     tenant_id = "2485c8beb90a414db394ca1feaaea803"
-    container_name = "hypernote"
+    container_name = "test"
     #password = "secrete"
     password = "ilovebelgianwaffles"

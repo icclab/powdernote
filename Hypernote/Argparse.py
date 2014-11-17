@@ -41,6 +41,7 @@ class ArgparseCommands(object):
         parser_e.set_defaults(parser_e=True)
 
         parser_l = subparsers.add_parser('list', help='lists all the notes')
+        parser_l.add_argument('-l', '--list_details', action='store_true', help='list all notes with meta data')
         parser_l.set_defaults(parser_l=True)
 
         parser_d = subparsers.add_parser('delete', help='delete a note')
@@ -49,7 +50,8 @@ class ArgparseCommands(object):
 
         # search -c ravioli
         parser_s = subparsers.add_parser('search', help='search for a SubString inside a note (will only search in titles)')
-        parser_s.add_argument('-c', action='store_true', help='search in the content of a note')
+        parser_s.add_argument('-c', '--content', action='store_true', help='search in the content of a note')
+        parser_s.add_argument('-t', '--tag', action='store_true', help='search for note with this tag')
         parser_s.add_argument('subStr', type=str, help='search for a word in a title')
         parser_s.set_defaults(parser_s=True)
 
@@ -60,6 +62,11 @@ class ArgparseCommands(object):
         parser_md = subparsers.add_parser('meta', help='get meta')
         parser_md.add_argument('md_id', type=int, help='id of note you want metadata from')
         parser_md.set_defaults(parser_md=True)
+
+        parser_tag = subparsers.add_parser('tag', help='add tags to a note')
+        parser_tag.add_argument('t_id', type=int, help='id of note you want to add tags to')
+        parser_tag.add_argument('tagList', type=str, nargs='+', help='add tags, seperate with spaces only')
+        parser_tag.set_defaults(parser_tag=True)
 
         args = parser.parse_args()
         #print help(args)
@@ -75,7 +82,10 @@ class ArgparseCommands(object):
             hn.editNote(editId)
 
         elif args.__contains__("parser_l"):
-            hn.listNote()
+            if args.l == True:
+                hn.listNotesAndMeta()
+            else:
+                hn.listNote()
 
         elif args.__contains__("parser_d"):
             deleteId = args.d_id
@@ -85,6 +95,8 @@ class ArgparseCommands(object):
             searchStr = args.subStr
             if args.c == True:
                 hn.searchInMushroom(searchStr)
+            if args.t == True:
+                hn.searchInTags(searchStr)
             else:
                 hn.searchInTitle(searchStr)
 
@@ -94,7 +106,12 @@ class ArgparseCommands(object):
 
         elif args.__contains__("parser_md"):
             metaId = args.md_id
-            hn.readMeta(metaId)
+            hn.printMeta(metaId)
+
+        elif args.__contains__("parser_tag"):
+            tags = args.tagList
+            id = args.t_id
+            hn.addTags(tags, id)
 
 
 
