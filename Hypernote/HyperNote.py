@@ -19,10 +19,12 @@ limitations under the License.
 __author__ = 'gank'
 
 import sys
+from tabulate import tabulate
 from EditorManager import EditorManager
 from SwiftManager import SwiftManager
 from SwiftAuthManager import SwiftAuthManager
 from Note import Note
+from MetaManager import MetaManager
 
 
 class HyperNote(object):
@@ -35,7 +37,6 @@ class HyperNote(object):
         sam = SwiftAuthManager()
         storage_url, token = sam.getcredentials()
         self._swiftManager = SwiftManager(storage_url, token)
-
 
     def newNote(self, title):
         note = Note(title)
@@ -63,6 +64,25 @@ class HyperNote(object):
         for key, values in dict.items():
             print values
 
+    def listNotesAndMeta(self):
+        list = self._swiftManager.downloadObjectIds()
+        dict  = {}
+        table = []
+        for element in list:
+            id = SwiftManager.objIdToId(element)
+            if id is None:
+                raise RuntimeError("Can not get the ID from " + element + " ... should not happen, really")
+            metamngr = self._swiftManager.metaMngrFactory(element)
+            id = int(id)
+            crdate = metamngr.getCreateDate()
+            lastmod = metamngr.getLastModifiedDate()
+            tags = metamngr.getTags()
+            dict[id] = [element, crdate, lastmod, tags]
+            sorted(dict)
+
+        for key, value in dict.items():
+            table.append(value)
+        print tabulate(table, headers=["Note", "Creation Date", "Last Modified", "Tags"])
 
     def deleteNote(self, id):
         self._swiftManager.deleteNote(id)
@@ -99,10 +119,17 @@ class HyperNote(object):
             else:
                 print noteName
 
+    def searchInTags(self, substr):
+        self._swiftManager.downloadNotes()
+        notes = self._swiftManager.getDownloadedNotes()
 
+        for
 
     def _readNote(self, note):
         print HyperNote.NOTE_INDICATOR + note.getContent() + HyperNote.NOTE_INDICATOR
 
-    def readMeta(self, metaId):
+    def _printMeta(self, metaId):
         self._swiftManager.printMeta(metaId)
+
+    def addTags(self, tags, objId):
+        self._swiftManager.addTags(tags, objId)

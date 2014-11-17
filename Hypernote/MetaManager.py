@@ -32,25 +32,56 @@ class MetaManager(object):
         self._token = token
         self._commitList = {}
         self._objId = objectId
+        self._meta = None
+        self.update()
+        #self._commitList = self._meta
 
     @staticmethod
     def dateNow():
         nowDate = datetime.now()
         return nowDate.strftime('%H:%M, %d/%m/%Y')
 
+    def loadData(self):
+        self._commitList['x-object-meta-crdate'] = self._getMeta('x-object-meta-crdate')
+        self._commitList['x-object-meta-lastmod'] = self._getMeta('x-object-meta-lastmod')
+        self._commitList['x-object-meta-tags'] = self._getMeta('x-object-meta-tags')
+
 
     def getCreateDate(self):
-        try:
-            meta = get_object(self._url, self._token, Configuration.container_name, self._objId)[0]
-        except ClientException:
-            return None
-        crDate = meta['x-object-meta-crdate']
-        return crDate
+        # use _getMeta
+        #"other solution is very easy" ~ Vincenzo Pii, 2014 Zürich
+        return self._getMeta('x-object-meta-crdate')
 
     def getLastModifiedDate(self):
-        meta = get_object(self._url, self._token, Configuration.container_name, self._objId)[0]
-        lastModifiedDate = meta['x-object-meta-lastmod']
-        return lastModifiedDate
+        return self._getMeta('x-object-meta-lastmod')
+
+    def getTags(self):
+        return self._getMeta('x-object-meta-tags')
+
+    def _getMeta(self, metaHeader):
+        '''
+        Given a metadata header name, returns its value.
+        :param metaHeader: string of the metadata header, e.g., 'x-object-meta-lastmod'
+        :return: None if no metadata is available for this object or the value is not available,
+        the value for this metadata otherwise
+        '''
+        # Implement this
+        if self._meta == None:
+            return None
+        if metaHeader in self._meta:
+            return self._meta[metaHeader]
+        else:
+            return None
+
+    def update(self):
+        '''
+        Updates the metadata information for this object
+        :return:
+        '''
+        try:
+            self._meta = get_object(self._url, self._token, Configuration.container_name, self._objId)[0]
+        except ClientException:
+            self._meta = None
 
     def setCreateDate(self, currentCreateDate):
         self._commitList['x-object-meta-crdate'] = currentCreateDate
@@ -58,7 +89,23 @@ class MetaManager(object):
     def setLastModifiedDate(self, lastModifiedDate):
         self._commitList['x-object-meta-lastmod'] = lastModifiedDate
 
+    def setTags(self, tags):
+        oldL = self._getMeta('x-object-meta-tags')
+        if oldL is None:
+            oldL = []
+        else:
+            oldL = oldL.split()
+        if tags is None:
+            tags = []
+        oldL = oldL + tags
+        #else:
+        #    oldL = str(oldL)
+        oldL = ' '.join(oldL)
+        print oldL
+        self._commitList['x-object-meta-tags'] = oldL
+
     def commitMeta(self):
         if self._commitList != {}:
+            print self._commitList
             post_object(self._url, self._token, Configuration.container_name, self._objId, self._commitList)
         self._commitList = {}

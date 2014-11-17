@@ -99,8 +99,15 @@ class SwiftManager(object):
         #this comment is just a companion for the one above, he felt lonely
         if currentCreateDate is None:
             currentCreateDate = lastModifiedDate
+        '''
+        try:
+            metaManager.loadData()
+        except TypeError:
+            print "swag"
+        '''
         metaManager.setCreateDate(currentCreateDate)
         metaManager.setLastModifiedDate(lastModifiedDate)
+        metaManager.setTags(metaManager.getTags())
         metaManager.commitMeta()
 
 
@@ -185,10 +192,21 @@ class SwiftManager(object):
         else:
             return False
 
-
     def printMeta(self, metaId):
         note = self.getNote(metaId)
-        mm = MetaManager(self._storage_url, self._token, note.getObjectId())
+        mm = self.metaMngrFactory(note.getObjectId())
         crDate = mm.getCreateDate()
         lastmod = mm.getLastModifiedDate()
         print SwiftManager.METAIMP + SwiftManager.CRDATEIMP + crDate + SwiftManager.LASTMODIMP + lastmod + SwiftManager.METAIMP
+
+    def metaMngrFactory(self, objId):
+        #vince said factories are self explanatory, no need to further comment
+        #I still don' really know what a factory does
+        return MetaManager(self._storage_url, self._token, objId)
+
+    def addTags(self, tags, tId):
+        note = self.getNote(tId)
+        mm = self.metaMngrFactory(note.getObjectId())
+        mm.loadData()
+        mm.setTags(tags)
+        mm.commitMeta()
