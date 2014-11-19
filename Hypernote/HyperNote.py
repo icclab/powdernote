@@ -88,6 +88,10 @@ class HyperNote(object):
         self._swiftManager.deleteNote(id)
 
     def _editNote(self, note):
+        # TODO: validate note content (even if existing content coming from online should always be valid if only edited with this application)
+        # raise exception if note content was not valid
+        
+        # TODO: edit note in a loop until the content is valid
         ret = self._editorManager.editNote(note)
         if ret == EditorManager.NEW_CONTENT_AVAILABLE:
             self._swiftManager.uploadNote(note)
@@ -122,8 +126,6 @@ class HyperNote(object):
     def searchInTags(self, substr):
         self._swiftManager.downloadNotes()
         notes = self._swiftManager.getDownloadedNotes()
-
-        for
 
     def _readNote(self, note):
         print HyperNote.NOTE_INDICATOR + note.getContent() + HyperNote.NOTE_INDICATOR
