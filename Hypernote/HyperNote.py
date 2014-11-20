@@ -24,12 +24,12 @@ from EditorManager import EditorManager
 from SwiftManager import SwiftManager
 from SwiftAuthManager import SwiftAuthManager
 from Note import Note
-from MetaManager import MetaManager
-
 
 class HyperNote(object):
 
     NOTE_INDICATOR = " \n --- \n"
+    NOTE = "Note: \n "
+    TAGS = "\nCoresponding tags: \n "
 
     def __init__(self):
         super(HyperNote, self).__init__()
@@ -123,9 +123,26 @@ class HyperNote(object):
             else:
                 print noteName
 
+
     def searchInTags(self, substr):
+        '''
+        for every object in list check for tags
+        check if tags are the same
+        if tags in element meta
+        print element name
+        '''
+
         self._swiftManager.downloadNotes()
         notes = self._swiftManager.getDownloadedNotes()
+        for noteName in notes:
+            metamngr = self._swiftManager.metaMngrFactory(noteName)
+            tags = metamngr.getTags()
+            if tags == "" or tags is None:
+                continue
+            tagList = tags.lower().split()
+            substr = substr.lower()
+            if substr in tagList:
+                print HyperNote.NOTE_INDICATOR + HyperNote.NOTE + noteName + HyperNote.TAGS + tags + HyperNote.NOTE_INDICATOR
 
     def _readNote(self, note):
         print HyperNote.NOTE_INDICATOR + note.getContent() + HyperNote.NOTE_INDICATOR

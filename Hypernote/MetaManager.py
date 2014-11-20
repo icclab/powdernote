@@ -90,6 +90,11 @@ class MetaManager(object):
         self._commitList['x-object-meta-lastmod'] = lastModifiedDate
 
     def setTags(self, tags):
+        '''
+
+        :param tags: list expected
+        :return:
+        '''
         oldL = self._getMeta('x-object-meta-tags')
         if oldL is None:
             oldL = []
@@ -98,10 +103,8 @@ class MetaManager(object):
         if tags is None:
             tags = []
         oldL = oldL + tags
-        #else:
-        #    oldL = str(oldL)
+        oldL = set(oldL)
         oldL = ' '.join(oldL)
-        print oldL
         self._commitList['x-object-meta-tags'] = oldL
 
     def commitMeta(self):

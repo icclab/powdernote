@@ -99,15 +99,11 @@ class SwiftManager(object):
         #this comment is just a companion for the one above, he felt lonely
         if currentCreateDate is None:
             currentCreateDate = lastModifiedDate
-        '''
-        try:
-            metaManager.loadData()
-        except TypeError:
-            print "swag"
-        '''
+
         metaManager.setCreateDate(currentCreateDate)
         metaManager.setLastModifiedDate(lastModifiedDate)
-        metaManager.setTags(metaManager.getTags())
+        #we only need to keep the previous tags, NONE IS CORRECT DO NOT CHANGE
+        metaManager.setTags(None)
         metaManager.commitMeta()
 
 
