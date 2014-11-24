@@ -109,6 +109,5 @@ class MetaManager(object):
 
     def commitMeta(self):
         if self._commitList != {}:
-            print self._commitList
             post_object(self._url, self._token, Configuration.container_name, self._objId, self._commitList)
         self._commitList = {}
