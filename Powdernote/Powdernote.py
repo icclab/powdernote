@@ -25,14 +25,14 @@ from SwiftManager import SwiftManager
 from SwiftAuthManager import SwiftAuthManager
 from Note import Note
 
-class HyperNote(object):
+class Powdernote(object):
 
     NOTE_INDICATOR = " \n --- \n"
     NOTE = "Note: \n "
     TAGS = "\nCoresponding tags: \n "
 
     def __init__(self):
-        super(HyperNote, self).__init__()
+        super(Powdernote, self).__init__()
         self._editorManager = EditorManager()
         sam = SwiftAuthManager()
         storage_url, token = sam.getcredentials()
@@ -142,10 +142,10 @@ class HyperNote(object):
             tagList = tags.lower().split()
             substr = substr.lower()
             if substr in tagList:
-                print HyperNote.NOTE_INDICATOR + HyperNote.NOTE + noteName + HyperNote.TAGS + tags + HyperNote.NOTE_INDICATOR
+                print Powdernote.NOTE_INDICATOR + Powdernote.NOTE + noteName + Powdernote.TAGS + tags + Powdernote.NOTE_INDICATOR
 
     def _readNote(self, note):
-        print HyperNote.NOTE_INDICATOR + note.getContent() + HyperNote.NOTE_INDICATOR
+        print Powdernote.NOTE_INDICATOR + note.getContent() + Powdernote.NOTE_INDICATOR
 
     def _printMeta(self, metaId):
         self._swiftManager.printMeta(metaId)
