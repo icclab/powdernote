@@ -19,7 +19,7 @@ limitations under the License.
 __author__ = 'gank'
 
 import argparse
-from HyperNote import HyperNote
+from Powdernote import Powdernote
 
 class ArgparseCommands(object):
 
@@ -30,7 +30,7 @@ class ArgparseCommands(object):
 
         parser = argparse.ArgumentParser()
 
-        subparsers = parser.add_subparsers(help='Hypernote Functions')
+        subparsers = parser.add_subparsers(help='Powdernote Functions')
 
         parser_n = subparsers.add_parser('new', help='create a new note')
         parser_n.add_argument('title', type=str, help='write the title of new note')
@@ -71,7 +71,7 @@ class ArgparseCommands(object):
         args = parser.parse_args()
         #print help(args)
 
-        hn = HyperNote()
+        hn = Powdernote()
 
         if args.__contains__("parser_n"):
             note_title = args.title

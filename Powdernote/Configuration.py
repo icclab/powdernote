@@ -21,12 +21,9 @@ __author__ = 'gank'
 
 class Configuration(object):
 
-    #auth_url = "http://gabrielanke.ddns.net:5000/v2.0"
     auth_url = "http://160.85.4.231:5000/v2.0"
-    username = "admin"
-    tenant_name = "admin"
-    #tenant_id = "9a6819247ed640439584fbca408e28ae"
-    tenant_id = "2485c8beb90a414db394ca1feaaea803"
-    container_name = "test"
-    #password = "secrete"
-    password = "ilovebelgianwaffles"
+    username = "anke"
+    tenant_name = username
+    tenant_id = "155fcc56f9a24587bd26187457a61e6c"
+    container_name = "hypernote-anke"
+    password = "t2F0Ni"
