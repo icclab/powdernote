@@ -195,9 +195,7 @@ class SwiftManager(object):
         noteTitle = note.getObjectId()
         crDate = mm.getCreateDate()
         lastmod = mm.getLastModifiedDate()
-        tags = None
-        if mm.getTags() is not None:
-            tags = mm.getTags()
+        tags = mm.getTags()
         print noteTitle + SwiftManager.METAIMP + SwiftManager.CRDATEIMP + crDate + SwiftManager.LASTMODIMP + lastmod + SwiftManager.TAGSIMP + tags + SwiftManager.METAIMP
 
     def metaMngrFactory(self, objId):
