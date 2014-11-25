@@ -8,6 +8,7 @@ PLEASE let us know if you have problems with the requirements, so we can write a
 
     Python (2.7)
     python-swiftclient
+    tabulate (pip install tabulate)
 
 Install:
 --------
