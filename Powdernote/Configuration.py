@@ -21,9 +21,12 @@ __author__ = 'gank'
 
 class Configuration(object):
 
-    auth_url = "http://160.85.4.231:5000/v2.0"
+    #insert your credentials
     username = ""
-    tenant_name = username
+    password = ""
     tenant_id = ""
     container_name = ""
-    password = ""
+
+    #do not edit these
+    tenant_name = username
+    auth_url = "http://160.85.4.231:5000/v2.0"

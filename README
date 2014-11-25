@@ -1,0 +1,15 @@
+POWDERNOTE
+==========
+
+Install:
+--------
+
+After downloading the repo add this line to your ~/.bashrc file (or ~/.bash_profile, or whatever) to have powdernote in your PATH (replace <path_to_powdernote> with the path to the downloaded repo):
+
+    export PATH=$PATH:<path_to_powdernote>/Powdernote/bin
+
+Now add the credentials you've received to the Configuration.py file.
+
+Now you can type powdernote -h to see the commands.
+
+Have fun at being productive!
