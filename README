@@ -8,16 +8,33 @@ PLEASE let us know if you have problems with the requirements, so we can write a
 
     Python (2.7)
     python-swiftclient
+    tabulate (pip install tabulate)
 
 Install:
 --------
 
-After downloading the repo add this line to your ~/.bashrc file (or ~/.bash_profile, or whatever) to have powdernote in your PATH (replace <path_to_powdernote> with the path to the downloaded repo):
+1. Clone the repo (you should already have it if you are reading this...)
+2. Add this line to your ~/.bashrc file (or ~/.bash_profile, or whatever), replace <path_to_powdernote> with the path to the downloaded repo:
 
-    export PATH=$PATH:<path_to_powdernote>/Powdernote/bin
+    export PATH=$PATH:<path_to_powdernote>/bin
 
-Now add the credentials you've received to the Configuration.py file.
+3. Add the credentials you've received to the Configuration.py file.
 
-Now you can type powdernote -h to see the commands.
+Configure
+---------
+
+You can setup the editor to be used for notes with the
+
+    EDITOR
+
+environment variable.
+It defaults to vim.
+
+TODO: there will be a dedicated env variable for powdernote
+
+Get started
+-----------
+
+Type `powdernote -h` to see the available commands.
 
 Have fun at being productive!
