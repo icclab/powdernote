@@ -33,6 +33,7 @@ class SwiftManager(object):
     IDSEP = " - "
     CRDATEIMP = "Date of creation: "
     LASTMODIMP = ", \nLast modified: "
+    TAGSIMP = ", \nTags: "
     METAIMP = "\n---\n"
 
     '''
@@ -191,9 +192,13 @@ class SwiftManager(object):
     def printMeta(self, metaId):
         note = self.getNote(metaId)
         mm = self.metaMngrFactory(note.getObjectId())
+        noteTitle = note.getObjectId()
         crDate = mm.getCreateDate()
         lastmod = mm.getLastModifiedDate()
-        print SwiftManager.METAIMP + SwiftManager.CRDATEIMP + crDate + SwiftManager.LASTMODIMP + lastmod + SwiftManager.METAIMP
+        tags = None
+        if mm.getTags() is not None:
+            tags = mm.getTags()
+        print noteTitle + SwiftManager.METAIMP + SwiftManager.CRDATEIMP + crDate + SwiftManager.LASTMODIMP + lastmod + SwiftManager.TAGSIMP + tags + SwiftManager.METAIMP
 
     def metaMngrFactory(self, objId):
         #vince said factories are self explanatory, no need to further comment
