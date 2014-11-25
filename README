@@ -1,6 +1,14 @@
 POWDERNOTE
 ==========
 
+Requirements:
+-------------
+
+PLEASE let us know if you have problems with the requirements, so we can write a better section here!
+
+    Python (2.7)
+    python-swiftclient
+
 Install:
 --------
 
