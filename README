@@ -13,12 +13,16 @@ PLEASE let us know if you have problems with the requirements, so we can write a
 Install:
 --------
 
-After downloading the repo add this line to your ~/.bashrc file (or ~/.bash_profile, or whatever) to have powdernote in your PATH (replace <path_to_powdernote> with the path to the downloaded repo):
+1. Clone the repo (you should already have it if you are reading this...)
+2. Add this line to your ~/.bashrc file (or ~/.bash_profile, or whatever), replace <path_to_powdernote> with the path to the downloaded repo:
 
-    export PATH=$PATH:<path_to_powdernote>/Powdernote/bin
+    export PATH=$PATH:<path_to_powdernote>/bin
 
-Now add the credentials you've received to the Configuration.py file.
+3. Add the credentials you've received to the Configuration.py file.
 
-Now you can type powdernote -h to see the commands.
+Get started
+-----------
+
+Type `powdernote -h` to see the commands.
 
 Have fun at being productive!
