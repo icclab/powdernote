@@ -20,6 +20,18 @@ Install:
 
 3. Add the credentials you've received to the Configuration.py file.
 
+Configure
+---------
+
+You can setup the editor to be used for notes with the
+
+    EDITOR
+
+environment variable.
+It defaults to vim.
+
+TODO: there will be a dedicated env variable for powdernote
+
 Get started
 -----------
 
