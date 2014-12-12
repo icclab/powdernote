@@ -131,6 +131,15 @@ class Powdernote(object):
 
     @staticmethod
     def _findMatchingIntervals(content, substr):
+        '''
+        This function adds a margin of 10 characters to each match in the content of a note. If any of these "lines"
+        overlap the output will be from th beginning of the first one until the ending of the last overlapping one. If
+        the distance between matches is too long, there will be '...'.
+        :param content:
+        :param substr:
+        :return:
+        '''
+
         previous = -1
         current = None
         beg = None
@@ -170,19 +179,6 @@ class Powdernote(object):
             yield start
             start += len(sub) # use start += 1 to find overlapping matches
 
-        '''
-            loc = noteContent.find(substr)
-            if loc < 0:
-                continue
-            else:
-                print noteName
-                start = loc - 10
-                end = loc + 10
-                minLoc = 0
-                maxLoc = len(noteContent)
-                begin, fin = max(minLoc, start), min(maxLoc, end)
-                print noteContent[begin:fin]
-        '''
     def searchInTags(self, substr):
         '''
         for every object in list check for tags
