@@ -132,9 +132,17 @@ class Powdernote(object):
     @staticmethod
     def _findMatchingIntervals(content, substr):
         '''
-        This function adds a margin of 10 characters to each match in the content of a note. If any of these "lines"
-        overlap the output will be from th beginning of the first one until the ending of the last overlapping one. If
-        the distance between matches is too long, there will be '...'.
+        This function searches for <substr> in <content> and returns, for each match, two indexes, the point where the
+        matching start, minus a margin of 10 characters and the point where the matching ends, plus a margin of 10
+        characters.
+        The output is then a list of lists (list of the intervals, each one defined as a pair of [beginning, end]).
+        If two or more different intervals overlap, the function merges them so that a single interval is returned
+        including multiple matches. e.g.:
+
+        "ciao" occurs on location 25, so minus the margin to the left and plus the margin to the right the index of this
+        match equals [15,39]. If there is another "ciao" at location 42 the index for this match is [32, 56].
+        Because this indexes overlap (32-39) the new index of the match is [15,56]
+
         :param content:
         :param substr:
         :return:
