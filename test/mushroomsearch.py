@@ -17,6 +17,7 @@ limitations under the License.
 '''
 
 import unittest
+from Powdernote.Powdernote import Powdernote
 
 class MushroomSearch_Test(unittest.TestCase):
 
@@ -34,16 +35,26 @@ class MushroomSearch_Test(unittest.TestCase):
     input3 = "aaa aaa aaa ciao aaa aaa aaa aaa aaa aaa aaa aaa ciao"
     expected3 = [[2, 25], [39, len(input3) - 1]]
 
+    input4 = "aaa aaa ciao aaa ciao aaa aaa aaa aaa aaa aaa ciao aaa gdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfg ciao aaaaaa"
+    expected4 = [[0, 30], [36, 59], [80, 100]]
+
     def searchInMushroom(self, string, keyword):
-        # TODO, test code here
-        return None# TODO
+        olist = Powdernote._findMatchingIntervals(string, keyword)
+        return olist
 
     def test_mushroomSearch(self):
         indexes = self.searchInMushroom(self.input1, "ciao")
+        print indexes, self.expected1
         assert(indexes == self.expected1)
 
         indexes = self.searchInMushroom(self.input2, "ciao")
+        print indexes, self.expected2
         assert(indexes == self.expected2)
 
         indexes = self.searchInMushroom(self.input3, "ciao")
+        print indexes, self.expected3
         assert(indexes == self.expected3)
+
+        indexes = self.searchInMushroom(self.input4, "ciao")
+        print indexes, self.expected4
+        assert(indexes == self.expected4)
