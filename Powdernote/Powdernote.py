@@ -141,7 +141,7 @@ class Powdernote(object):
 
         "ciao" occurs on location 25, so minus the margin to the left and plus the margin to the right the index of this
         match equals [15,39]. If there is another "ciao" at location 42 the index for this match is [32, 56].
-        Because this indexes overlap (32-39) the new index of the match is [15,56]
+        Because this indexes overlap (32-39) the new index of the matches is [15,56]
 
         :param content:
         :param substr:
