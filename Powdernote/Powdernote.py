@@ -30,6 +30,7 @@ class Powdernote(object):
     NOTE_INDICATOR = " \n --- \n"
     NOTE = "Note: \n "
     TAGS = "\nCoresponding tags: \n "
+    DOTDOTDOT = "..."
 
     def __init__(self):
         super(Powdernote, self).__init__()
@@ -117,13 +118,71 @@ class Powdernote(object):
         for noteName, noteContent in notes.items():
             substr = substr.lower()
             noteContent = noteContent.lower()
+            olist = self._findMatchingIntervals(noteContent, substr)
+            if olist == []:
+                continue
+            else:
+                print self.NOTE_INDICATOR
+                print noteName
+                for alist in olist:
+                    print self.DOTDOTDOT + noteContent[alist[0]:alist[1]].replace('\n', ' ') + self.DOTDOTDOT
+                print self.NOTE_INDICATOR
+
+
+    @staticmethod
+    def _findMatchingIntervals(content, substr):
+        previous = -1
+        current = None
+        beg = None
+        rightMargin = len(substr) - 1 + 10
+        leftMargin = 10
+        olist = []
+        end = None
+        prevMatch = None
+        for match in Powdernote.find_all(content, substr):
+            current = max(match - leftMargin, 0)
+            if previous == -1:
+                previous = current
+                beg = previous
+                prevMatch = match
+
+            if prevMatch+rightMargin >= current:
+                previous = current
+                prevMatch = match
+                continue
+            else:
+                end = min(prevMatch + rightMargin, len(content) - 1)
+                previous = current
+                olist.append([beg, end])
+                beg = current
+            prevMatch = match
+        if prevMatch is not None:
+            end = min(prevMatch + rightMargin, len(content) - 1)
+            olist.append([beg, end])
+        return olist
+
+    @staticmethod
+    def find_all(content, sub):
+        start = 0
+        while True:
+            start = content.find(sub, start)
+            if start == -1: return
+            yield start
+            start += len(sub) # use start += 1 to find overlapping matches
+
+        '''
             loc = noteContent.find(substr)
             if loc < 0:
                 continue
             else:
                 print noteName
-
-
+                start = loc - 10
+                end = loc + 10
+                minLoc = 0
+                maxLoc = len(noteContent)
+                begin, fin = max(minLoc, start), min(maxLoc, end)
+                print noteContent[begin:fin]
+        '''
     def searchInTags(self, substr):
         '''
         for every object in list check for tags

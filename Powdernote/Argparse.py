@@ -28,7 +28,7 @@ class ArgparseCommands(object):
 
     def commands(self):
 
-        parser = argparse.ArgumentParser()
+        parser = argparse.ArgumentParser(description="Powdernote")
 
         subparsers = parser.add_subparsers(help='Powdernote Functions')
 
