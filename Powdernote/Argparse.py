@@ -82,10 +82,7 @@ class ArgparseCommands(object):
             hn.editNote(editId)
 
         elif args.__contains__("parser_l"):
-            if args.list_details == True:
-                hn.listNotesAndMeta()
-            else:
-                hn.listNote()
+            hn.listNotesAndMeta()
 
         elif args.__contains__("parser_d"):
             deleteId = args.d_id

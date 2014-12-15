@@ -51,20 +51,6 @@ class Powdernote(object):
         note = self._swiftManager.getNote(id)
         self._readNote(note)
 
-    def listNote(self):
-        list = self._swiftManager.downloadObjectIds()
-        dict = {}
-        for element in list:
-            id = SwiftManager.objIdToId(element)
-            if id is None:
-                continue
-            id = int(id)
-            dict[id] = element
-            sorted(dict)
-
-        for key, values in dict.items():
-            print values
-
     def listNotesAndMeta(self):
         list = self._swiftManager.downloadObjectIds()
         dict  = {}
@@ -78,12 +64,14 @@ class Powdernote(object):
             crdate = metamngr.getCreateDate()
             lastmod = metamngr.getLastModifiedDate()
             tags = metamngr.getTags()
-            dict[id] = [element, crdate, lastmod, tags]
+            name = SwiftManager.objIdToTitle(element)
+            objId = SwiftManager.objIdToId(element)
+            dict[id] = [objId, name, crdate, lastmod, tags]
             sorted(dict)
 
         for key, value in dict.items():
             table.append(value)
-        print tabulate(table, headers=["Note", "Creation Date", "Last Modified", "Tags"])
+        print tabulate(table, headers=["ID", "Note", "Creation Date", "Last Modified", "Tags"])
 
     def deleteNote(self, id):
         self._swiftManager.deleteNote(id)
