@@ -33,8 +33,7 @@ class Note(object):
         self._objiectId = ""
 
     def getContent(self):
-            toad = self._title
-            content = toad + "\n" + Note.EMPTY_LINE_INDICATOR + "\n" + self._mushroom
+            content = self._mushroom
             return content
 
     def setContent(self, content):
