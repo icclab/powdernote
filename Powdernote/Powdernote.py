@@ -208,7 +208,7 @@ class Powdernote(object):
                 print Powdernote.NOTE_INDICATOR + Powdernote.NOTE + noteName + Powdernote.TAGS + tags + Powdernote.NOTE_INDICATOR
 
     def _readNote(self, note):
-        print Powdernote.NOTE_INDICATOR + note.getContent() + Powdernote.NOTE_INDICATOR
+        print Powdernote.NOTE_INDICATOR + note.getTitle() + Powdernote.NOTE_INDICATOR + note.getContent() + Powdernote.NOTE_INDICATOR
 
     def printMeta(self, metaId):
         self._swiftManager.printMeta(metaId)
