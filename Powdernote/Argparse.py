@@ -92,7 +92,7 @@ class ArgparseCommands(object):
             searchStr = args.subStr
             if args.content == True:
                 hn.searchInMushroom(searchStr)
-            if args.tag == True:
+            elif args.tag == True:
                 hn.searchInTags(searchStr)
             else:
                 hn.searchInTitle(searchStr)

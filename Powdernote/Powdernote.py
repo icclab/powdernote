@@ -65,8 +65,7 @@ class Powdernote(object):
             lastmod = metamngr.getLastModifiedDate()
             tags = metamngr.getTags()
             name = SwiftManager.objIdToTitle(element)
-            objId = SwiftManager.objIdToId(element)
-            dict[id] = [objId, name, crdate, lastmod, tags]
+            dict[id] = [id, name, crdate, lastmod, tags]
             sorted(dict)
 
         for key, value in dict.items():
@@ -183,17 +182,28 @@ class Powdernote(object):
         print element name
         '''
 
-        self._swiftManager.downloadNotes()
-        notes = self._swiftManager.getDownloadedNotes()
-        for noteName in notes:
-            metamngr = self._swiftManager.metaMngrFactory(noteName)
+        list = self._swiftManager.downloadObjectIds()
+        dict  = {}
+        table = []
+        for element in list:
+            id = SwiftManager.objIdToId(element)
+            if id is None:
+                raise RuntimeError("Can not get the ID from " + element + " ... should not happen, really")
+            metamngr = self._swiftManager.metaMngrFactory(element)
+            id = int(id)
             tags = metamngr.getTags()
+            name = SwiftManager.objIdToTitle(element)
             if tags == "" or tags is None:
                 continue
             tagList = tags.lower().split()
             substr = substr.lower()
             if substr in tagList:
-                print Powdernote.NOTE_INDICATOR + Powdernote.NOTE + noteName + Powdernote.TAGS + tags + Powdernote.NOTE_INDICATOR
+                dict[id] = [id, name, tags]
+
+        for key, value in dict.items():
+            table.append(value)
+        print tabulate(table, headers=["ID", "Note", "Tags"])
+
 
     def _readNote(self, note):
         print Powdernote.NOTE_INDICATOR + note.getTitle() + Powdernote.NOTE_INDICATOR + note.getContent() + Powdernote.NOTE_INDICATOR
