@@ -68,48 +68,48 @@ class ArgparseCommands(object):
         parser_tag.add_argument('tagList', type=str, nargs='+', help='add tags, seperate with spaces only')
         parser_tag.set_defaults(parser_tag=True)
 
+
         args = parser.parse_args()
         #print help(args)
 
-        hn = Powdernote()
+        pn = Powdernote()
 
         if args.__contains__("parser_n"):
             note_title = args.title
-            hn.newNote(note_title)
+            pn.newNote(note_title)
 
         elif args.__contains__("parser_e"):
             editId = args.e_id
-            hn.editNote(editId)
+            pn.editNote(editId)
 
         elif args.__contains__("parser_l"):
-            hn.listNotesAndMeta()
+            pn.listNotesAndMeta()
 
         elif args.__contains__("parser_d"):
             deleteId = args.d_id
-            hn.deleteNote(deleteId)
+            pn.deleteNote(deleteId)
 
         elif args.__contains__("parser_s"):
             searchStr = args.subStr
             if args.content == True:
-                hn.searchInMushroom(searchStr)
+                pn.searchInMushroom(searchStr)
             elif args.tag == True:
-                hn.searchInTags(searchStr)
+                pn.searchInTags(searchStr)
             else:
-                hn.searchInTitle(searchStr)
+                pn.searchInTitle(searchStr)
 
         elif args.__contains__("parser_r"):
             readId = args.r_id
-            hn.readNote(readId)
+            pn.readNote(readId)
 
         elif args.__contains__("parser_md"):
             metaId = args.md_id
-            hn.printMeta(metaId)
+            pn.printMeta(metaId)
 
         elif args.__contains__("parser_tag"):
             tags = args.tagList
             id = args.t_id
-            hn.addTags(tags, id)
-
+            pn.addTags(tags, id)
 
 
 if __name__ == '__main__':

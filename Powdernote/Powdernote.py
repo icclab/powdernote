@@ -19,7 +19,6 @@ limitations under the License.
 __author__ = 'gank'
 
 import sys
-from tabulate import tabulate
 from EditorManager import EditorManager
 from SwiftManager import SwiftManager
 from SwiftAuthManager import SwiftAuthManager
