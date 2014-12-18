@@ -24,6 +24,7 @@ from EditorManager import EditorManager
 from SwiftManager import SwiftManager
 from SwiftAuthManager import SwiftAuthManager
 from Note import Note
+from OutputManager import OutputManager
 
 class Powdernote(object):
 
@@ -54,7 +55,6 @@ class Powdernote(object):
     def listNotesAndMeta(self):
         list = self._swiftManager.downloadObjectIds()
         dict  = {}
-        table = []
         for element in list:
             id = SwiftManager.objIdToId(element)
             if id is None:
@@ -68,9 +68,7 @@ class Powdernote(object):
             dict[id] = [id, name, crdate, lastmod, tags]
             sorted(dict)
 
-        for key, value in dict.items():
-            table.append(value)
-        print tabulate(table, headers=["ID", "Note", "Creation Date", "Last Modified", "Tags"])
+        OutputManager.listPrint(dict, OutputManager.HEADER_FULL)
 
     def deleteNote(self, id):
         self._swiftManager.deleteNote(id)
@@ -85,21 +83,34 @@ class Powdernote(object):
             self._swiftManager.uploadNote(note)
             print "note has been saved"
         else:
-            print "no changes have been made, aborting..."
+            print "no changes have been made, canceling..."
             sys.exit(1)
 
     def searchInTitle(self, subString):
-        titles = self._swiftManager.downloadObjectIds()
-        for title in titles:
-            title = title.lower()
+        list = self._swiftManager.downloadObjectIds()
+        dict  = {}
+        for element in list:
+            id = SwiftManager.objIdToId(element)
+            if id is None:
+                raise RuntimeError("Can not get the ID from " + element + " ... should not happen, really")
+            metamngr = self._swiftManager.metaMngrFactory(element)
+            id = int(id)
+            crdate = metamngr.getCreateDate()
+            lastmod = metamngr.getLastModifiedDate()
+            tags = metamngr.getTags()
+            name = SwiftManager.objIdToTitle(element).lower()
             subString = subString.lower()
-            loc = title.find(subString)
+            loc = name.find(subString)
             if loc < 0:
                 continue
             else:
-                print title
+                dict[id] = [id, name, crdate, lastmod, tags]
+            sorted(dict)
+
+        OutputManager.listPrint(dict, OutputManager.HEADER_FULL)
 
     def searchInMushroom(self, substr):
+        matchstr = []
         self._swiftManager.downloadNotes()
         notes = self._swiftManager.getDownloadedNotes()
         for noteName, noteContent in notes.items():
@@ -109,11 +120,10 @@ class Powdernote(object):
             if olist == []:
                 continue
             else:
-                print self.NOTE_INDICATOR
-                print noteName
                 for alist in olist:
-                    print self.DOTDOTDOT + noteContent[alist[0]:alist[1]].replace('\n', ' ') + self.DOTDOTDOT
-                print self.NOTE_INDICATOR
+                    matchstr.append(noteContent[alist[0]:alist[1]])
+            OutputManager.searchMDPrint(noteName, matchstr)
+            matchstr = []
 
 
     @staticmethod
@@ -138,8 +148,8 @@ class Powdernote(object):
         previous = -1
         current = None
         beg = None
-        rightMargin = len(substr) - 1 + 10
-        leftMargin = 10
+        rightMargin = len(substr) - 1 + 15
+        leftMargin = 15
         olist = []
         end = None
         prevMatch = None
@@ -184,7 +194,6 @@ class Powdernote(object):
 
         list = self._swiftManager.downloadObjectIds()
         dict  = {}
-        table = []
         for element in list:
             id = SwiftManager.objIdToId(element)
             if id is None:
@@ -199,14 +208,12 @@ class Powdernote(object):
             substr = substr.lower()
             if substr in tagList:
                 dict[id] = [id, name, tags]
+            sorted(dict)
 
-        for key, value in dict.items():
-            table.append(value)
-        print tabulate(table, headers=["ID", "Note", "Tags"])
-
+        OutputManager.listPrint(dict, OutputManager.HEADER_TAG)
 
     def _readNote(self, note):
-        print Powdernote.NOTE_INDICATOR + note.getTitle() + Powdernote.NOTE_INDICATOR + note.getContent() + Powdernote.NOTE_INDICATOR
+        OutputManager.markdownPrint(note.getTitle(), note.getContent())
 
     def printMeta(self, metaId):
         self._swiftManager.printMeta(metaId)

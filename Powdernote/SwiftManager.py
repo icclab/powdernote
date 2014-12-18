@@ -25,6 +25,7 @@ from swiftclient.client import put_object, get_container, get_object, delete_obj
 from Configuration import Configuration
 from Note import Note
 from MetaManager import MetaManager
+from OutputManager import OutputManager
 
 class SwiftManager(object):
 
@@ -190,13 +191,17 @@ class SwiftManager(object):
             return False
 
     def printMeta(self, metaId):
+        dict = {}
         note = self.getNote(metaId)
         mm = self.metaMngrFactory(note.getObjectId())
-        noteTitle = note.getObjectId()
+        name = SwiftManager.objIdToTitle(note.getObjectId())
         crDate = mm.getCreateDate()
         lastmod = mm.getLastModifiedDate()
         tags = mm.getTags()
-        print noteTitle + SwiftManager.METAIMP + SwiftManager.CRDATEIMP + crDate + SwiftManager.LASTMODIMP + lastmod + SwiftManager.TAGSIMP + tags + SwiftManager.METAIMP
+        dict[metaId] = [metaId, name, crDate, lastmod, tags]
+        sorted(dict)
+
+        OutputManager.listPrint(dict, OutputManager.HEADER_FULL)
 
     def metaMngrFactory(self, objId):
         #vince said factories are self explanatory, no need to further comment
