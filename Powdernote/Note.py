@@ -21,11 +21,6 @@ __author__ = 'gank'
 
 class Note(object):
 
-    #EMPTY_LINE_INDICATOR="#empty line after title"
-    EMPTY_LINE_INDICATOR=""
-
-    SEPARATOR="\n\n"
-
     def __init__(self, title):
         super(Note, self).__init__()
         self._title = title
@@ -54,7 +49,7 @@ class Note(object):
 
         :param content: the note content, the mushroom is an optional part of it
         '''
-        self._mushroom = content[content.find(Note.SEPARATOR) + len(Note.SEPARATOR):]
+        self._mushroom = content
 
     def getTitle(self):
         return self._title
