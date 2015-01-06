@@ -228,3 +228,14 @@ class SwiftManager(object):
         mm.loadData()
         mm.setTags(tags)
         mm.commitMeta()
+
+    def doesNoteExist(self, id):
+        list = self.downloadObjectIds()
+        idList = []
+        for element in list:
+            oId = SwiftManager.objIdToId(element)
+            idList.append(int(oId))
+        if id not in idList:
+            return False
+        else:
+            return True

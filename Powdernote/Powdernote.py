@@ -44,12 +44,18 @@ class Powdernote(object):
         self._editNote(note)
 
     def editNote(self, id):
-        note = self._swiftManager.getNote(id)
-        self._editNote(note)
+        if self._swiftManager.doesNoteExist(id) == True:
+            note = self._swiftManager.getNote(id)
+            self._editNote(note)
+        else:
+            print "Note #" + str(id) + " doesn't exist"
 
     def readNote(self, id):
-        note = self._swiftManager.getNote(id)
-        self._readNote(note)
+        if self._swiftManager.doesNoteExist(id) == True:
+            note = self._swiftManager.getNote(id)
+            self._readNote(note)
+        else:
+            print "Note #" + str(id) + " doesn't exist"
 
     def listNotesAndMeta(self):
         list = self._swiftManager.downloadObjectIds()
@@ -70,7 +76,10 @@ class Powdernote(object):
         OutputManager.listPrint(dict, OutputManager.HEADER_FULL)
 
     def deleteNote(self, id):
-        self._swiftManager.deleteNote(id)
+        if self._swiftManager.doesNoteExist(id) == True:
+           self._swiftManager.deleteNote(id)
+        else:
+            print "Note #" + str(id) + " doesn't exist"
 
     def _editNote(self, note):
         # TODO: validate note content (even if existing content coming from online should always be valid if only edited with this application)
@@ -215,16 +224,22 @@ class Powdernote(object):
         OutputManager.markdownPrint(note.getTitle(), note.getContent())
 
     def printMeta(self, metaId):
-        self._swiftManager.printMeta(metaId)
+        if self._swiftManager.doesNoteExist(metaId) == True:
+            self._swiftManager.printMeta(metaId)
+        else:
+            print "Note #" + str(metaId) + " doesn't exist"
 
     def addTags(self, tags, objId):
         self._swiftManager.addTags(tags, objId)
 
     def renameNote(self, noteId, newTitle):
-        note = self._swiftManager.getNote(noteId)
-        newTitle = str(noteId) + " - " + newTitle
-        oldTitle = note.getObjectId()
-        if oldTitle == newTitle:
-            print "No changes have been made, cancelling..."
-            sys.exit(1)
-        self._swiftManager._renameNote(note, newTitle, oldTitle)
+        if self._swiftManager.doesNoteExist(noteId) == True:
+            note = self._swiftManager.getNote(noteId)
+            newTitle = str(noteId) + " - " + newTitle
+            oldTitle = note.getObjectId()
+            if oldTitle == newTitle:
+                print "No changes have been made, cancelling..."
+                sys.exit(1)
+            self._swiftManager._renameNote(note, newTitle, oldTitle)
+        else:
+            print "Note #" + str(noteId) + " doesn't exist"
