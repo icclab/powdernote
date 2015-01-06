@@ -68,6 +68,11 @@ class ArgparseCommands(object):
         parser_tag.add_argument('tagList', type=str, nargs='+', help='add tags, seperate with spaces only')
         parser_tag.set_defaults(parser_tag=True)
 
+        parser_rename = subparsers.add_parser('rename', help='rename a note')
+        parser_rename.add_argument('r_id', type=int, help='id of note you want to rename')
+        parser_rename.add_argument('newTitle', type=str, help='how you want to name the note')
+        parser_rename.set_defaults(parser_rename=True)
+
 
         args = parser.parse_args()
         #print help(args)
@@ -110,6 +115,11 @@ class ArgparseCommands(object):
             tags = args.tagList
             id = args.t_id
             pn.addTags(tags, id)
+
+        elif args.__contains__("parser_rename"):
+            id = args.r_id
+            title = args.newTitle
+            pn.renameNote(id, title)
 
 
 if __name__ == '__main__':

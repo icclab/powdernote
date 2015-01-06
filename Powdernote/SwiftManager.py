@@ -88,8 +88,7 @@ class SwiftManager(object):
                return note
        return None
 
-    def uploadNote(self, note):
-        title = note.getObjectId()
+    def uploadNote(self, note, title):
         if len(title) == 0:
             title = self._generateObjectTitle(note.getTitle())
         metaManager = MetaManager(self._storage_url, self._token, title)
@@ -108,6 +107,21 @@ class SwiftManager(object):
         metaManager.setTags(None)
         metaManager.commitMeta()
 
+    def _renameNote(self, note, newTitle, oldTitle):
+        put_object(self._storage_url, self._token, Configuration.container_name, newTitle, headers={"X-Copy-From":Configuration.container_name + "/" + oldTitle})
+        self._deleteNoteByObjectId(oldTitle)
+
+        metaManager = MetaManager(self._storage_url, self._token, newTitle)
+        currentCreateDate = metaManager.getCreateDate()
+        lastModifiedDate = MetaManager.dateNow()
+
+        metaManager.setCreateDate(currentCreateDate)
+        metaManager.setLastModifiedDate(lastModifiedDate)
+        metaManager.setTags(None)
+        metaManager.commitMeta()
+
+        print "Ok"
+
 
     def deleteNote(self, id):
         _, objects = self._downloadContainer()
@@ -115,9 +129,9 @@ class SwiftManager(object):
             if str(id) == SwiftManager.objIdToId(object['name']):
                 if self._confirmation("delete note \'" + object['name'] + "\'"):
                     self._deleteNoteByObjectId(object['name'])
-                    print "OK"
+                    print "Ok"
                 else:
-                    print "abort"
+                    print "Abort"
                 return
 
     def _deleteNoteByObjectId(self, objectId):
@@ -179,10 +193,10 @@ class SwiftManager(object):
         confirm = None
         while confirm == None:
             try:
-                answer = raw_input("are you sure you want to " + action + "? (y/n) ")
+                answer = raw_input("Are you sure you want to " + action + "? (y/n) ")
                 confirm = util.strtobool(answer)
             except ValueError:
-                print "try again"
+                print "Try again"
                 continue
 
         if confirm == 1:

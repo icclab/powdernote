@@ -79,10 +79,10 @@ class Powdernote(object):
         # TODO: edit note in a loop until the content is valid
         ret = self._editorManager.editNote(note)
         if ret == EditorManager.NEW_CONTENT_AVAILABLE:
-            self._swiftManager.uploadNote(note)
-            print "note has been saved"
+            self._swiftManager.uploadNote(note, note.getObjectId())
+            print "Note has been saved"
         else:
-            print "no changes have been made, canceling..."
+            print "No changes have been made, cancelling..."
             sys.exit(1)
 
     def searchInTitle(self, subString):
@@ -219,3 +219,12 @@ class Powdernote(object):
 
     def addTags(self, tags, objId):
         self._swiftManager.addTags(tags, objId)
+
+    def renameNote(self, noteId, newTitle):
+        note = self._swiftManager.getNote(noteId)
+        newTitle = str(noteId) + " - " + newTitle
+        oldTitle = note.getObjectId()
+        if oldTitle == newTitle:
+            print "No changes have been made, cancelling..."
+            sys.exit(1)
+        self._swiftManager._renameNote(note, newTitle, oldTitle)
