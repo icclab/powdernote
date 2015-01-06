@@ -87,6 +87,7 @@ class ArgparseCommands(object):
             editId = args.e_id
             pn.editNote(editId)
 
+
         elif args.__contains__("parser_l"):
             pn.listNotesAndMeta()
 
