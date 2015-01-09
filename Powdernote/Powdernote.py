@@ -19,11 +19,16 @@ limitations under the License.
 __author__ = 'gank'
 
 import sys
+from os.path import expanduser
 from EditorManager import EditorManager
 from SwiftManager import SwiftManager
 from SwiftAuthManager import SwiftAuthManager
 from Note import Note
 from OutputManager import OutputManager
+from ConfigParser import ConfigParser
+from datetime import datetime
+from collections import OrderedDict
+
 
 class Powdernote(object):
 
@@ -38,6 +43,8 @@ class Powdernote(object):
         sam = SwiftAuthManager()
         storage_url, token = sam.getcredentials()
         self._swiftManager = SwiftManager(storage_url, token)
+        self._path = expanduser("~")
+
 
     def newNote(self, title):
         note = Note(title)
@@ -59,7 +66,8 @@ class Powdernote(object):
 
     def listNotesAndMeta(self):
         list = self._swiftManager.downloadObjectIds()
-        dict  = {}
+        soDict  = {}
+        sort = self.settingsParser("Settings", "sort")
         for element in list:
             id = SwiftManager.objIdToId(element)
             if id is None:
@@ -70,10 +78,33 @@ class Powdernote(object):
             lastmod = metamngr.getLastModifiedDate()
             tags = metamngr.getTags()
             name = SwiftManager.objIdToTitle(element)
-            dict[id] = [id, name, crdate, lastmod, tags]
-            sorted(dict)
+            soDict[id] = [id, name, crdate, lastmod, tags]
 
-        OutputManager.listPrint(dict, OutputManager.HEADER_FULL)
+        if sort == "name":
+            soDict = OrderedDict(sorted(soDict.items(), key=lambda (k, v): v[1]))
+
+        elif sort == "crdate":
+            soDict = OrderedDict(sorted(soDict.items(), key=lambda (k, v): datetime.strptime(v[2], "%H:%M, %d/%m/%Y").isoformat(), reverse=True))
+
+        elif sort == "id":
+            sorted(soDict)
+
+        else:
+            soDict = OrderedDict(sorted(soDict.items(), key=lambda (k, v): datetime.strptime(v[3], "%H:%M, %d/%m/%Y").isoformat(), reverse=True))
+
+        OutputManager.listPrint(soDict, OutputManager.HEADER_FULL)
+
+    def settingsParser(self, section, option):
+        config = ConfigParser()
+        read = config.read(self._path + "/.powdernoterc")
+
+        if read == []:
+            value = "empty"
+        else:
+            value = config.get(section, option)
+
+        return value
+
 
     def deleteNote(self, id):
         if self._swiftManager.doesNoteExist(id) == True:
