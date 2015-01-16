@@ -49,9 +49,9 @@ class ArgparseCommands(object):
         parser_d.set_defaults(parser_d=True)
 
         # search -c ravioli
-        parser_s = subparsers.add_parser('search', help='search for a SubString inside a note (will only search in titles)')
-        parser_s.add_argument('-c', '--content', action='store_true', help='search in the content of a note')
-        parser_s.add_argument('-t', '--tag', action='store_true', help='search for note with this tag')
+        parser_s = subparsers.add_parser('search', help='search for a SubString inside a note (searches in content)')
+        parser_s.add_argument('-t', '--title', action='store_true', help='search in the titles of notes')
+        parser_s.add_argument('-m', '--meta', action='store_true', help='search for a note with this tag')
         parser_s.add_argument('subStr', type=str, help='search for a word in a title')
         parser_s.set_defaults(parser_s=True)
 
@@ -97,12 +97,12 @@ class ArgparseCommands(object):
 
         elif args.__contains__("parser_s"):
             searchStr = args.subStr
-            if args.content == True:
-                pn.searchInMushroom(searchStr)
-            elif args.tag == True:
+            if args.title == True:
+                pn.searchInTitle(searchStr)
+            elif args.meta == True:
                 pn.searchInTags(searchStr)
             else:
-                pn.searchInTitle(searchStr)
+                 pn.searchInMushroom(searchStr)
 
         elif args.__contains__("parser_r"):
             readId = args.r_id
