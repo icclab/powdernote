@@ -78,15 +78,15 @@ class SwiftManager(object):
 
 
     def getNote(self, noteId):
-       objectIds = self.downloadObjectIds()
-       for objectId in objectIds:
-           if str(noteId) == SwiftManager.objIdToId(objectId):
-               noteContent = self._downloadNote(objectId)
-               note = Note(SwiftManager.objIdToTitle(objectId))
-               note.setObjectId(objectId)
-               note.setContent(noteContent)
-               return note
-       return None
+        objectIds = self.downloadObjectIds()
+        for objectId in objectIds:
+            if str(noteId) == SwiftManager.objIdToId(objectId):
+                noteContent = self._downloadNote(objectId)
+                note = Note(SwiftManager.objIdToTitle(objectId))
+                note.setObjectId(objectId)
+                note.setContent(noteContent)
+                return note
+        return None
 
     def uploadNote(self, note, title):
         if len(title) == 0:
@@ -106,6 +106,7 @@ class SwiftManager(object):
         #we only need to keep the previous tags, NONE IS CORRECT DO NOT CHANGE
         metaManager.setTags(None)
         metaManager.commitMeta()
+        print title
 
     def _renameNote(self, note, newTitle, oldTitle):
         put_object(self._storage_url, self._token, Configuration.container_name, newTitle, headers={"X-Copy-From":Configuration.container_name + "/" + oldTitle})
@@ -123,13 +124,14 @@ class SwiftManager(object):
         print "Ok"
 
 
-    def deleteNote(self, id):
+    def deleteNote(self, id, force = False):
         _, objects = self._downloadContainer()
         for object in objects:
             if str(id) == SwiftManager.objIdToId(object['name']):
-                if self._confirmation("delete note \'" + object['name'] + "\'"):
+                if force or self._confirmation("delete note \'" + object['name'] + "\'"):
                     self._deleteNoteByObjectId(object['name'])
-                    print "Ok"
+                    if force == False:
+                        print "Ok"
                 else:
                     print "Abort"
                 return
