@@ -35,7 +35,6 @@ class Powdernote(object):
     NOTE_INDICATOR = " \n --- \n"
     NOTE = "Note: \n "
     TAGS = "\nCoresponding tags: \n "
-    DOTDOTDOT = "..."
 
     def __init__(self):
         super(Powdernote, self).__init__()
@@ -105,12 +104,25 @@ class Powdernote(object):
 
         return value
 
+    def deleteList(self, idList):
+        nameList = []
+        for id in idList:
+            if self._swiftManager.doesNoteExist(id) == True:
+                note = self._swiftManager.getNote(id)
+                title = str(note.getTitle())
+                nameList.append((str(id), title))
+            else:
+                print "Note #" + str(id) + " doesn't exist."
+                sys.exit(1)
 
-    def deleteNote(self, id):
-        if self._swiftManager.doesNoteExist(id) == True:
-           self._swiftManager.deleteNote(id)
+        action = "delete note(s)"
+        OutputManager.printListedNotes(nameList)
+        if self._swiftManager._confirmation(action) == True:
+            for id, _ in nameList:
+                self._swiftManager.deleteNote(id, force=True)
+            print "Ok"
         else:
-            print "Note #" + str(id) + " doesn't exist"
+            print "Abort"
 
     def _editNote(self, note):
         # TODO: validate note content (even if existing content coming from online should always be valid if only edited with this application)
@@ -126,14 +138,23 @@ class Powdernote(object):
             sys.exit(1)
 
     def searchInTitle(self, subString):
+        elementList = self._searchInTitleImpl(subString)
+        elementDict  = {}
+        for elements in elementList:
+            id = elements[0]
+            elementDict[id] = elements
+        sorted(elementDict)
+        OutputManager.listPrint(elementDict, OutputManager.HEADER_FULL)
+
+    def _searchInTitleImpl(self, subString):
+        elementList = []
         list = self._swiftManager.downloadObjectIds()
-        dict  = {}
         for element in list:
-            id = SwiftManager.objIdToId(element)
-            if id is None:
+            noteId = SwiftManager.objIdToId(element)
+            if noteId is None:
                 raise RuntimeError("Can not get the ID from " + element + " ... should not happen, really")
             metamngr = self._swiftManager.metaMngrFactory(element)
-            id = int(id)
+            noteId = int(noteId)
             crdate = metamngr.getCreateDate()
             lastmod = metamngr.getLastModifiedDate()
             tags = metamngr.getTags()
@@ -143,27 +164,37 @@ class Powdernote(object):
             if loc < 0:
                 continue
             else:
-                dict[id] = [id, name, crdate, lastmod, tags]
-            sorted(dict)
-
-        OutputManager.listPrint(dict, OutputManager.HEADER_FULL)
+                elementList.append([noteId, name, crdate, lastmod, tags])
+        return elementList
 
     def searchInMushroom(self, substr):
+        elementList = self._searchInMushroomImpl(substr)
+        for element in elementList:
+            OutputManager.searchMDPrint(element[0] + " - " + element[1], element[2])
+
+    def _searchInMushroomImpl(self, substr):
+        '''
+        this function returns a list of lists, with the values: id, name, content
+        :param substr:
+        :return:
+        '''
         matchstr = []
         self._swiftManager.downloadNotes()
         notes = self._swiftManager.getDownloadedNotes()
-        for noteName, noteContent in notes.items():
+        for name, content in notes.items():
+            id = SwiftManager.objIdToId(name)
+            name = SwiftManager.objIdToTitle(name)
             substr = substr.lower()
-            noteContent = noteContent.lower()
-            olist = self._findMatchingIntervals(noteContent, substr)
+            content = content.lower()
+            olist = self._findMatchingIntervals(content, substr)
             if olist == []:
                 continue
             else:
+                intervals = []
                 for alist in olist:
-                    matchstr.append(noteContent[alist[0]:alist[1]])
-            OutputManager.searchMDPrint(noteName, matchstr)
-            matchstr = []
-
+                    intervals.append(content[alist[0]:alist[1]])
+                matchstr.append([id, name, intervals])
+        return matchstr
 
     @staticmethod
     def _findMatchingIntervals(content, substr):
@@ -231,8 +262,17 @@ class Powdernote(object):
         print element name
         '''
 
-        list = self._swiftManager.downloadObjectIds()
+        elementList = self._searchInTagsImpl(substr)
         dict  = {}
+        for elements in elementList:
+            id = elements[0]
+            dict[id] = elements
+        sorted(dict)
+        OutputManager.listPrint(dict, OutputManager.HEADER_TAG)
+
+    def _searchInTagsImpl(self, substr):
+        list = self._swiftManager.downloadObjectIds()
+        elementList = []
         for element in list:
             id = SwiftManager.objIdToId(element)
             if id is None:
@@ -246,10 +286,51 @@ class Powdernote(object):
             tagList = tags.lower().split()
             substr = substr.lower()
             if substr in tagList:
-                dict[id] = [id, name, tags]
-            sorted(dict)
+                elementList.append([id, name, tags])
+        return elementList
 
-        OutputManager.listPrint(dict, OutputManager.HEADER_TAG)
+    def searchEverything(self, substr):
+        titleMatch = self._searchInTitleImpl(substr)
+        tagMatch = self._searchInTagsImpl(substr)
+        contentMatch = self._searchInMushroomImpl(substr)
+        generalMatch = []
+
+        title = {}
+        tag = {}
+        content = {}
+
+
+        for element in titleMatch:
+            title[str(element[0])] = str(element[1])
+
+        for element in tagMatch:
+            tag[str(element[0])] = [str(element[1]), element[2]]
+
+        for element in contentMatch:
+            content[str(element[0])] = [str(element[1]), element[2]]
+
+        generalMatch = set(title.keys() + tag.keys() + content.keys())
+
+        for element in generalMatch:
+            if element in tag.keys() and element in content.keys():
+                # print content.values()[0], tag, content.values()[1]
+                OutputManager.searchEverythingPrint(element, content[element][0], tag, content[element][1])
+
+            elif element in content.keys():
+                # print content.values()[0], content.values()[1]
+                 OutputManager.searchEverythingPrint(element, content[element][0], None, content[element][1])
+
+            elif element in tag.keys():
+                # print element, tag.values()[0][0], tag.values()[0][1]
+                OutputManager.searchEverythingPrint(element, tag.values()[0][0], tag.values()[0][1])
+
+            elif element in title.keys():
+                # print title[element]
+                OutputManager.searchEverythingPrint(element, title.values()[0])
+
+            else:
+                print "nothing found"
+
 
     def _readNote(self, note):
         OutputManager.markdownPrint(note.getTitle(), note.getContent())

@@ -41,18 +41,18 @@ class ArgparseCommands(object):
         parser_e.set_defaults(parser_e=True)
 
         parser_l = subparsers.add_parser('list', help='lists all the notes')
-        parser_l.add_argument('-l', '--list_details', action='store_true', help='list all notes with meta data')
+        parser_l.add_argument('n_id', type=int, nargs='?', help='list information for note with given id')
         parser_l.set_defaults(parser_l=True)
 
         parser_d = subparsers.add_parser('delete', help='delete a note')
-        parser_d.add_argument('d_id', type=int, help='id of note you want to delete, CAUTION is recommended')
+        parser_d.add_argument('idList', type=int, nargs='+', help='id of note you want to delete, CAUTION is recommended')
         parser_d.set_defaults(parser_d=True)
 
         # search -c ravioli
-        parser_s = subparsers.add_parser('search', help='search for a SubString inside a note (searches in content)')
+        parser_s = subparsers.add_parser('search', help='search for a SubString inside a note (searches everywhere)')
         parser_s.add_argument('-t', '--title', action='store_true', help='search in the titles of notes')
-        parser_s.add_argument('-m', '--meta', action='store_true', help='search for a note with this tag')
-        parser_s.add_argument('subStr', type=str, help='search for a word in a title')
+        parser_s.add_argument('-p', '--tag', action='store_true', help='search for a note with this tag')
+        parser_s.add_argument('subStr', type=str, help='search for a word in a note')
         parser_s.set_defaults(parser_s=True)
 
         parser_r = subparsers.add_parser('read', help='display a note')
@@ -89,20 +89,24 @@ class ArgparseCommands(object):
 
 
         elif args.__contains__("parser_l"):
-            pn.listNotesAndMeta()
+            nId = args.n_id
+            if nId is not None:
+                pn.printMeta(nId)
+            else:
+                pn.listNotesAndMeta()
 
         elif args.__contains__("parser_d"):
-            deleteId = args.d_id
-            pn.deleteNote(deleteId)
+            dIdList = args.idList
+            pn.deleteList(dIdList)
 
         elif args.__contains__("parser_s"):
             searchStr = args.subStr
             if args.title == True:
                 pn.searchInTitle(searchStr)
-            elif args.meta == True:
+            elif args.tag == True:
                 pn.searchInTags(searchStr)
             else:
-                 pn.searchInMushroom(searchStr)
+                pn.searchEverything(searchStr)
 
         elif args.__contains__("parser_r"):
             readId = args.r_id
