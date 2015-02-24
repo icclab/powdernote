@@ -25,7 +25,7 @@ Configure
 
 You can setup the editor to be used for notes with the
 
-    EDITOR
+    PDRNOTE_EDITOR
 
 environment variable.
 It defaults to vim.

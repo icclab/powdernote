@@ -111,7 +111,8 @@ class EditorManager(object):
             editor = 'E'
         else:
             editor = 'vi'
-        return (os.environ.get("VISUAL") or
+        return (os.environ.get("PDRNOTE_EDITOR ") or
+                os.environ.get("VISUAL") or
                 os.environ.get("EDITOR", editor))
 
     def _openEditor(self, filename):
