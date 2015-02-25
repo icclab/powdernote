@@ -126,8 +126,10 @@ class ArgparseCommands(object):
             title = args.newTitle
             pn.renameNote(id, title)
 
-
-if __name__ == '__main__':
+def main():
     ac = ArgparseCommands()
 
     ac.commands()
+
+if __name__ == '__main__':
+    main()
