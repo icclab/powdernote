@@ -17,7 +17,7 @@ limitations under the License.
 '''
 
 import unittest
-from Powdernote.Powdernote import Powdernote
+from Powdernote_impl.Powdernote_impl import Powdernote
 
 class MushroomSearch_Test(unittest.TestCase):
 

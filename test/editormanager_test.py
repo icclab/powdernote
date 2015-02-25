@@ -20,7 +20,7 @@ __author__ = 'gank'
 
 import unittest
 import os
-from Powdernote.EditorManager import EditorManager
+from Powdernote_impl.EditorManager import EditorManager
 
 class EditorManager_test(unittest.TestCase):
 
