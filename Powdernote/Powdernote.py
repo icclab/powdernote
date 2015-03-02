@@ -19,7 +19,7 @@ limitations under the License.
 __author__ = 'gank'
 
 import argparse
-from Powdernote_impl import Powdernote_impl
+from Powdernote_impl import Powdernote
 
 class ArgparseCommands(object):
 
@@ -77,7 +77,7 @@ class ArgparseCommands(object):
         args = parser.parse_args()
         #print help(args)
 
-        pn = Powdernote_impl()
+        pn = Powdernote()
 
         if args.__contains__("parser_n"):
             note_title = args.title
