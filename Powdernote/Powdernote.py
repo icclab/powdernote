@@ -28,9 +28,9 @@ class ArgparseCommands(object):
 
     def commands(self):
 
-        parser = argparse.ArgumentParser(prog="Powdernote", description="Powdernote")
+        parser = argparse.ArgumentParser(prog="powdernote", description="powdernote")
 
-        subparsers = parser.add_subparsers(help='Powdernote Functions')
+        subparsers = parser.add_subparsers(help='powdernote Functions')
 
         parser_n = subparsers.add_parser('new', help='create a new note')
         parser_n.add_argument('title', type=str, help='write the title of new note')

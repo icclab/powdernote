@@ -21,12 +21,12 @@ from setuptools import setup
 
 setup(name='powdernote',
       version='1.0',
-      description='Powdernote',
+      description='powdernote',
       author='The Kid',
       author_email='anke@zhaw.ch',
       url='http://blog.zhaw.ch/icclab',
       license='Apache 2.0',
-      packages=['Powdernote'],
+      packages=['powdernote'],
       install_requires=['tabulate', 'python-swiftclient'],
-      entry_points={'console_scripts':['powdernote = Powdernote.powdernote:main']}
+      entry_points={'console_scripts':['powdernote = powdernote.powdernote:main']}
 )
