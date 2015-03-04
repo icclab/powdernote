@@ -28,5 +28,5 @@ setup(name='powdernote',
       license='Apache 2.0',
       packages=['powdernote'],
       install_requires=['tabulate', 'python-swiftclient'],
-      entry_points={'console_scripts':['powdernote = powdernote.powdernote:main']}
+      entry_points={'console_scripts':['powdernote = powdernote.Powdernote:main']}
 )
