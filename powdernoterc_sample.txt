@@ -2,4 +2,4 @@
 sort=id
 ;Choose how to sort your notes
 ;id - sorts by id, lastmod - sorts by last modifaction date, crdate - sorts by date of creation, name - sort by name
-;It's id by default
+;It's lastmod by default

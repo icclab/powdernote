@@ -59,9 +59,6 @@ class ArgparseCommands(object):
         parser_r.add_argument('r_id', type=int, help='id of note you want to read')
         parser_r.set_defaults(parser_r=True)
 
-        parser_md = subparsers.add_parser('meta', help='get meta')
-        parser_md.add_argument('md_id', type=int, help='id of note you want metadata from')
-        parser_md.set_defaults(parser_md=True)
 
         parser_tag = subparsers.add_parser('tag', help='add tags to a note')
         parser_tag.add_argument('t_id', type=int, help='id of note you want to add tags to')
@@ -87,7 +84,6 @@ class ArgparseCommands(object):
             editId = args.e_id
             pn.editNote(editId)
 
-
         elif args.__contains__("parser_l"):
             nId = args.n_id
             if nId is not None:
@@ -111,10 +107,6 @@ class ArgparseCommands(object):
         elif args.__contains__("parser_r"):
             readId = args.r_id
             pn.readNote(readId)
-
-        elif args.__contains__("parser_md"):
-            metaId = args.md_id
-            pn.printMeta(metaId)
 
         elif args.__contains__("parser_tag"):
             tags = args.tagList
