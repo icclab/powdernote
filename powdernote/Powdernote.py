@@ -62,7 +62,7 @@ class ArgparseCommands(object):
 
         parser_tag = subparsers.add_parser('tag', help='add tags to a note')
         parser_tag.add_argument('t_id', type=int, help='id of note you want to add tags to')
-        parser_tag.add_argument('tagList', type=str, nargs='+', help='add tags, seperate with spaces only')
+        parser_tag.add_argument('tagList', type=str, nargs='+', help='add tags, separate with spaces only')
         parser_tag.set_defaults(parser_tag=True)
 
         parser_rename = subparsers.add_parser('rename', help='rename a note')

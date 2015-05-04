@@ -18,15 +18,7 @@ limitations under the License.
 
 __author__ = 'gank'
 
+class VersionManager(object):
 
-class Configuration(object):
-
-    #insert your credentials
-    username = "anke"
-    password = "j3b6az"
-    tenant_id = "cb27aebb63a8419486e027f8d8caca5a"
-    container_name = "powdernote-anke"
-
-    #do not edit these
-    tenant_name = username
-    auth_url = "http://160.85.4.231:5000/v2.0"
+        def __init__(self):
+            super(VersionManager, self).__init__()

@@ -290,6 +290,12 @@ class Powdernote(object):
         return elementList
 
     def searchEverything(self, substr):
+        '''
+        this function searches for a substring, it doesn't matter if it is in title, content or tags, if there are results
+        they will be printed.
+        :param substr:
+        :return:
+        '''
         titleMatch = self._searchInTitleImpl(substr)
         tagMatch = self._searchInTagsImpl(substr)
         contentMatch = self._searchInMushroomImpl(substr)
@@ -313,19 +319,15 @@ class Powdernote(object):
 
         for element in generalMatch:
             if element in tag.keys() and element in content.keys():
-                # print content.values()[0], tag, content.values()[1]
                 OutputManager.searchEverythingPrint(element, content[element][0], tag, content[element][1])
 
             elif element in content.keys():
-                # print content.values()[0], content.values()[1]
                  OutputManager.searchEverythingPrint(element, content[element][0], None, content[element][1])
 
             elif element in tag.keys():
-                # print element, tag.values()[0][0], tag.values()[0][1]
                 OutputManager.searchEverythingPrint(element, tag.values()[0][0], tag.values()[0][1])
 
             elif element in title.keys():
-                # print title[element]
                 OutputManager.searchEverythingPrint(element, title.values()[0])
 
             else:
@@ -345,6 +347,12 @@ class Powdernote(object):
         self._swiftManager.addTags(tags, objId)
 
     def renameNote(self, noteId, newTitle):
+        '''
+        this function saves the note with a new title but same content and metadata to swift
+        :param noteId:
+        :param newTitle:
+        :return:
+        '''
         if self._swiftManager.doesNoteExist(noteId) == True:
             note = self._swiftManager.getNote(noteId)
             newTitle = str(noteId) + " - " + newTitle

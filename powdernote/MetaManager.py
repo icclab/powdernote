@@ -91,7 +91,7 @@ class MetaManager(object):
 
     def setTags(self, tags):
         '''
-
+        this function takes the users input as a list of tags
         :param tags: list expected
         :return:
         '''
