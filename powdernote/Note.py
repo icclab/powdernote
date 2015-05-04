@@ -36,18 +36,7 @@ class Note(object):
         When a note is created, content comes only from the editor.
         When a note is edited, content comes from Swift and from the editor
 
-        At this point we assume that the note content is valid, this means that it
-        can be of one of these formats:
-
-        <title>
-        \n
-        <nothing>
-
-        <title>
-        \n
-        <mushroom>
-
-        :param content: the note content, the mushroom is an optional part of it
+        :param content: the note content
         '''
         self._mushroom = content
 

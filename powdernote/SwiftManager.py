@@ -192,6 +192,11 @@ class SwiftManager(object):
         return get_container(self._storage_url, self._token, Configuration.container_name)
 
     def _confirmation(self, action):
+        '''
+        asks for confirmation of an action
+        :param action:
+        :return:
+        '''
         confirm = None
         while confirm == None:
             try:
@@ -207,6 +212,11 @@ class SwiftManager(object):
             return False
 
     def printMeta(self, metaId):
+        '''
+        prints the metadata of a single note
+        :param metaId:
+        :return:
+        '''
         dict = {}
         note = self.getNote(metaId)
         mm = self.metaMngrFactory(note.getObjectId())
@@ -225,6 +235,12 @@ class SwiftManager(object):
         return MetaManager(self._storage_url, self._token, objId)
 
     def addTags(self, tags, tId):
+        '''
+        saves tags to the metadata of note, and then commits it to swift
+        :param tags:
+        :param tId:
+        :return:
+        '''
         note = self.getNote(tId)
         mm = self.metaMngrFactory(note.getObjectId())
         mm.loadData()
