@@ -93,8 +93,6 @@ class SwiftManager(object):
             title = self._generateObjectTitle(note.getTitle())
         metaManager = MetaManager(self._storage_url, self._token, title)
         currentCreateDate = metaManager.getCreateDate()
-        #if the object already exists, make a version
-        if title in self
         put_object(self._storage_url, self._token, Configuration.container_name, title,
                    note.getContent())
         lastModifiedDate = MetaManager.dateNow()
@@ -110,7 +108,7 @@ class SwiftManager(object):
         metaManager.commitMeta()
         print title
 
-    def _renameNote(self, note, newTitle, oldTitle):
+    def _renameNote(self, newTitle, oldTitle):
         put_object(self._storage_url, self._token, Configuration.container_name, newTitle, headers={"X-Copy-From":Configuration.container_name + "/" + oldTitle})
         self._deleteNoteByObjectId(oldTitle)
 
@@ -124,6 +122,10 @@ class SwiftManager(object):
         metaManager.commitMeta()
 
         print "Ok"
+
+    def versionUpload(self, oldTitle, newTitle):
+        #todo: commets
+        put_object(self._storage_url, self._token, Configuration.container_name, newTitle, headers={"X-Copy-From":Configuration.container_name + "/" + oldTitle})
 
 
     def deleteNote(self, id, force = False):

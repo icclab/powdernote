@@ -18,15 +18,25 @@ limitations under the License.
 
 __author__ = 'gank'
 
-from EditorManager import EditorManager
+from MetaManager import MetaManager
+from SwiftManager import SwiftManager
+from OutputManager import OutputManager
 
 class VersionManager(object):
 
-        def __init__(self):
+        VERSIONIDENTIFIER = "v"
+        DELETEIDENTIFIER = "vd"
+
+        def __init__(self, swiftManager):
             super(VersionManager, self).__init__()
+            self._swiftMngr = swiftManager
 
+        def versionCreator(self, objectId):
+            #todo: comments
 
-
-        def versionCreator(self, note):
-
+            metamngr = self._swiftMngr.metaMngrFactory(objectId)
+            time = metamngr.getLastModifiedDate().strftime("%Y%m%d%H%M%S%f")[:-3]
+            oldTitle = objectId
+            newTitle = VersionManager.VERSIONIDENTIFIER + OutputManager.DASH + time + oldTitle
+            self._swiftMngr.versionUpload(oldTitle, newTitle)
 
