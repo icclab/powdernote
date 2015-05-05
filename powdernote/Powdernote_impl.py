@@ -44,7 +44,7 @@ class Powdernote(object):
         storage_url, token = sam.getcredentials()
         self._swiftManager = SwiftManager(storage_url, token)
         self._path = expanduser("~")
-        self._versionMngr = VersionManager()
+        self._versionMngr = VersionManager(self._swiftManager)
 
 
     def newNote(self, title):
@@ -131,8 +131,8 @@ class Powdernote(object):
         oldNote = note
         if ret == EditorManager.NEW_CONTENT_AVAILABLE:
             #make a version of a note
-            self._versionMngr.versionCreator(oldNote)
-            #upload the note to swift
+            self._versionMngr.versionCreator(oldNote.getObjectId())
+            #upload the note with the new content to swift
             self._swiftManager.uploadNote(note, note.getObjectId())
             print "Note has been saved"
         else:

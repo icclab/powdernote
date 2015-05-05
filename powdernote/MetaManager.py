@@ -77,7 +77,6 @@ class MetaManager(object):
         else:
             return timestamp
 
-
     def getTags(self):
         return self._getMeta('x-object-meta-tags')
 
