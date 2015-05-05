@@ -28,6 +28,7 @@ from OutputManager import OutputManager
 from ConfigParser import ConfigParser
 from datetime import datetime
 from collections import OrderedDict
+from VersionManager import VersionManager
 
 
 class Powdernote(object):
@@ -43,6 +44,7 @@ class Powdernote(object):
         storage_url, token = sam.getcredentials()
         self._swiftManager = SwiftManager(storage_url, token)
         self._path = expanduser("~")
+        self._versionMngr = VersionManager()
 
 
     def newNote(self, title):
@@ -125,12 +127,12 @@ class Powdernote(object):
             print "Abort"
 
     def _editNote(self, note):
-        # TODO: validate note content (even if existing content coming from online should always be valid if only edited with this application)
-        # raise exception if note content was not valid
-        
-        # TODO: edit note in a loop until the content is valid
         ret = self._editorManager.editNote(note)
+        oldNote = note
         if ret == EditorManager.NEW_CONTENT_AVAILABLE:
+            #make a version of a note
+            self._versionMngr.versionCreator(oldNote)
+            #upload the note to swift
             self._swiftManager.uploadNote(note, note.getObjectId())
             print "Note has been saved"
         else:

@@ -63,11 +63,6 @@ class OutputManager(object):
         for id, title in noteList:
             print id + OutputManager.ID_TITLE_SEPERATOR + title
 
-        #nameList = []
-        #for id in idList:
-        #    note = SwiftManager.getNote(id)
-        #    nameList.append(str(id) + OutputManager.SPACEDASHSPACE + str(note.getTitle()))
-
     @staticmethod
     def searchEverythingPrint(id, title, tag = None, content = None):
 
