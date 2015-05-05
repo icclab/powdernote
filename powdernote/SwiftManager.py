@@ -93,6 +93,8 @@ class SwiftManager(object):
             title = self._generateObjectTitle(note.getTitle())
         metaManager = MetaManager(self._storage_url, self._token, title)
         currentCreateDate = metaManager.getCreateDate()
+        #if the object already exists, make a version
+        if title in self
         put_object(self._storage_url, self._token, Configuration.container_name, title,
                    note.getContent())
         lastModifiedDate = MetaManager.dateNow()

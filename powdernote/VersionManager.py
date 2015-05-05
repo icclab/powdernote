@@ -18,7 +18,15 @@ limitations under the License.
 
 __author__ = 'gank'
 
+from EditorManager import EditorManager
+
 class VersionManager(object):
 
         def __init__(self):
             super(VersionManager, self).__init__()
+
+
+
+        def versionCreator(self, note):
+
+

@@ -22,7 +22,7 @@ from datetime import datetime
 from swiftclient.client import post_object, get_object
 from swiftclient.exceptions import ClientException
 from Configuration import Configuration
-
+import re
 
 class MetaManager(object):
 
@@ -39,21 +39,44 @@ class MetaManager(object):
     @staticmethod
     def dateNow():
         nowDate = datetime.now()
-        return nowDate.strftime('%H:%M, %d/%m/%Y')
+        return nowDate.strftime('%H:%M:%S.%f, %d/%m/%Y')
 
     def loadData(self):
         self._commitList['x-object-meta-crdate'] = self._getMeta('x-object-meta-crdate')
         self._commitList['x-object-meta-lastmod'] = self._getMeta('x-object-meta-lastmod')
         self._commitList['x-object-meta-tags'] = self._getMeta('x-object-meta-tags')
 
+    def _cutTimestampStringToSeconds(self, timestamp):
+        '''
+        this function makes the microseconds invisible in the timestamp string of a notes metadata when it's getting
+        listed, so there is not too much information that it looks confusing.
+        :param timestamp:
+        :return:
+        '''
+        regex = '^(\d+:\d+:\d+)\.\d+(,.*)$'
+        cut = re.search(regex, timestamp)
+        # support legacy notes that do not have the new timestamp
+        if cut is None:
+            return timestamp
+        cutSeconds = cut.group(1)+cut.group(2)
+        return cutSeconds
 
-    def getCreateDate(self):
+    def getCreateDate(self, cutToSeconds=True):
         # use _getMeta
         #"other solution is very easy" ~ Vincenzo Pii, 2014 Zürich
-        return self._getMeta('x-object-meta-crdate')
+        timestamp = self._getMeta('x-object-meta-crdate')
+        if cutToSeconds:
+            return self._cutTimestampStringToSeconds(timestamp)
+        else:
+            return timestamp
 
-    def getLastModifiedDate(self):
-        return self._getMeta('x-object-meta-lastmod')
+    def getLastModifiedDate(self, cutToSeconds=True):
+        timestamp = self._getMeta('x-object-meta-lastmod')
+        if cutToSeconds:
+            return self._cutTimestampStringToSeconds(timestamp)
+        else:
+            return timestamp
+
 
     def getTags(self):
         return self._getMeta('x-object-meta-tags')
