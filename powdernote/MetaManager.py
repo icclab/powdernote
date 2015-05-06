@@ -62,17 +62,15 @@ class MetaManager(object):
         return cutSeconds
 
     def getCreateDate(self, cutToSeconds=True):
-        # use _getMeta
-        #"other solution is very easy" ~ Vincenzo Pii, 2014 Zürich
         timestamp = self._getMeta('x-object-meta-crdate')
-        if cutToSeconds:
+        if timestamp and cutToSeconds:
             return self._cutTimestampStringToSeconds(timestamp)
         else:
             return timestamp
 
     def getLastModifiedDate(self, cutToSeconds=True):
         timestamp = self._getMeta('x-object-meta-lastmod')
-        if cutToSeconds:
+        if timestamp and cutToSeconds:
             return self._cutTimestampStringToSeconds(timestamp)
         else:
             return timestamp

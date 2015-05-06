@@ -48,7 +48,6 @@ class ArgparseCommands(object):
         parser_d.add_argument('idList', type=int, nargs='+', help='id of note you want to delete, CAUTION is recommended')
         parser_d.set_defaults(parser_d=True)
 
-        # search -c ravioli
         parser_s = subparsers.add_parser('search', help='search for a SubString inside a note (searches everywhere)')
         parser_s.add_argument('-t', '--title', action='store_true', help='search in the titles of notes')
         parser_s.add_argument('-p', '--tag', action='store_true', help='search for a note with this tag')
@@ -68,6 +67,10 @@ class ArgparseCommands(object):
         parser_rename = subparsers.add_parser('rename', help='rename a note')
         parser_rename.add_argument('r_id', type=int, help='id of note you want to rename')
         parser_rename.add_argument('newTitle', type=str, help='how you want to name the note')
+        parser_rename.set_defaults(parser_rename=True)
+
+        parser_rename = subparsers.add_parser('history', help='')
+        parser_rename.add_argument('h_id', type=int, help='')
         parser_rename.set_defaults(parser_rename=True)
 
 
@@ -117,6 +120,10 @@ class ArgparseCommands(object):
             id = args.r_id
             title = args.newTitle
             pn.renameNote(id, title)
+
+        elif args.__contains__("parser_history"):
+            id = args.h_id
+            pn.showHistory(id)
 
 def main():
     ac = ArgparseCommands()
