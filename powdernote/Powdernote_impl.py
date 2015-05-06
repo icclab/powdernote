@@ -70,6 +70,10 @@ class Powdernote(object):
         soDict  = {}
         sort = self.settingsParser("Settings", "sort")
         for element in list:
+            #exclude versions and deleted notes, that always begin with 'v'
+            if element[0] is "v":
+                continue
+
             id = SwiftManager.objIdToId(element)
             if id is None:
                 raise RuntimeError("Can not get the ID from " + element + " ... should not happen, really")
@@ -365,3 +369,13 @@ class Powdernote(object):
             self._swiftManager._renameNote(note, newTitle, oldTitle)
         else:
             print "Note #" + str(noteId) + " doesn't exist"
+
+    def showHistory(self, id):
+        #todo: comments
+
+    def getAllVersions(self):
+        listOfAllObjects = self._swiftManager.downloadObjectIds()
+        for element in listOfAllObjects:
+            if element[0] == "v":
+                
+

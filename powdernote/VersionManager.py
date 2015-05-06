@@ -18,14 +18,14 @@ limitations under the License.
 
 __author__ = 'gank'
 
-from MetaManager import MetaManager
-from SwiftManager import SwiftManager
 from OutputManager import OutputManager
+from datetime import datetime
 
 class VersionManager(object):
 
         VERSIONIDENTIFIER = "v"
         DELETEIDENTIFIER = "vd"
+        ZEROPAD = ":00.000000"
 
         def __init__(self, swiftManager):
             super(VersionManager, self).__init__()
@@ -34,9 +34,19 @@ class VersionManager(object):
         def versionCreator(self, objectId):
             #todo: comments
 
-            metamngr = self._swiftMngr.metaMngrFactory(objectId)
-            time = metamngr.getLastModifiedDate().strftime("%Y%m%d%H%M%S%f")[:-3]
-            oldTitle = objectId
-            newTitle = VersionManager.VERSIONIDENTIFIER + OutputManager.DASH + time + oldTitle
-            self._swiftMngr.versionUpload(oldTitle, newTitle)
+            if objectId not in self._swiftMngr.downloadObjectIds():
+                return
 
+            metamngr = self._swiftMngr.metaMngrFactory(objectId)
+            metaTime = metamngr.getLastModifiedDate(cutToSeconds=False)
+
+            #support legacy notes
+            if len(metaTime) == 17:
+                metaTime = metaTime[:5] + VersionManager.ZEROPAD + metaTime[5:]
+
+            time = datetime.strptime(metaTime, '%H:%M:%S.%f, %d/%m/%Y')
+            versionTime = time.strftime("%Y%m%d%H%M%S%f")[:-3]
+
+            oldTitle = objectId
+            newTitle = VersionManager.VERSIONIDENTIFIER + OutputManager.DASH + versionTime + OutputManager.DASH + oldTitle
+            self._swiftMngr.versionUpload(oldTitle, newTitle)
