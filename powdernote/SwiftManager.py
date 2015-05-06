@@ -26,6 +26,7 @@ from Configuration import Configuration
 from Note import Note
 from MetaManager import MetaManager
 from OutputManager import OutputManager
+from VersionManager import VersionManager
 
 class SwiftManager(object):
 
@@ -255,6 +256,8 @@ class SwiftManager(object):
         list = self.downloadObjectIds()
         idList = []
         for element in list:
+            if VersionManager.isAnoteVersion(element):
+                continue
             oId = SwiftManager.objIdToId(element)
             idList.append(int(oId))
         if id not in idList:

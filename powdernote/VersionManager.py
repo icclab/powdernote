@@ -48,5 +48,31 @@ class VersionManager(object):
             versionTime = time.strftime("%Y%m%d%H%M%S%f")[:-3]
 
             oldTitle = objectId
-            newTitle = VersionManager.VERSIONIDENTIFIER + OutputManager.DASH + versionTime + OutputManager.DASH + oldTitle
+            newTitle = VersionManager.VERSIONIDENTIFIER + OutputManager.DASH + versionTime + OutputManager.DASH \
+                       + self._swiftMngr.objIdToId(oldTitle)
             self._swiftMngr.versionUpload(oldTitle, newTitle)
+
+
+        @staticmethod
+        def isAnoteVersion(objectId):
+            if objectId.startswith("v"):
+                return True
+            return False
+
+
+        def historyList(self, noteId, allVersions, title):
+            #todo: comments
+
+            print allVersions
+
+            versionsOfNote = {}
+            versionId = 0
+            noteId = str(noteId)
+            for element in allVersions:
+                versionId = versionId + 1
+                if noteId in element[20:len(element)]:
+                    versionsOfNote[versionId] = [versionId, element, title]
+                else:
+                    continue
+
+            OutputManager.listPrint(versionsOfNote, 3)

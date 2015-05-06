@@ -45,6 +45,7 @@ class Powdernote(object):
         self._swiftManager = SwiftManager(storage_url, token)
         self._path = expanduser("~")
         self._versionMngr = VersionManager(self._swiftManager)
+        self._versionList = []
 
 
     def newNote(self, title):
@@ -370,12 +371,26 @@ class Powdernote(object):
         else:
             print "Note #" + str(noteId) + " doesn't exist"
 
-    def showHistory(self, id):
+    def showHistory(self, noteId):
         #todo: comments
 
-    def getAllVersions(self):
+        if self._swiftManager.doesNoteExist(noteId) == True:
+            self.setAllVersions()
+            allVersions = self.getAllVersions()
+
+            note = self._swiftManager.getNote(noteId)
+            title =  note.getTitle()
+            self._versionMngr.historyList(noteId, allVersions, title)
+        else:
+            print "Note #" + str(noteId) + " doesn't exist"
+
+    def setAllVersions(self):
         listOfAllObjects = self._swiftManager.downloadObjectIds()
         for element in listOfAllObjects:
-            if element[0] == "v":
-                
+            if element[0:2] == "v-":    #the dash is only to ensure that it's only versions, because deleted ones have "vd"
+                self._versionList.append(element)
+            else:
+                continue
 
+    def getAllVersions(self):
+        return self._versionList
