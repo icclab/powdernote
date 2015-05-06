@@ -69,9 +69,9 @@ class ArgparseCommands(object):
         parser_rename.add_argument('newTitle', type=str, help='how you want to name the note')
         parser_rename.set_defaults(parser_rename=True)
 
-        parser_rename = subparsers.add_parser('history', help='')
-        parser_rename.add_argument('h_id', type=int, help='')
-        parser_rename.set_defaults(parser_rename=True)
+        parser_history = subparsers.add_parser('history', help='')
+        parser_history.add_argument('h_id', type=int, help='')
+        parser_history.set_defaults(parser_history=True)
 
 
         args = parser.parse_args()
