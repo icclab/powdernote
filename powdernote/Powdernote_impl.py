@@ -375,22 +375,43 @@ class Powdernote(object):
         #todo: comments
 
         if self._swiftManager.doesNoteExist(noteId) == True:
-            self.setAllVersions()
+            self.downloadAllNoteVersions()
             allVersions = self.getAllVersions()
 
             note = self._swiftManager.getNote(noteId)
             title =  note.getTitle()
-            self._versionMngr.historyList(noteId, allVersions, title)
+            OutputManager.listPrint(self._versionMngr.historyList(noteId, allVersions, title), 3)
         else:
             print "Note #" + str(noteId) + " doesn't exist"
 
-    def setAllVersions(self):
+    def downloadAllNoteVersions(self):
+        #todo: comments
         listOfAllObjects = self._swiftManager.downloadObjectIds()
         for element in listOfAllObjects:
-            if element[0:2] == "v-":    #the dash is only to ensure that it's only versions, because deleted ones have "vd"
+            if VersionManager.isAnoteVersion(element):
                 self._versionList.append(element)
             else:
                 continue
 
     def getAllVersions(self):
         return self._versionList
+
+    def readVersion(self, noteId):
+        #todo: comments
+        self.downloadAllNoteVersions()
+        allVersions = self.getAllVersions()
+
+        note = self._swiftManager.getNote(noteId)
+        title =  note.getTitle()
+        versions = self._versionMngr.historyList(noteId, allVersions, title)
+        OutputManager.listPrint(versions, 3)
+        readingVersion = raw_input("Which version do you wish to read (id)? >")
+
+        print readingVersion
+        print versions
+
+        for key, value in versions.iteritems():
+            if key == readingVersion:
+                pass
+            else:
+                continue

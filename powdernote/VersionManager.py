@@ -55,15 +55,18 @@ class VersionManager(object):
 
         @staticmethod
         def isAnoteVersion(objectId):
-            if objectId.startswith("v"):
+            '''
+            checks if the object is a version
+            :param objectId:
+            :return:
+            '''
+            if objectId.startswith("v-"):
                 return True
             return False
 
 
         def historyList(self, noteId, allVersions, title):
             #todo: comments
-
-            print allVersions
 
             versionsOfNote = {}
             versionId = 0
@@ -75,4 +78,5 @@ class VersionManager(object):
                 else:
                     continue
 
-            OutputManager.listPrint(versionsOfNote, 3)
+            return versionsOfNote
+            #OutputManager.listPrint(versionsOfNote, 3)

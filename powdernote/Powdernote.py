@@ -45,7 +45,8 @@ class ArgparseCommands(object):
         parser_l.set_defaults(parser_l=True)
 
         parser_d = subparsers.add_parser('delete', help='delete a note')
-        parser_d.add_argument('idList', type=int, nargs='+', help='id of note you want to delete, CAUTION is recommended')
+        parser_d.add_argument('idList', type=int, nargs='+', help='id of note you want to delete, '
+                                                                  'CAUTION is recommended')
         parser_d.set_defaults(parser_d=True)
 
         parser_s = subparsers.add_parser('search', help='search for a SubString inside a note (searches everywhere)')
@@ -69,13 +70,14 @@ class ArgparseCommands(object):
         parser_rename.add_argument('newTitle', type=str, help='how you want to name the note')
         parser_rename.set_defaults(parser_rename=True)
 
-        parser_history = subparsers.add_parser('history', help='')
-        parser_history.add_argument('h_id', type=int, help='')
+        parser_history = subparsers.add_parser('history', help='versioning tools that help with checking versions, '
+                                                               'diffs or deleted notes')
+        parser_history.add_argument('h_id', type=int, help='id of note you want to know more about')
+        parser_history.add_argument('--read', action='store_true', help='read an older version of a note')
         parser_history.set_defaults(parser_history=True)
 
 
         args = parser.parse_args()
-        #print help(args)
 
         pn = Powdernote()
 
@@ -123,7 +125,10 @@ class ArgparseCommands(object):
 
         elif args.__contains__("parser_history"):
             id = args.h_id
-            pn.showHistory(id)
+            if args.read ==True:
+                pn.readVersion(id)
+            else:
+                pn.showHistory(id)
 
 def main():
     ac = ArgparseCommands()
