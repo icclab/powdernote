@@ -399,60 +399,95 @@ class Powdernote(object):
     def readVersion(self, noteId):
         #todo: comments
 
-        self.downloadAllNoteVersions()
-        allVersions = self.getAllVersions()
+        if self._swiftManager.doesNoteExist(noteId) == True:
+            self.downloadAllNoteVersions()
+            allVersions = self.getAllVersions()
 
-        self._swiftManager.downloadNotes()
-        noteList = self._swiftManager.getDownloadedNotes()
+            self._swiftManager.downloadNotes()
+            noteList = self._swiftManager.getDownloadedNotes()
 
-        note = self._swiftManager.getNote(noteId)
-        title =  note.getTitle()
-        versions = self._versionMngr.historyList(noteId, allVersions, title)
-        OutputManager.listPrint(versions, 3)
-        readingVersion = raw_input("Which version do you wish to read (id)? >")
+            note = self._swiftManager.getNote(noteId)
+            title =  note.getTitle()
+            versions = self._versionMngr.historyList(noteId, allVersions, title)
+            OutputManager.listPrint(versions, 3)
+            readingVersion = raw_input("Which version do you wish to read (id)? >")
 
 
-        for key, value in versions.iteritems():
-            if key == int(readingVersion):
-                versionTitle = versions[key][1]
-                content = noteList[versionTitle]
+            for key, value in versions.iteritems():
+                if key == int(readingVersion):
+                    versionTitle = versions[key][1]
+                    content = noteList[versionTitle]
 
-                noteTitle = versionTitle + OutputManager.ID_TITLE_SEPERATOR + title
+                    noteTitle = versionTitle + OutputManager.ID_TITLE_SEPERATOR + title
 
-                OutputManager.markdownPrint(noteTitle, content)
-            else:
-                continue
+                    OutputManager.markdownPrint(noteTitle, content)
+                else:
+                    continue
+        else:
+            print "Note #" + str(noteId) + " doesn't exist"
 
     def diffVersions(self, noteId):
         #todo: comments
 
-        self.downloadAllNoteVersions()
-        allVersions = self.getAllVersions()
 
-        self._swiftManager.downloadNotes()
-        noteList = self._swiftManager.getDownloadedNotes()
+        if self._swiftManager.doesNoteExist(noteId) == True:
 
-        note = self._swiftManager.getNote(noteId)
-        title =  note.getTitle()
-        versions = self._versionMngr.historyList(noteId, allVersions, title)
-        OutputManager.listPrint(versions, 3)
+            self.downloadAllNoteVersions()
+            allVersions = self.getAllVersions()
 
-        diff1 = raw_input("Which version do you wish to compare (id)? (0 is the current version) > ")
-        diff2 = raw_input("Which version do you wish to compare it with? (0 is the current version) > ")
+            self._swiftManager.downloadNotes()
+            noteList = self._swiftManager.getDownloadedNotes()
 
-        diff1 = int(diff1)
-        diff2 = int(diff2)
+            note = self._swiftManager.getNote(noteId)
+            title =  note.getTitle()
+            versions = self._versionMngr.historyList(noteId, allVersions, title)
+            OutputManager.listPrint(versions, 3)
 
-        if diff1 == 0:
-            diff1Content = self._swiftManager.getNote(noteId).getContent()
-        elif diff2 == 0:
-            diff2Content = self._swiftManager.getNote(noteId).getContent()
+            diff1 = raw_input("ID of base version? (0 is the current version) > ")
+            diff2 = raw_input("ID of target version? (0 is the current version) > ")
 
-        for key, value in versions.iteritems():
-            diffTitle = versions[key][1]
-            if key == diff1:
-                diff1Content = noteList[diffTitle]
-            elif key == diff2:
-                diff2Content = noteList[diffTitle]
+            diff1 = int(diff1)
+            diff2 = int(diff2)
 
-        OutputManager.printDiff(diff1Content, diff2Content)
+            if diff1 == 0:
+                diff1Content = self._swiftManager.getNote(noteId).getContent()
+            elif diff2 == 0:
+                diff2Content = self._swiftManager.getNote(noteId).getContent()
+
+            for key, value in versions.iteritems():
+                diffTitle = versions[key][1]
+                if key == diff1:
+                    diff1Content = noteList[diffTitle]
+                elif key == diff2:
+                    diff2Content = noteList[diffTitle]
+
+            OutputManager.printDiff(diff1Content, diff2Content)
+
+        else:
+            print "Note #" + str(noteId) + " doesn't exist"
+
+    def retrieveVersion(self, noteId):
+        #todo: comments
+
+        if self._swiftManager.doesNoteExist(noteId) == True:
+            self.downloadAllNoteVersions()
+            allVersions = self.getAllVersions()
+
+            self._swiftManager.downloadNotes()
+            noteList = self._swiftManager.getDownloadedNotes()
+
+            note = self._swiftManager.getNote(noteId)
+            title =  note.getTitle()
+            versions = self._versionMngr.historyList(noteId, allVersions, title)
+            OutputManager.listPrint(versions, 3)
+
+            retrieveVersion = raw_input("Which version do you wish to promote to the new one? > ")
+
+            for key, value in versions.iteritems():
+                versionTitle = versions[key][1]
+                self._versionMngr.versionCreator(title)
+
+
+
+        else:
+            print "Note #" + str(noteId) + " doesn't exist"

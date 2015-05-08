@@ -91,5 +91,5 @@ class OutputManager(object):
         :param content2:
         :return:
         '''
-        diff = ndiff(content1.splitlines(), content2.splitlines())
+        diff = ndiff(content2.splitlines(), content1.splitlines())
         print '\n'.join(list(diff))
