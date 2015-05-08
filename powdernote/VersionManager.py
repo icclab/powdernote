@@ -79,4 +79,3 @@ class VersionManager(object):
                     continue
 
             return versionsOfNote
-            #OutputManager.listPrint(versionsOfNote, 3)

@@ -19,6 +19,7 @@ limitations under the License.
 __author__ = 'gank'
 
 from tabulate import tabulate
+from difflib import ndiff
 
 class OutputManager(object):
 
@@ -80,3 +81,15 @@ class OutputManager(object):
             title = id + OutputManager.ID_TITLE_SEPERATOR + title
             OutputManager.searchMDPrint(title, content)
             print "Tags: " + str(tag[id][1]) + OutputManager.BREAK
+
+
+    @staticmethod
+    def printDiff(content1, content2):
+        '''
+        prints the diff of two strings
+        :param content1:
+        :param content2:
+        :return:
+        '''
+        diff = ndiff(content1.splitlines(), content2.splitlines())
+        print '\n'.join(list(diff))

@@ -398,8 +398,12 @@ class Powdernote(object):
 
     def readVersion(self, noteId):
         #todo: comments
+
         self.downloadAllNoteVersions()
         allVersions = self.getAllVersions()
+
+        self._swiftManager.downloadNotes()
+        noteList = self._swiftManager.getDownloadedNotes()
 
         note = self._swiftManager.getNote(noteId)
         title =  note.getTitle()
@@ -407,11 +411,48 @@ class Powdernote(object):
         OutputManager.listPrint(versions, 3)
         readingVersion = raw_input("Which version do you wish to read (id)? >")
 
-        print readingVersion
-        print versions
 
         for key, value in versions.iteritems():
-            if key == readingVersion:
-                pass
+            if key == int(readingVersion):
+                versionTitle = versions[key][1]
+                content = noteList[versionTitle]
+
+                noteTitle = versionTitle + OutputManager.ID_TITLE_SEPERATOR + title
+
+                OutputManager.markdownPrint(noteTitle, content)
             else:
                 continue
+
+    def diffVersions(self, noteId):
+        #todo: comments
+
+        self.downloadAllNoteVersions()
+        allVersions = self.getAllVersions()
+
+        self._swiftManager.downloadNotes()
+        noteList = self._swiftManager.getDownloadedNotes()
+
+        note = self._swiftManager.getNote(noteId)
+        title =  note.getTitle()
+        versions = self._versionMngr.historyList(noteId, allVersions, title)
+        OutputManager.listPrint(versions, 3)
+
+        diff1 = raw_input("Which version do you wish to compare (id)? (0 is the current version) > ")
+        diff2 = raw_input("Which version do you wish to compare it with? (0 is the current version) > ")
+
+        diff1 = int(diff1)
+        diff2 = int(diff2)
+
+        if diff1 == 0:
+            diff1Content = self._swiftManager.getNote(noteId).getContent()
+        elif diff2 == 0:
+            diff2Content = self._swiftManager.getNote(noteId).getContent()
+
+        for key, value in versions.iteritems():
+            diffTitle = versions[key][1]
+            if key == diff1:
+                diff1Content = noteList[diffTitle]
+            elif key == diff2:
+                diff2Content = noteList[diffTitle]
+
+        OutputManager.printDiff(diff1Content, diff2Content)

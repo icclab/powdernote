@@ -74,6 +74,7 @@ class ArgparseCommands(object):
                                                                'diffs or deleted notes')
         parser_history.add_argument('h_id', type=int, help='id of note you want to know more about')
         parser_history.add_argument('--read', action='store_true', help='read an older version of a note')
+        parser_history.add_argument('--diff', action='store_true', help='see the diff of two notes')
         parser_history.set_defaults(parser_history=True)
 
 
@@ -127,6 +128,8 @@ class ArgparseCommands(object):
             id = args.h_id
             if args.read ==True:
                 pn.readVersion(id)
+            elif args.diff == True:
+                pn.diffVersions(id)
             else:
                 pn.showHistory(id)
 
