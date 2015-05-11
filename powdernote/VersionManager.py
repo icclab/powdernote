@@ -25,33 +25,39 @@ class VersionManager(object):
 
         VERSIONIDENTIFIER = "v"
         DELETEIDENTIFIER = "vd"
+        DELETEID = "d"
         ZEROPAD = ":00.000000"
 
         def __init__(self, swiftManager):
             super(VersionManager, self).__init__()
             self._swiftMngr = swiftManager
+            self._versionList = []
+            self._deletedNotes = []
 
-        def versionCreator(self, objectId):
-            #todo: comments
 
-            if objectId not in self._swiftMngr.downloadObjectIds():
-                return
+        def downloadAllNoteVersions(self):
+        #todo: comments
+            listOfAllObjects = self._swiftMngr.downloadObjectIds()
+            for element in listOfAllObjects:
+                if self.isAnoteVersion(element):
+                    self._versionList.append(element)
+                else:
+                    continue
 
-            metamngr = self._swiftMngr.metaMngrFactory(objectId)
-            metaTime = metamngr.getLastModifiedDate(cutToSeconds=False)
+        def downloadAllDeleted(self):
+        #todo: comments
+            listOfAllObjects = self._swiftMngr.downloadObjectIds()
+            for element in listOfAllObjects:
+                if self.isAnoteDeleted(element):
+                    self._deletedNotes.append(element)
+                else:
+                    continue
 
-            #support legacy notes
-            if len(metaTime) == 17:
-                metaTime = metaTime[:5] + VersionManager.ZEROPAD + metaTime[5:]
+        def getAllVersions(self):
+            return self._versionList
 
-            time = datetime.strptime(metaTime, '%H:%M:%S.%f, %d/%m/%Y')
-            versionTime = time.strftime("%Y%m%d%H%M%S%f")[:-3]
-
-            oldTitle = objectId
-            newTitle = VersionManager.VERSIONIDENTIFIER + OutputManager.DASH + versionTime + OutputManager.DASH \
-                       + self._swiftMngr.objIdToId(oldTitle)
-            self._swiftMngr.versionUpload(oldTitle, newTitle)
-
+        def getDeleted(self):
+            return self._deletedNotes
 
         @staticmethod
         def isAnoteVersion(objectId):
@@ -74,6 +80,27 @@ class VersionManager(object):
             if objectId.startswith("vd-"):
                 return True
             return False
+
+        def versionCreator(self, objectId):
+            #todo: comments
+
+            if objectId not in self._swiftMngr.downloadObjectIds():
+                return
+
+            metamngr = self._swiftMngr.metaMngrFactory(objectId)
+            metaTime = metamngr.getLastModifiedDate(cutToSeconds=False)
+
+            #support legacy notes
+            if len(metaTime) == 17:
+                metaTime = metaTime[:5] + VersionManager.ZEROPAD + metaTime[5:]
+
+            time = datetime.strptime(metaTime, '%H:%M:%S.%f, %d/%m/%Y')
+            versionTime = time.strftime("%Y%m%d%H%M%S%f")[:-3]
+
+            oldTitle = objectId
+            newTitle = VersionManager.VERSIONIDENTIFIER + OutputManager.DASH + versionTime + OutputManager.DASH \
+                       + self._swiftMngr.objIdToId(oldTitle)
+            self._swiftMngr.versionUpload(oldTitle, newTitle)
 
 
         def historyList(self, noteId, allVersions, title):
@@ -102,14 +129,22 @@ class VersionManager(object):
             versionType = VersionManager.DELETEIDENTIFIER
 
             self._versionUploader(objectId, versionType)
+            self.versionDelete(noteId)
 
         def versionDelete(self, noteId):
             #todo: comments
-            #delete the versions
+            '''
+            deletes the versions of a note that is about to be deleted
+            :param noteId:
+            :return:
+            '''
+            note, title, versions, noteList = self._getVersionInfo(noteId, output=False)
+            for _, value in versions.iteritems():
+                self._swiftMngr._deleteNoteByObjectId(value[1])
+
 
         def _versionUploader(self, objectId, versionType):
             #todo: comments
-
             if objectId not in self._swiftMngr.downloadObjectIds():
                 return
 
@@ -123,14 +158,51 @@ class VersionManager(object):
             time = datetime.strptime(metaTime, '%H:%M:%S.%f, %d/%m/%Y')
             versionTime = time.strftime("%Y%m%d%H%M%S%f")[:-3]
 
+            title = self._swiftMngr.objIdToTitle(objectId)
             oldTitle = objectId
             if versionType == VersionManager.VERSIONIDENTIFIER:
-                identifier = VersionManager.VERSIONIDENTIFIER
-
-            elif versionType == VersionManager.DELETEIDENTIFIER:
-                identifier = VersionManager.DELETEIDENTIFIER
-
-            newTitle = identifier + OutputManager.DASH + versionTime + OutputManager.DASH \
+                newTitle = VersionManager.VERSIONIDENTIFIER + OutputManager.DASH + versionTime + OutputManager.DASH \
                        + self._swiftMngr.objIdToId(oldTitle)
 
+            elif versionType == VersionManager.DELETEIDENTIFIER:
+                newTitle = VersionManager.DELETEIDENTIFIER + OutputManager.DASH + versionTime + OutputManager.DASH \
+                       + VersionManager.DELETEID + OutputManager.ID_TITLE_SEPERATOR + title
+
             self._swiftMngr.versionUpload(oldTitle, newTitle)
+
+
+        def _getVersionInfo(self, noteId, output=True):
+            #todo: comments
+            self.downloadAllNoteVersions()
+            allVersions = self.getAllVersions()
+
+            self._swiftMngr.downloadNotes()
+            noteList = self._swiftMngr.getDownloadedNotes()
+
+            note = self._swiftMngr.getNote(noteId)
+            title = note.getTitle()
+            versions = self.historyList(noteId, allVersions, title)
+
+
+            if output == True:
+                OutputManager.listPrint(versions, 3)
+
+            return note, title, versions, noteList
+
+        def getDeletedInfo(self, output = True):
+            self.downloadAllDeleted()
+            allDeleted = self.getDeleted()
+
+            deletedList = {}
+            deletedId = 0
+
+            for element in allDeleted:
+                deletedId = deletedId + 1
+                deletedList[deletedId] = [deletedId, element]
+
+            if output == True:
+                OutputManager.listPrint(deletedList, 4)
+
+            return deletedList
+
+

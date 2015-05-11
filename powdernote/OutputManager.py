@@ -26,7 +26,8 @@ class OutputManager(object):
     DASH = "-"
     BREAK = "\n"
     DOTDOTDOT = "..."
-    HEADER = [["ID", "Note", "Creation Date", "Last Modified", "Tags"],["ID", "Note", "Tags"], ["ID", "Note"], ["ID", "Version", "Title"]]
+    HEADER = [["ID", "Note", "Creation Date", "Last Modified", "Tags"],["ID", "Note", "Tags"], ["ID", "Note"],
+              ["ID", "Version", "Title"], ["ID", "Deleted Note"]]
     HEADER_FULL = 0
     HEADER_TAG = 1
     HEADER_TITLEID = 2

@@ -45,7 +45,7 @@ class Powdernote(object):
         self._swiftManager = SwiftManager(storage_url, token)
         self._path = expanduser("~")
         self._versionMngr = VersionManager(self._swiftManager)
-        self._versionList = []
+        self._deletedNotes = []
 
 
     def newNote(self, title):
@@ -127,7 +127,7 @@ class Powdernote(object):
         if self._swiftManager._confirmation(action) == True:
             for id, title in nameList:
                 #deleted versions are created here
-                self._versionMngr.deleteCreator(id, title)
+                self._versionMngr.deleteVersionCreator(id, title)
                 self._swiftManager.deleteNote(id, force=True)
             print "Ok"
         else:
@@ -375,30 +375,17 @@ class Powdernote(object):
 
     def showHistory(self, noteId):
         #todo: comments
-
         if self._swiftManager.doesNoteExist(noteId) == True:
-            self._getVersionInfo(noteId)
+            self._versionMngr._getVersionInfo(noteId)
         else:
             print "Note #" + str(noteId) + " doesn't exist"
-
-    def downloadAllNoteVersions(self):
-        #todo: comments
-        listOfAllObjects = self._swiftManager.downloadObjectIds()
-        for element in listOfAllObjects:
-            if VersionManager.isAnoteVersion(element):
-                self._versionList.append(element)
-            else:
-                continue
-
-    def getAllVersions(self):
-        return self._versionList
 
     def readVersion(self, noteId):
         #todo: comments
 
         if self._swiftManager.doesNoteExist(noteId) == True:
 
-            note, title, versions, noteList = self._getVersionInfo(noteId)
+            note, title, versions, noteList = self._versionMngr._getVersionInfo(noteId)
 
             OutputManager.listPrint(versions, 3)
             readingVersion = raw_input("Which version do you wish to read (id)? >")
@@ -423,7 +410,7 @@ class Powdernote(object):
 
         if self._swiftManager.doesNoteExist(noteId) == True:
 
-            note, title, versions, noteList = self._getVersionInfo(noteId)
+            note, title, versions, noteList = self._versionMngr._getVersionInfo(noteId)
 
             diff1 = raw_input("ID of base version? (0 is the current version) > ")
             diff2 = raw_input("ID of target version? (0 is the current version) > ")
@@ -452,7 +439,7 @@ class Powdernote(object):
         #todo: comments
 
         if self._swiftManager.doesNoteExist(noteId) == True:
-            note, title, versions, noteList = self._getVersionInfo(noteId)
+            note, title, versions, noteList = self._versionMngr._getVersionInfo(noteId)
 
             retrieveVersion = raw_input("Which version do you wish to promote to the new one? > ")
 
@@ -471,16 +458,9 @@ class Powdernote(object):
         else:
             print "Note #" + str(noteId) + " doesn't exist"
 
-    def _getVersionInfo(self, noteId):
-        self.downloadAllNoteVersions()
-        allVersions = self.getAllVersions()
+    def showDeleted(self):
 
-        self._swiftManager.downloadNotes()
-        noteList = self._swiftManager.getDownloadedNotes()
+        self._versionMngr.getDeletedInfo()
 
-        note = self._swiftManager.getNote(noteId)
-        title =  note.getTitle()
-        versions = self._versionMngr.historyList(noteId, allVersions, title)
-        OutputManager.listPrint(versions, 3)
 
-        return note, title, versions, noteList
+
