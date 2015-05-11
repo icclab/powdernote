@@ -64,6 +64,17 @@ class VersionManager(object):
                 return True
             return False
 
+        @staticmethod
+        def isAnoteDeleted(objectId):
+            '''
+            checks if the object is a deleted note
+            :param objectId:
+            :return:
+            '''
+            if objectId.startswith("vd-"):
+                return True
+            return False
+
 
         def historyList(self, noteId, allVersions, title):
             #todo: comments
@@ -79,3 +90,47 @@ class VersionManager(object):
                     continue
 
             return versionsOfNote
+
+        def deleteVersionCreator(self, noteId, title):
+            #todo: comments
+
+            #the reason why the delete is in the beginning, is because the version that is being created in this
+            #method would also be deleted if the method would be called in the end
+            self.versionDelete(noteId)
+
+            objectId = noteId + OutputManager.ID_TITLE_SEPERATOR + title
+            versionType = VersionManager.DELETEIDENTIFIER
+
+            self._versionUploader(objectId, versionType)
+
+        def versionDelete(self, noteId):
+            #todo: comments
+            #delete the versions
+
+        def _versionUploader(self, objectId, versionType):
+            #todo: comments
+
+            if objectId not in self._swiftMngr.downloadObjectIds():
+                return
+
+            metamngr = self._swiftMngr.metaMngrFactory(objectId)
+            metaTime = metamngr.getLastModifiedDate(cutToSeconds=False)
+
+            #support legacy notes
+            if len(metaTime) == 17:
+                metaTime = metaTime[:5] + VersionManager.ZEROPAD + metaTime[5:]
+
+            time = datetime.strptime(metaTime, '%H:%M:%S.%f, %d/%m/%Y')
+            versionTime = time.strftime("%Y%m%d%H%M%S%f")[:-3]
+
+            oldTitle = objectId
+            if versionType == VersionManager.VERSIONIDENTIFIER:
+                identifier = VersionManager.VERSIONIDENTIFIER
+
+            elif versionType == VersionManager.DELETEIDENTIFIER:
+                identifier = VersionManager.DELETEIDENTIFIER
+
+            newTitle = identifier + OutputManager.DASH + versionTime + OutputManager.DASH \
+                       + self._swiftMngr.objIdToId(oldTitle)
+
+            self._swiftMngr.versionUpload(oldTitle, newTitle)
