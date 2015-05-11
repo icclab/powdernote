@@ -256,7 +256,7 @@ class SwiftManager(object):
         list = self.downloadObjectIds()
         idList = []
         for element in list:
-            if VersionManager.isAnoteVersion(element):
+            if VersionManager.isAnoteVersion(element) or VersionManager.isAnoteDeleted(element):
                 continue
             oId = SwiftManager.objIdToId(element)
             idList.append(int(oId))
