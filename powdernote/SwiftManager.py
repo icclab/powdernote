@@ -109,18 +109,19 @@ class SwiftManager(object):
         metaManager.commitMeta()
         print title
 
-    def _renameNote(self, newTitle, oldTitle):
+    def _renameNote(self, newTitle, oldTitle, meta = True):
         put_object(self._storage_url, self._token, Configuration.container_name, newTitle, headers={"X-Copy-From":Configuration.container_name + "/" + oldTitle})
         self._deleteNoteByObjectId(oldTitle)
 
-        metaManager = MetaManager(self._storage_url, self._token, newTitle)
-        currentCreateDate = metaManager.getCreateDate()
-        lastModifiedDate = MetaManager.dateNow()
+        if meta == True:
+            metaManager = MetaManager(self._storage_url, self._token, newTitle)
+            currentCreateDate = metaManager.getCreateDate()
+            lastModifiedDate = MetaManager.dateNow()
 
-        metaManager.setCreateDate(currentCreateDate)
-        metaManager.setLastModifiedDate(lastModifiedDate)
-        metaManager.setTags(None)
-        metaManager.commitMeta()
+            metaManager.setCreateDate(currentCreateDate)
+            metaManager.setLastModifiedDate(lastModifiedDate)
+            metaManager.setTags(None)
+            metaManager.commitMeta()
 
         print "Ok"
 

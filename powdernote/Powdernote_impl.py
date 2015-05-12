@@ -29,6 +29,7 @@ from ConfigParser import ConfigParser
 from datetime import datetime
 from collections import OrderedDict
 from VersionManager import VersionManager
+import re
 
 
 class Powdernote(object):
@@ -390,9 +391,10 @@ class Powdernote(object):
             OutputManager.listPrint(versions, 3)
             readingVersion = raw_input("Which version do you wish to read (id)? >")
 
+            readingVersion = int(readingVersion)
 
             for key, value in versions.iteritems():
-                if key == int(readingVersion):
+                if key == readingVersion:
                     versionTitle = versions[key][1]
                     content = noteList[versionTitle]
 
@@ -401,6 +403,10 @@ class Powdernote(object):
                     OutputManager.markdownPrint(noteTitle, content)
                 else:
                     continue
+
+            if readingVersion > key:
+                print str(readingVersion) + " does not exist"
+
         else:
             print "Note #" + str(noteId) + " doesn't exist"
 
@@ -430,6 +436,11 @@ class Powdernote(object):
                 elif key == diff2:
                     diff2Content = noteList[diffTitle]
 
+            if diff1 > key:
+                print str(diff1) + " does not exist"
+            elif diff2 > key:
+                print str(diff2) + " does not exist"
+
             OutputManager.printDiff(diff1Content, diff2Content)
 
         else:
@@ -439,28 +450,65 @@ class Powdernote(object):
         #todo: comments
 
         if self._swiftManager.doesNoteExist(noteId) == True:
-            note, title, versions, noteList = self._versionMngr._getVersionInfo(noteId)
+            note, title, versions, rearanged, noteList = self._versionMngr._getVersionInfo(noteId)
+
 
             retrieveVersion = raw_input("Which version do you wish to promote to the new one? > ")
 
             retrieveVersion = int(retrieveVersion)
 
-            for key, value in versions.iteritems():
+            for key, value in rearanged.iteritems():
                 if key == retrieveVersion:
-                    versionTitle = versions[key][1]
+                    versionTitle = rearanged[key][1]
                     objId = str(noteId) + OutputManager.ID_TITLE_SEPERATOR + title
                     self._versionMngr.versionCreator(objId)
                     self._swiftManager._renameNote(objId, versionTitle)
                 else:
                     continue
 
+            if retrieveVersion > key:
+                print str(retrieveVersion) + " does not exist"
+
 
         else:
             print "Note #" + str(noteId) + " doesn't exist"
 
     def showDeleted(self):
-
+        #todo
         self._versionMngr.getDeletedInfo()
 
+    def undoDelete(self):
+        '''
+        this function allows the user to promote a backed up deleted note to a normal note
+        :return:
+        '''
+        #display all the deleted notes
+        deletedList = self._versionMngr.getDeletedInfo()
 
+        #user input for id
+        undoId = raw_input("Which note do you wish to restore? > ")
+        undoId = int(undoId)
 
+        #find the right id
+        for key, value in deletedList.iteritems():
+            deleteRgx = "^(vd-\d+-d\s-\s)(.*)"
+            if key == undoId:
+                objectId = value[1]
+
+                #catch the note title with the regex, to exclude "vd-timestamp-d - "
+                match = re.search(deleteRgx, objectId)
+                title = match.group(2)
+
+                #create the new title, with a new ID
+                newTitle = str(self._swiftManager._generateObjectId()) + OutputManager.ID_TITLE_SEPERATOR + title
+
+                #make a copy of the backup and save it with a new name and delete the back up
+                self._swiftManager._renameNote(newTitle, objectId, meta=False)
+
+                print newTitle
+
+            else:
+                continue
+
+        if undoId > key:
+            print str(undoId) + " does not exist"

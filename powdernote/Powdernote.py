@@ -79,6 +79,7 @@ class ArgparseCommands(object):
         parser_history.set_defaults(parser_history=True)
 
         parser_deleted = subparsers.add_parser('deleted', help='see all the backed up deleted notes')
+        parser_deleted.add_argument('--undo', action='store_true', help='lets you restore a note')
         parser_deleted.set_defaults(parser_deleted=True)
 
 
@@ -140,8 +141,11 @@ class ArgparseCommands(object):
                 pn.showHistory(id)
 
         elif args.__contains__("parser_deleted"):
+            if args.undo == True:
+                pn.undoDelete()
+            else:
+                pn.showDeleted()
 
-            pn.showDeleted()
 
 def main():
     ac = ArgparseCommands()
