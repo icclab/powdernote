@@ -47,6 +47,7 @@ class Powdernote(object):
         self._path = expanduser("~")
         self._versionMngr = VersionManager(self._swiftManager)
         self._deletedNotes = []
+        self._keyList = []
 
 
     def newNote(self, title):
@@ -139,7 +140,7 @@ class Powdernote(object):
         oldNote = note
         if ret == EditorManager.NEW_CONTENT_AVAILABLE:
             #make a version of a note
-            self._versionMngr.versionCreator(oldNote.getObjectId())
+            self._versionMngr._versionUploader(oldNote.getObjectId(), versionType=VersionManager.VERSIONIDENTIFIER)
             #upload the note with the new content to swift
             self._swiftManager.uploadNote(note, note.getObjectId())
             print "Note has been saved"
@@ -375,106 +376,137 @@ class Powdernote(object):
             print "Note #" + str(noteId) + " doesn't exist"
 
     def showHistory(self, noteId):
-        #todo: comments
+        '''
+        prints the versions in a list of the given note
+        :param noteId:
+        :return:
+        '''
         if self._swiftManager.doesNoteExist(noteId) == True:
             self._versionMngr._getVersionInfo(noteId)
         else:
             print "Note #" + str(noteId) + " doesn't exist"
 
     def readVersion(self, noteId):
-        #todo: comments
-
+        '''
+        outputs the content of a note version
+        :param noteId:
+        :return:
+        '''
         if self._swiftManager.doesNoteExist(noteId) == True:
-
             note, title, versions, noteList = self._versionMngr._getVersionInfo(noteId)
 
-            OutputManager.listPrint(versions, 3)
-            readingVersion = raw_input("Which version do you wish to read (id)? >")
-
-            readingVersion = int(readingVersion)
+            #user input for id, if the input is not an integer the error message will be displayed
+            try:
+                readingVersion = int(raw_input("Which version do you wish to read (id)? >"))
+            except (ValueError):
+                print "invalid input"
+                sys.exit(1)
 
             for key, value in versions.iteritems():
+                self._keyList.append(key)
                 if key == readingVersion:
                     versionTitle = versions[key][1]
+                    #get the content of the object
                     content = noteList[versionTitle]
-
+                    #create the note title, composing from "vTIMESTAMP-id - title"
                     noteTitle = versionTitle + OutputManager.ID_TITLE_SEPERATOR + title
 
                     OutputManager.markdownPrint(noteTitle, content)
                 else:
                     continue
-
-            if readingVersion > key:
-                print str(readingVersion) + " does not exist"
-
+            #as an information for the user, that the version doesn't exist
+            if readingVersion not in self._keyList:
+                print str(readingVersion) + " doesn't exist"
+        #as an information for the user, that the note doesn't exist
         else:
             print "Note #" + str(noteId) + " doesn't exist"
 
     def diffVersions(self, noteId):
-        #todo: comments
-
+        '''
+        creates the diff of two versions of a note
+        :param noteId:
+        :return:
+        '''
 
         if self._swiftManager.doesNoteExist(noteId) == True:
-
             note, title, versions, noteList = self._versionMngr._getVersionInfo(noteId)
 
-            diff1 = raw_input("ID of base version? (0 is the current version) > ")
-            diff2 = raw_input("ID of target version? (0 is the current version) > ")
+            #user input for id, if the input is not an integer the error message will be displayed
+            try:
+                diff1 = int(raw_input("ID of base version? (0 is the current version) > "))
+                diff2 = int(raw_input("ID of target version? (0 is the current version) > "))
+            except (ValueError):
+                print "invalid input"
+                sys.exit(1)
 
-            diff1 = int(diff1)
-            diff2 = int(diff2)
-
+            #check if the user wants to diff with the current note
             if diff1 == 0:
                 diff1Content = self._swiftManager.getNote(noteId).getContent()
             elif diff2 == 0:
                 diff2Content = self._swiftManager.getNote(noteId).getContent()
 
             for key, value in versions.iteritems():
+                self._keyList.append(key)
                 diffTitle = versions[key][1]
+                #check which input is which note
                 if key == diff1:
                     diff1Content = noteList[diffTitle]
                 elif key == diff2:
                     diff2Content = noteList[diffTitle]
 
-            if diff1 > key:
-                print str(diff1) + " does not exist"
-            elif diff2 > key:
-                print str(diff2) + " does not exist"
+            #as an information for the user, that the version doesn't exist
+            if diff1 not in self._keyList:
+                print str(diff1) + " doesn't exist"
+            elif diff2 not in self._keyList:
+                print str(diff2) + " doesn't exist"
 
             OutputManager.printDiff(diff1Content, diff2Content)
-
+        #as an information for the user
         else:
             print "Note #" + str(noteId) + " doesn't exist"
 
     def retrieveVersion(self, noteId):
-        #todo: comments
+        '''
+        promotes a version to be the current note
+        :param noteId:
+        :return:
+        '''
 
         if self._swiftManager.doesNoteExist(noteId) == True:
-            note, title, versions, rearanged, noteList = self._versionMngr._getVersionInfo(noteId)
+            note, title, versions, noteList = self._versionMngr._getVersionInfo(noteId)
 
+            #user input for id, if the input is not an integer the error message will be displayed
+            try:
+                retrieveVersion = int(raw_input("Which version do you wish to promote to the new one? > "))
+            except (ValueError):
+                print "invalid input"
+                sys.exit(1)
 
-            retrieveVersion = raw_input("Which version do you wish to promote to the new one? > ")
-
-            retrieveVersion = int(retrieveVersion)
-
-            for key, value in rearanged.iteritems():
+            for key, value in versions.iteritems():
+                self._keyList.append(key)
                 if key == retrieveVersion:
-                    versionTitle = rearanged[key][1]
+                    versionTitle = versions[key][1]
+                    #creating the objectId, which is used for the rename
                     objId = str(noteId) + OutputManager.ID_TITLE_SEPERATOR + title
-                    self._versionMngr.versionCreator(objId)
+                    #create a version of the current note
+                    self._versionMngr._versionUploader(objId, versionType=VersionManager.VERSIONIDENTIFIER)
+                    #make a copy of the version and save it as the current one, also delete the version
                     self._swiftManager._renameNote(objId, versionTitle)
                 else:
                     continue
+            #as an information for the user, that the version doesn't exist
+            if retrieveVersion not in self._keyList:
+                print str(retrieveVersion) + " doesn't exist"
 
-            if retrieveVersion > key:
-                print str(retrieveVersion) + " does not exist"
-
-
+        #as an information for the user, that the note doesn't exist
         else:
             print "Note #" + str(noteId) + " doesn't exist"
 
     def showDeleted(self):
-        #todo
+        '''
+        calls a method to display all the backed up notes
+        :return:
+        '''
         self._versionMngr.getDeletedInfo()
 
     def undoDelete(self):
@@ -485,14 +517,18 @@ class Powdernote(object):
         #display all the deleted notes
         deletedList = self._versionMngr.getDeletedInfo()
 
-        #user input for id
-        undoId = raw_input("Which note do you wish to restore? > ")
-        undoId = int(undoId)
+        #user input for id, if the input is not an integer the error message will be displayed
+        try:
+            undoId = int(raw_input("Which note do you wish to restore? > "))
+        except (ValueError):
+            print "invalid input"
+            sys.exit(1)
 
         #find the right id
         for key, value in deletedList.iteritems():
             deleteRgx = "^(vd-\d+-d\s-\s)(.*)"
             if key == undoId:
+                self._keyList.append(key)
                 objectId = value[1]
 
                 #catch the note title with the regex, to exclude "vd-timestamp-d - "
@@ -503,12 +539,13 @@ class Powdernote(object):
                 newTitle = str(self._swiftManager._generateObjectId()) + OutputManager.ID_TITLE_SEPERATOR + title
 
                 #make a copy of the backup and save it with a new name and delete the back up
-                self._swiftManager._renameNote(newTitle, objectId, meta=False)
+                self._swiftManager._renameNote(newTitle, objectId)
 
+                #as an information for the user
                 print newTitle
 
             else:
                 continue
-
-        if undoId > key:
+        #as an information for the user, that the note doesn't exist
+        if undoId not in self._keyList:
             print str(undoId) + " does not exist"
