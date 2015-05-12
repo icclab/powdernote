@@ -138,7 +138,7 @@ class VersionManager(object):
             :param noteId:
             :return:
             '''
-            note, title, versions, noteList = self._getVersionInfo(noteId, output=False)
+            note, title, versions, rearanged, noteList = self._getVersionInfo(noteId, output=False)
             for _, value in versions.iteritems():
                 self._swiftMngr._deleteNoteByObjectId(value[1])
 
@@ -183,11 +183,12 @@ class VersionManager(object):
             title = note.getTitle()
             versions = self.historyList(noteId, allVersions, title)
 
+            rearangedVersions = self.rearangeVersionID(versions)
 
             if output == True:
-                OutputManager.listPrint(versions, 3)
+                OutputManager.listPrint(rearangedVersions, 3)
 
-            return note, title, versions, noteList
+            return note, title, versions, rearangedVersions, noteList
 
         def getDeletedInfo(self, output = True):
             self.downloadAllDeleted()
@@ -205,4 +206,15 @@ class VersionManager(object):
 
             return deletedList
 
+        def rearangeVersionID(self, versions):
+            #todo: comments
 
+            newVersions = {}
+            newVersionId = 0
+            for key, value in versions.iteritems():
+                noteTitle = versions[key][2]
+                newVersionId = newVersionId + 1
+                versionTitle = versions[key][1]
+                newVersions[newVersionId] = [newVersionId, versionTitle, noteTitle]
+
+            return newVersions
