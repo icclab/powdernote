@@ -22,10 +22,10 @@ __author__ = 'gank'
 class Configuration(object):
 
     #insert your credentials
-    username = "anke"
-    password = "j3b6az"
-    tenant_id = "cb27aebb63a8419486e027f8d8caca5a"
-    container_name = "powdernote-anke"
+    username = ""
+    password = ""
+    tenant_id = ""
+    container_name = ""
 
     #do not edit these
     tenant_name = username
