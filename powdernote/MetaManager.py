@@ -22,6 +22,7 @@ from datetime import datetime
 from swiftclient.client import post_object, get_object
 from swiftclient.exceptions import ClientException
 from Configuration import Configuration
+from VersionManager import VersionManager
 import re
 
 class MetaManager(object):
@@ -63,15 +64,25 @@ class MetaManager(object):
 
     def getCreateDate(self, cutToSeconds=True):
         timestamp = self._getMeta('x-object-meta-crdate')
-        if timestamp and cutToSeconds:
-            return self._cutTimestampStringToSeconds(timestamp)
+        if timestamp:
+            #support legacy notes
+            if MetaManager.isLegacyTimestamp(timestamp):
+                timestamp = MetaManager.convertLegacyTimestamp(timestamp)
+
+            if cutToSeconds:
+                return self._cutTimestampStringToSeconds(timestamp)
         else:
             return timestamp
 
     def getLastModifiedDate(self, cutToSeconds=True):
         timestamp = self._getMeta('x-object-meta-lastmod')
-        if timestamp and cutToSeconds:
-            return self._cutTimestampStringToSeconds(timestamp)
+        if timestamp:
+            #support legacy notes
+            if MetaManager.isLegacyTimestamp(timestamp):
+                timestamp = MetaManager.convertLegacyTimestamp(timestamp)
+
+            if cutToSeconds:
+                return self._cutTimestampStringToSeconds(timestamp)
         else:
             return timestamp
 
@@ -131,3 +142,13 @@ class MetaManager(object):
         if self._commitList != {}:
             post_object(self._url, self._token, Configuration.container_name, self._objId, self._commitList)
         self._commitList = {}
+
+
+    @staticmethod
+    def isLegacyTimestamp(timestamp):
+        return len(timestamp) == 17
+
+    @staticmethod
+    def convertLegacyTimestamp(timestamp):
+        timestamp = timestamp[:5] + VersionManager.ZEROPAD + timestamp[5:]
+        return timestamp

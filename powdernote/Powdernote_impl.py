@@ -92,13 +92,13 @@ class Powdernote(object):
             soDict = OrderedDict(sorted(soDict.items(), key=lambda (k, v): v[1]))
 
         elif sort == "crdate":
-            soDict = OrderedDict(sorted(soDict.items(), key=lambda (k, v): datetime.strptime(v[2], "%H:%M, %d/%m/%Y").isoformat(), reverse=True))
+            soDict = OrderedDict(sorted(soDict.items(), key=lambda (k, v): datetime.strptime(v[2], "%H:%M:%S, %d/%m/%Y").isoformat(), reverse=True))
 
         elif sort == "id":
             sorted(soDict)
 
         else:
-            soDict = OrderedDict(sorted(soDict.items(), key=lambda (k, v): datetime.strptime(v[3], "%H:%M, %d/%m/%Y").isoformat(), reverse=True))
+            soDict = OrderedDict(sorted(soDict.items(), key=lambda (k, v): datetime.strptime(v[3], "%H:%M:%S, %d/%m/%Y").isoformat(), reverse=True))
 
         OutputManager.listPrint(soDict, OutputManager.HEADER_FULL)
 
