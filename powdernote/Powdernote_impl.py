@@ -551,4 +551,4 @@ class Powdernote(object):
                 continue
         #as an information for the user, that the note doesn't exist
         if undoId not in self._keyList:
-            print str(undoId) + " does not exist"
+            print str(undoId) + " doesn't exist"
