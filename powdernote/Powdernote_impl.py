@@ -371,7 +371,7 @@ class Powdernote(object):
             if oldTitle == newTitle:
                 print "No changes have been made, cancelling..."
                 sys.exit(1)
-            self._swiftManager._renameNote(note, newTitle, oldTitle)
+            self._swiftManager._renameNote(newTitle, oldTitle)
         else:
             print "Note #" + str(noteId) + " doesn't exist"
 
