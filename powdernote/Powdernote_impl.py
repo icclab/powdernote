@@ -468,7 +468,7 @@ class Powdernote(object):
         else:
             print "Note #" + str(noteId) + " doesn't exist"
 
-    def retrieveVersion(self, noteId):
+    def restoreVersion(self, noteId):
         '''
         promotes a version to be the current note
         :param noteId:
