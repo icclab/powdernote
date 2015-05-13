@@ -445,9 +445,11 @@ class Powdernote(object):
             elif diff2 == 0:
                 diff2Content = self._swiftManager.getNote(noteId).getContent()
 
+            #append 0, because it's valid but not a key
+            self._keyList.append(0)
+
             for key, value in versions.iteritems():
                 self._keyList.append(key)
-                self._keyList.append("0")
                 diffTitle = versions[key][1]
                 #check which input is which note
                 if key == diff1:
