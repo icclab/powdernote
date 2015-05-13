@@ -75,7 +75,7 @@ class ArgparseCommands(object):
         parser_history.add_argument('h_id', type=int, help='list the previous versions of the note with the given ID')
         parser_history.add_argument('--read', action='store_true', help='read an older version of a note')
         parser_history.add_argument('--diff', action='store_true', help='see the diff of two notes')
-        parser_history.add_argument('--retrieve', action='store_true', help='promote a version to the current note')
+        parser_history.add_argument('--restore', action='store_true', help='promote a version to the current note')
         parser_history.set_defaults(parser_history=True)
 
         parser_deleted = subparsers.add_parser('deleted', help='see all the backed up deleted notes')
@@ -136,7 +136,7 @@ class ArgparseCommands(object):
             elif args.diff == True:
                 pn.diffVersions(id)
             elif args.retrieve == True:
-                pn.retrieveVersion(id)
+                pn.restoreVersion(id)
             else:
                 pn.showHistory(id)
 
