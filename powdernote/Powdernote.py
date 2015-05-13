@@ -135,7 +135,7 @@ class ArgparseCommands(object):
                 pn.readVersion(id)
             elif args.diff == True:
                 pn.diffVersions(id)
-            elif args.retrieve == True:
+            elif args.restore == True:
                 pn.restoreVersion(id)
             else:
                 pn.showHistory(id)
