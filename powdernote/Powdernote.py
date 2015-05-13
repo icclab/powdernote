@@ -28,7 +28,7 @@ class ArgparseCommands(object):
 
     def commands(self):
 
-        parser = argparse.ArgumentParser(prog="powdernote", description="powdernote")
+        parser = argparse.ArgumentParser(prog="powdernote", description="only integer values are allowed for IDs.")
 
         subparsers = parser.add_subparsers(help='powdernote Functions')
 
