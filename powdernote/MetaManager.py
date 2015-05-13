@@ -82,9 +82,9 @@ class MetaManager(object):
                 timestamp = MetaManager.convertLegacyTimestamp(timestamp)
 
             if cutToSeconds:
-                return self._cutTimestampStringToSeconds(timestamp)
-        else:
-            return timestamp
+                timestamp = self._cutTimestampStringToSeconds(timestamp)
+
+        return timestamp
 
     def getTags(self):
         return self._getMeta('x-object-meta-tags')
