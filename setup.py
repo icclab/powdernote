@@ -27,6 +27,6 @@ setup(name='powdernote',
       url='http://blog.zhaw.ch/icclab',
       license='Apache 2.0',
       packages=['powdernote'],
-      install_requires=['tabulate', 'python-swiftclient', 'python-keystoneclient'],
+      install_requires=['tabulate', 'python-swiftclient', 'python-keystoneclient', 'difflib'],
       entry_points={'console_scripts':['powdernote = powdernote.Powdernote:main']}
 )
