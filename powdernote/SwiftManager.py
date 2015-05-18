@@ -126,7 +126,12 @@ class SwiftManager(object):
         print "Ok"
 
     def versionUpload(self, oldTitle, newTitle):
-        #todo: commets
+        '''
+        uploads a version
+        :param oldTitle:
+        :param newTitle:
+        :return:
+        '''
         put_object(self._storage_url, self._token, Configuration.container_name, newTitle, headers={"X-Copy-From":Configuration.container_name + "/" + oldTitle})
 
 
