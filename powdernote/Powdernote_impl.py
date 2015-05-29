@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-Copyright 2014 ZHAW (Zürcher Hochschule für Angewandte Wissenschaften)
+Copyright 2015 ZHAW (Zürcher Hochschule für Angewandte Wissenschaften)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -161,6 +161,8 @@ class Powdernote(object):
         elementList = []
         list = self._swiftManager.downloadObjectIds()
         for element in list:
+            if VersionManager.isAnoteDeleted(element) or VersionManager.isAnoteVersion(element):
+                continue
             noteId = SwiftManager.objIdToId(element)
             if noteId is None:
                 raise RuntimeError("Can not get the ID from " + element + " ... should not happen, really")
@@ -193,6 +195,8 @@ class Powdernote(object):
         self._swiftManager.downloadNotes()
         notes = self._swiftManager.getDownloadedNotes()
         for name, content in notes.items():
+            if VersionManager.isAnoteDeleted(name) or VersionManager.isAnoteVersion(name):
+                continue
             id = SwiftManager.objIdToId(name)
             name = SwiftManager.objIdToTitle(name)
             substr = substr.lower()
@@ -285,6 +289,8 @@ class Powdernote(object):
         list = self._swiftManager.downloadObjectIds()
         elementList = []
         for element in list:
+            if VersionManager.isAnoteDeleted(element) or VersionManager.isAnoteVersion(element):
+                continue
             id = SwiftManager.objIdToId(element)
             if id is None:
                 raise RuntimeError("Can not get the ID from " + element + " ... should not happen, really")
