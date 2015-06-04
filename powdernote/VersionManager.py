@@ -30,6 +30,9 @@ class VersionManager(object):
         DELETEID = "d"
         ZEROPAD = ":00.000000"
 
+        LEGACY_FORMAT_SAMPLE = "09:21, 03/12/2014"
+        LEGACY_FORMAT_LENGTH = len(LEGACY_FORMAT_SAMPLE)
+
         def __init__(self, swiftManager):
             super(VersionManager, self).__init__()
             self._swiftMngr = swiftManager

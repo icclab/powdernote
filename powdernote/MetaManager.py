@@ -139,12 +139,18 @@ class MetaManager(object):
             post_object(self._url, self._token, Configuration.container_name, self._objId, self._commitList)
         self._commitList = {}
 
-
     @staticmethod
     def isLegacyTimestamp(timestamp):
-        return len(timestamp) == 17
+        '''
+        Returns true if the given timestamp is a legacy one (before we introduced usec timestamps for versioning)
+        '''
+        return len(timestamp) == VersionManager.LEGACY_FORMAT_LENGTH
 
     @staticmethod
     def convertLegacyTimestamp(timestamp):
+        '''
+        Pads a legacy timestamp (e.g., 09:21, 03/12/2014) with zeros so its length is like a usec one (e.g.,
+        '09:21:00.000000, 03/12/2014)
+        '''
         timestamp = timestamp[:5] + VersionManager.ZEROPAD + timestamp[5:]
         return timestamp
