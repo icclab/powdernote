@@ -51,3 +51,5 @@ powdernote/Configuration.py
 powdernoterc
 
 reinstall.sh
+
+*.bak
