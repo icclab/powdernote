@@ -119,7 +119,7 @@ class VersionManager(object):
         versionId = 0
         for version in allVersions[str(noteId)]:
             versionId = versionId + 1
-            #add the versions to the dict
+            # add the versions to the dict
             versionsOfNote[versionId] = [versionId, version, title]
         return versionsOfNote
 
@@ -133,9 +133,9 @@ class VersionManager(object):
         objectId = noteId + OutputManager.ID_TITLE_SEPERATOR + title
         versionType = VersionManager.DELETEIDENTIFIER
 
-        #upload the back up
+        # upload the back up
         self._versionUploader(objectId, versionType)
-        #delete all the versions of the note
+        # delete all the versions of the note
         self.versionDelete(noteId)
 
     def versionDelete(self, noteId):
@@ -146,7 +146,7 @@ class VersionManager(object):
         '''
         note, title, versions, noteList = self._getVersionInfo(noteId, output=False)
         for _, value in versions.iteritems():
-            #delete a note by ObjectId
+            # delete a note by ObjectId
             self._swiftMngr._deleteNoteByObjectId(value[1])
 
     def _versionUploader(self, objectId, versionType):
@@ -159,29 +159,29 @@ class VersionManager(object):
         if objectId not in self._swiftMngr.downloadObjectIds():
             return
 
-        #get the timestamps
+        # get the timestamps
         metamngr = self._swiftMngr.metaMngrFactory(objectId)
         metaTime = metamngr.getLastModifiedDate(cutToSeconds=False)
 
-        #support legacy notes
+        # support legacy notes
         if len(metaTime) == 17:
-            #legacy notes don't have seconds or microseconds, here they are added
+            # legacy notes don't have seconds or microseconds, here they are added
             metaTime = metaTime[:5] + VersionManager.ZEROPAD + metaTime[5:]
 
-        #transform the timestamp, to the right format
+        # transform the timestamp, to the right format
         time = datetime.strptime(metaTime, '%H:%M:%S.%f, %d/%m/%Y')
         versionTime = time.strftime("%Y%m%d%H%M%S%f")[:-3]
 
-        #get only the title
+        # get only the title
         title = self._swiftMngr.objIdToTitle(objectId)
         oldTitle = objectId
         if versionType == VersionManager.VERSIONIDENTIFIER:
-            #compose the new title if it is a version, so with the "v-"
+            # compose the new title if it is a version, so with the "v-"
             newTitle = VersionManager.VERSIONIDENTIFIER + OutputManager.DASH + versionTime + OutputManager.DASH \
                    + self._swiftMngr.objIdToId(oldTitle)
 
         elif versionType == VersionManager.DELETEIDENTIFIER:
-            #compose new title if it is a back up, so with the "vd-"
+            # compose new title if it is a back up, so with the "vd-"
             newTitle = VersionManager.DELETEIDENTIFIER + OutputManager.DASH + versionTime + OutputManager.DASH \
                    + VersionManager.DELETEID + OutputManager.ID_TITLE_SEPERATOR + title
 
@@ -194,22 +194,22 @@ class VersionManager(object):
         :param output:
         :return:
         '''
-        #a list with a list of objects that start with "v"
+        # a list with a list of objects that start with "v"
         allVersions = self._downloadAllNoteVersions()
 
         self._swiftMngr.downloadNotes()
-        #a list with the content for each object
+        # a list with the content for each object
         noteList = self._swiftMngr.getDownloadedNotes()
 
         note = self._swiftMngr.getNote(noteId)
         title = note.getTitle()
-        #a list of all the versions with a continuos Id
+        # a list of all the versions with a continuos Id
         versions = self.historyList(noteId, self.arrangeNoteVersions(allVersions), title)
-        #rearanges the ids so each note's versions start counting from 1
+        # rearanges the ids so each note's versions start counting from 1
         # rearangedVersions = self.rearangeVersionID(versions)
 
         if output == True:
-            #nicely prints the versions list
+            # nicely prints the versions list
             OutputManager.listPrint(versions, 3)
 
         return note, title, versions, noteList
@@ -226,12 +226,12 @@ class VersionManager(object):
         deletedId = 0
 
         for element in allDeleted:
-            #assign an id to all objects and save it in a dict
+            # assign an id to all objects and save it in a dict
             deletedId = deletedId + 1
             deletedList[deletedId] = [deletedId, element]
 
         if output == True:
-            #nicely prints the backed up notes list
+            # nicely prints the backed up notes list
             OutputManager.listPrint(deletedList, 4)
 
         return deletedList
