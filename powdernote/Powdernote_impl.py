@@ -125,7 +125,7 @@ class Powdernote(object):
 
         action = "delete note(s)"
         OutputManager.printListedNotes(nameList)
-        if self._swiftManager._confirmation(action):
+        if self._swiftManager.confirmation(action):
             for id, title in nameList:
                 #deleted versions are created here
                 self._versionMngr.deleteVersionCreator(id, title)

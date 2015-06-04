@@ -139,7 +139,7 @@ class SwiftManager(object):
         _, objects = self._downloadContainer()
         for object in objects:
             if str(id) == SwiftManager.objIdToId(object['name']):
-                if force or self._confirmation("delete note \'" + object['name'] + "\'"):
+                if force or self.confirmation("delete note \'" + object['name'] + "\'"):
                     self._deleteNoteByObjectId(object['name'])
                     if force == False:
                         print "Ok"
@@ -202,7 +202,7 @@ class SwiftManager(object):
     def _downloadContainer(self):
         return get_container(self._storage_url, self._token, Configuration.container_name)
 
-    def _confirmation(self, action):
+    def confirmation(self, action):
         '''
         asks for confirmation of an action
         :param action:
