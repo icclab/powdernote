@@ -48,3 +48,4 @@ docs/_build/
 
 .DS_Store
 powdernote/Configuration.py
+powdernoterc
