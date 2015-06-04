@@ -96,13 +96,9 @@ class MetaManager(object):
         :return: None if no metadata is available for this object or the value is not available,
         the value for this metadata otherwise
         '''
-        # Implement this
         if self._meta == None:
             return None
-        if metaHeader in self._meta:
-            return self._meta[metaHeader]
-        else:
-            return None
+        return self._meta.get(metaHeader)
 
     def update(self):
         '''
