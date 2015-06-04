@@ -49,7 +49,7 @@ class MetaManager(object):
 
     def _cutTimestampStringToSeconds(self, timestamp):
         '''
-        this function makes the microseconds invisible in the timestamp string of a notes metadata when it's getting
+        this function makes the microseconds invisible in the timestamp string of a note metadata when it's getting
         listed, so there is not too much information that it looks confusing.
         :param timestamp:
         :return:
