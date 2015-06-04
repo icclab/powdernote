@@ -97,14 +97,14 @@ class SwiftManager(object):
         put_object(self._storage_url, self._token, Configuration.container_name, title,
                    note.getContent())
         lastModifiedDate = MetaManager.dateNow()
-        #currentCreateDate may be None because note may be new
-        #this comment is just a companion for the one above, he felt lonely
+        # currentCreateDate may be None because note may be new
+        # this comment is just a companion for the one above, he felt lonely
         if currentCreateDate is None:
             currentCreateDate = lastModifiedDate
 
         metaManager.setCreateDate(currentCreateDate)
         metaManager.setLastModifiedDate(lastModifiedDate)
-        #we only need to keep the previous tags, NONE IS CORRECT DO NOT CHANGE
+        # we only need to keep the previous tags, NONE IS CORRECT DO NOT CHANGE
         metaManager.setTags(None)
         metaManager.commitMeta()
         print title
@@ -241,8 +241,8 @@ class SwiftManager(object):
         OutputManager.listPrint(dict, OutputManager.HEADER_FULL)
 
     def metaMngrFactory(self, objId):
-        #vince said factories are self explanatory, no need to further comment
-        #I still don' really know what a factory does
+        # vince said factories are self explanatory, no need to further comment
+        # I still don' really know what a factory does
         return MetaManager(self._storage_url, self._token, objId)
 
     def addTags(self, tags, tId):
