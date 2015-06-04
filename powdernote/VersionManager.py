@@ -97,6 +97,15 @@ class VersionManager(object):
             return True
         return False
 
+    @staticmethod
+    def isVersionOrDeleted(objectId):
+        '''
+        Only backup of deleted notes or note versions can start with v
+        '''
+        if objectId.startswith("v"):
+            return True
+        return False
+
     def historyList(self, noteId, allVersions, title):
         '''
         creates a list of the versions of the given note
