@@ -49,20 +49,19 @@ class Powdernote(object):
         self._deletedNotes = []
         self._keyList = []
 
-
     def newNote(self, title):
         note = Note(title)
         self._editNote(note)
 
     def editNote(self, id):
-        if self._swiftManager.doesNoteExist(id) == True:
+        if self._swiftManager.doesNoteExist(id):
             note = self._swiftManager.getNote(id)
             self._editNote(note)
         else:
             print "Note #" + str(id) + " doesn't exist"
 
     def readNote(self, id):
-        if self._swiftManager.doesNoteExist(id) == True:
+        if self._swiftManager.doesNoteExist(id):
             note = self._swiftManager.getNote(id)
             self._readNote(note)
         else:
@@ -70,7 +69,7 @@ class Powdernote(object):
 
     def listNotesAndMeta(self):
         list = self._swiftManager.downloadObjectIds()
-        soDict  = {}
+        soDict = {}
         sort = self.settingsParser("Settings", "sort")
         for element in list:
             #exclude versions and deleted notes, that always begin with 'v'
@@ -116,7 +115,7 @@ class Powdernote(object):
     def deleteList(self, idList):
         nameList = []
         for id in idList:
-            if self._swiftManager.doesNoteExist(id) == True:
+            if self._swiftManager.doesNoteExist(id):
                 note = self._swiftManager.getNote(id)
                 title = str(note.getTitle())
                 nameList.append((str(id), title))
@@ -126,7 +125,7 @@ class Powdernote(object):
 
         action = "delete note(s)"
         OutputManager.printListedNotes(nameList)
-        if self._swiftManager._confirmation(action) == True:
+        if self._swiftManager._confirmation(action):
             for id, title in nameList:
                 #deleted versions are created here
                 self._versionMngr.deleteVersionCreator(id, title)
@@ -322,7 +321,6 @@ class Powdernote(object):
         tag = {}
         content = {}
 
-
         for element in titleMatch:
             title[str(element[0])] = str(element[1])
 
@@ -349,7 +347,6 @@ class Powdernote(object):
 
             else:
                 print "nothing found"
-
 
     def _readNote(self, note):
         OutputManager.markdownPrint(note.getTitle(), note.getContent())
