@@ -36,33 +36,34 @@ class VersionManager(object):
     def __init__(self, swiftManager):
         super(VersionManager, self).__init__()
         self._swiftMngr = swiftManager
-        self._versionList = []
-        self._deletedNotes = []
 
-
-    def downloadAllNoteVersions(self):
+    def _downloadAllNoteVersions(self):
         '''
         extracts all the objects that start with "v" and appends them to a list
         :return:
         '''
+        versions = []
         listOfAllObjects = self._swiftMngr.downloadObjectIds()
         for element in listOfAllObjects:
             if self.isAnoteVersion(element):
-                self._versionList.append(element)
+                versions.append(element)
             else:
                 continue
+        return versions
 
-    def downloadAllDeleted(self):
+    def _downloadAllDeleted(self):
         '''
         extracts all the objects that start with "vd" and appends them to a list
         :return:
         '''
+        deleted = []
         listOfAllObjects = self._swiftMngr.downloadObjectIds()
         for element in listOfAllObjects:
             if self.isAnoteDeleted(element):
-                self._deletedNotes.append(element)
+                deleted.append(element)
             else:
                 continue
+        return deleted
 
     @staticmethod
     def extractId(objectId):
@@ -73,21 +74,6 @@ class VersionManager(object):
         '''
         regex = "^(v-\d+-)(\d+)"
         return re.search(regex, objectId).group(2)
-
-
-    def getAllVersions(self):
-        '''
-        returns a list of all objects starting with "v"
-        :return:
-        '''
-        return self._versionList
-
-    def getDeleted(self):
-        '''
-        returns a list of all objects starting with "vd"
-        :return:
-        '''
-        return self._deletedNotes
 
     @staticmethod
     def isAnoteVersion(objectId):
@@ -110,8 +96,6 @@ class VersionManager(object):
         if objectId.startswith("vd-"):
             return True
         return False
-
-
 
     def historyList(self, noteId, allVersions, title):
         '''
@@ -156,7 +140,6 @@ class VersionManager(object):
             #delete a note by ObjectId
             self._swiftMngr._deleteNoteByObjectId(value[1])
 
-
     def _versionUploader(self, objectId, versionType):
         '''
         uploads a version or a backup of a note
@@ -195,7 +178,6 @@ class VersionManager(object):
 
         self._swiftMngr.versionUpload(oldTitle, newTitle)
 
-
     def _getVersionInfo(self, noteId, output=True):
         '''
         prints and returns a list of the versions of the given note
@@ -203,9 +185,8 @@ class VersionManager(object):
         :param output:
         :return:
         '''
-        self.downloadAllNoteVersions()
         #a list with a list of objects that start with "v"
-        allVersions = self.getAllVersions()
+        allVersions = self._downloadAllNoteVersions()
 
         self._swiftMngr.downloadNotes()
         #a list with the content for each object
@@ -230,9 +211,7 @@ class VersionManager(object):
         :param output:
         :return:
         '''
-        self.downloadAllDeleted()
-        #list with all the objects that start with "vd"
-        allDeleted = self.getDeleted()
+        allDeleted= self._downloadAllDeleted()
 
         deletedList = {}
         deletedId = 0
@@ -247,7 +226,6 @@ class VersionManager(object):
             OutputManager.listPrint(deletedList, 4)
 
         return deletedList
-
 
     def arrangeNoteVersions(self, allVersions):
         '''
