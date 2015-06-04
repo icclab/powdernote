@@ -74,7 +74,7 @@ class Powdernote(object):
         sort = self.settingsParser("Settings", "sort")
         for element in list:
             #exclude versions and deleted notes, that always begin with 'v'
-            if element[0] == "v":
+            if VersionManager.isVersionOrDeleted(element):
                 continue
 
             id = SwiftManager.objIdToId(element)
