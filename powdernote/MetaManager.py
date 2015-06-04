@@ -35,7 +35,7 @@ class MetaManager(object):
         self._objId = objectId
         self._meta = None
         self.update()
-        #self._commitList = self._meta
+        # self._commitList = self._meta
 
     @staticmethod
     def dateNow():
@@ -65,7 +65,7 @@ class MetaManager(object):
     def getCreateDate(self, cutToSeconds=True):
         timestamp = self._getMeta('x-object-meta-crdate')
         if timestamp:
-            #support legacy notes
+            # support legacy notes
             if MetaManager.isLegacyTimestamp(timestamp):
                 timestamp = MetaManager.convertLegacyTimestamp(timestamp)
 
@@ -77,7 +77,7 @@ class MetaManager(object):
     def getLastModifiedDate(self, cutToSeconds=True):
         timestamp = self._getMeta('x-object-meta-lastmod')
         if timestamp:
-            #support legacy notes
+            # support legacy notes
             if MetaManager.isLegacyTimestamp(timestamp):
                 timestamp = MetaManager.convertLegacyTimestamp(timestamp)
 

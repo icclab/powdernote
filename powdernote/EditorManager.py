@@ -56,7 +56,7 @@ class EditorManager(object):
         '''
         :return: the content of the editor manager, can be empty, not-initialized, un-updated, ...
         '''
-        #print "getContent: {}".format(self._content)
+        # print "getContent: {}".format(self._content)
         return self._content
 
 
@@ -72,9 +72,9 @@ class EditorManager(object):
             oldContent = self._existingContent
         else:
             oldContent = ""
-        #open tempfile with editor -> _openEditor
+        # open tempfile with editor -> _openEditor
         self._openEditor(tempnote.name)
-        #read file back
+        # read file back
         with open(tempnote.name) as f:
             newContent = f.read()
 
