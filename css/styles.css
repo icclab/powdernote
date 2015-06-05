@@ -1,0 +1,650 @@
+/* Preloader */
+
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #f2f3f7;
+    /* change if the mask should have another color then white */
+    z-index: 9999999;
+    /* makes sure it stays on top */
+}
+#status {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    left: 50%;
+    /* centers the loading animation horizontally one the screen */
+    top: 50%;
+    /* centers the loading animation vertically one the screen */
+    background-image: url(../img/status.gif);
+    /* path to your loading animation */
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: -100px 0 0 -100px;
+    /* is width and height divided by two */
+}
+body {
+    font-family: 'Open Sans', sans-serif;
+    color: #8a8b8b;
+    font-size: 18px;
+    line-height: 22px;
+    background-color: rgba(53, 10, 4, .5);
+	background-image:url(../img/bg.jpg);
+	background-size: cover;
+	background-repeat:repeat;
+    font-weight: normal;
+	
+}
+
+.bg-overlay {
+    background: url("../img/bg-overlay.png") repeat scroll 0 0 rgba(0, 0, 0, 0);
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 0;
+}
+
+
+body.yellow {
+    background-color: #ffcc00;
+}
+body.green {
+    background-color: #aaee06;
+}
+body.blue {
+    background-color: #00d2ff;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    padding: 0;
+}
+.homepage #logo {
+    margin: 0 0 26px 0;
+}
+.home {
+    background: #e6e9ed url(../img/bg-body.png) left top repeat-x;
+}
+.main-wrapper {
+    padding: 60px 20px 0 20px;
+    margin: 0 auto;
+}
+/*Logo Start Here*/
+
+#logo {
+    text-align: center;
+    margin: 0 0 30px 0;
+    padding: 0;
+}
+#logo a {
+    display: inline-block;
+    padding: 4px;
+}
+/*Logo End Here*/
+
+/*Slogan start here*/
+
+.slogan {
+    margin-bottom: 76px;
+    text-align: center;
+}
+.slogan h1 {
+    color: #fff;
+}
+.slogan p {
+    margin: 10px 0;
+    padding: 0;
+    color: #3e3d3d;
+}
+/*SLogan end here*/
+
+/*Countdown start here*/
+
+.count-down {
+    margin: 0 0 85px 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    height: 240px;
+    height: auto;
+}
+.count-down li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 28px;
+    display: inline-block;
+    min-height: 250px;
+}
+.count-down li div {
+    margin: 0 !important;
+    padding: 0;
+}
+.count-down li input {
+    font-family: 'Roboto', sans-serif !important;
+    font-size: 88px!important;    
+    width: 154px!important;
+    height: 98px!important;
+    margin: 70px 0 0 -210px !important;
+    font-weight: normal!important;
+}
+#days-title,
+#hours-title,
+#mins-title,
+#secs-title {
+    display: block;   
+    text-transform: uppercase;
+    margin-top: -94px;
+    font-size: 24px;
+    position: relative;
+    z-index: 9 !important;
+}
+/*Countdown end here*/
+
+/*Newsletter subscribe start here*/
+
+.email-ico i {
+    font-size: 36px;
+    line-height: 72px;
+}
+
+.contact .form-group {
+    position: relative;
+    width: 100%;
+    margin-bottom: 4px !important;
+}
+.contact {
+    color: #8C8C8C;
+    float: none;
+    margin: 0 auto 60px auto;
+}
+
+.contact input {
+    background-color: #ffffff;
+    border: none;
+    height: 60px;
+    width: 100%;
+    padding: 0 22% 0 70px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.contact .error:focus,
+.contact .error {
+    border: 1px solid #ff0000;
+}
+.contact label.error {
+    color: #fff;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: normal;
+    position: absolute;
+    right: 0;
+    text-transform: none;
+    top: -28px;
+    border: none;
+    background-color: #FF0000;
+    padding: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.contact .email-ico {
+    position: absolute;
+    top: -6px;
+    left: 12px;
+    font-size: 24px;
+}
+.contact .btn-submit {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 20px;
+    border: none;
+    background-color: #ff382e;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    font-size: 20px;
+    color: #ffffff;
+    line-height: 22px;
+    font-family: 'Roboto', sans-serif;
+    width: 90px;
+    height: 40px;
+    font-weight: bold;
+    line-height: 24px;
+	padding: 0;
+}
+.form-respond .content-message {
+    border-radius: 4px;
+    margin: 0 0 50px;
+    padding: 30px;
+}
+.form-respond .success {
+    color: #fff;
+    background-color: green;
+}
+.form-respond .content-message {
+    border-radius: 4px;
+    margin: 0 0 50px;
+    padding: 4px 8px;
+    color: #fff;
+    background-color: #FF0000;
+}
+.form-respond .content-message h2,
+.form-respond .content-message p {
+    display: inline;
+    font-size: 15px;
+}
+/*Newsletter subscribe end here*/
+
+/*Social Links start here*/
+
+.connect-us {
+    margin: 0 0 28px 0;
+    padding: 0;
+    text-align: center;
+}
+.connect-us li {
+    display: inline-block;
+    font-size: 28px;
+}
+.connect-us li a {
+    display: block;
+    margin: 10px;
+    width: 40px;
+    height: 40px;
+    line-height: 36px;
+    color: #fff;
+}
+.connect-us li a.fb:hover {
+    color: #507cbe;
+}
+.connect-us li a.twitter:hover {
+    color: #62cdf2;
+}
+.connect-us li a.gplus:hover {
+    color: #ec5d48;
+}
+.connect-us li a.linkedin:hover {
+    color: #1e88c9;
+}
+.connect-us li a.ytube:hover {
+    color: #e64c38;
+}
+.connect-us li a.dribbble:hover {
+    color: #d34e95;
+}
+.connect-us li a.pinterest:hover {
+    color: #e94546;
+}
+/*Social Links end here*/
+
+/*Footer start here*/
+
+footer {
+    text-align: center;
+    font-size: 16px;
+}
+.footer-text{
+	font-size: 12px;
+}
+footer a {
+    color: #8a8b8b;
+    text-decoration: underline;
+}
+footer a:hover {
+    text-decoration: none;
+    color: #8a8b8b;
+}
+/*Footer start here*/
+
+/*About/Contact css start here*/
+
+.about-us a {
+    position: absolute;
+    top: 50%;
+    height: 40px;
+    width: 40px;
+    background-color: #ff3b30;
+    border-radius: 50%;
+    color: #ffffff;
+    text-align: center;
+    line-height: 40px;
+    left: 1%;
+    font-size: 22px;
+    z-index: 999;
+}
+.about-us .tooltip-inner,
+.contact-us .tooltip-inner {
+    background: none;
+    border-radius: 0;
+    color: #3e3d3d;
+    font-size: 14px;
+    text-transform: uppercase;
+    padding: 0;
+}
+.about-us .tooltip-arrow,
+.contact-us .tooltip-arrow {
+    display: none;
+}
+.contact-us a {
+    position: absolute;
+    top: 50%;
+    height: 40px;
+    width: 40px;
+    background-color: #ff3b30;
+    border-radius: 50%;
+    color: #ffffff;
+    text-align: center;
+    line-height: 40px;
+    right: 1%;
+    font-size: 22px;
+    z-index: 999;
+}
+.about-us a:hover,
+.contact-us a:hover {
+    text-decoration: none;
+}
+/*About/Contact css end here*/
+
+.ux .modal {
+    background: rgba(31, 31, 31, 0.96)
+}
+.pop-up {
+    padding: 20px;
+    border-radius: 0;
+    box-shadow: none;
+    background: none;
+    border: none;
+}
+.cls-pop {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 30px;
+    line-height: 40px;
+    color: #ffffff;
+    font-weight: normal;
+    z-index: 999;
+}
+.cls-pop:hover {
+    color: #ff382e;
+    text-decoration: none;
+}
+.pop-up h3 {
+    font-size: 34px;
+    line-height: 40px;
+    margin: 0 0 60px 0;
+    padding: 0;
+    color: #ff382e;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-weight: normal;
+    text-transform: uppercase;
+    position: relative;
+}
+.pop-up h3:before {
+    background-color: #ff382e;
+    bottom: -30px;
+    content: "";
+    display: block;
+    height: 1px;
+    position: absolute;
+    width: 300px;
+}
+.pop-up h3:before {
+    left: 50%;
+    margin-left: -150px;
+}
+.pop-up p {
+    margin: 10px 0;
+    padding: 0;
+    font-size: 15px;
+    line-height: 24px;
+    color: #dadada;
+}
+.pop-up-cnt {
+    text-align: center;
+}
+.pop-up-cnt i {
+    height: 40px;
+    width: 40px;
+    background-color: #ff3b30;
+    border-radius: 50%;
+    color: #ffffff;
+    line-height: 40px;
+    margin-bottom: 10px;
+}
+.pop-up-cnt h4 {
+    font-size: 22px;
+    line-height: 28px;
+    margin: 0;
+    padding: 0;
+    color: #ffffff;
+}
+.pop-up-cnt .cnt-wrap {
+    padding-top: 30px;
+}
+.features {
+    margin: 20px 0 0 0;
+    padding: 0 0 0 14px;
+}
+.features li {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    line-height: 28px;
+    color: #dadada;
+    width: 33%;
+    float: left;
+}
+.gmap {
+    margin: 20px 0;
+    position: relative;
+    width: 100%;
+    height: 400px;
+}
+
+/*Contact*/
+
+input[type="text"] {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: 1px solid rgb(255, 255, 255);
+    color: rgb(255, 255, 255);
+    font-weight: 300;
+    height: 45px;
+    line-height: 45px;
+    margin-bottom: 20px;
+    padding: 0 20px;
+    width: 100%;
+}
+
+textarea {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: 1px solid rgb(255, 255, 255);
+    color: rgb(255, 255, 255);
+    height: 160px;
+    margin-bottom: 20px;
+    overflow: auto;
+    padding: 20px;
+    width: 100%;
+}
+
+.contact-btn-submit {
+    background-color: rgb(255, 56, 46);
+    border: medium none;
+    border-radius: 4px;
+    color: rgb(255, 255, 255);
+    font-family: "Roboto",sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    height: 40px;
+    line-height: 24px;    
+    width: 110px;
+}
+
+/* Captcha */
+
+.captcha > input
+{
+	width:50%;
+	margin-top: 10px;
+}
+
+/* 404 page design */
+
+h1.error {
+    color: rgb(255, 255, 255);
+    font-size: 10em;
+}
+.no-page-found {
+    margin-bottom: 76px;
+    text-align: center;
+	color: rgb(255, 255, 255);	
+}
+.no-page-found p {
+    color: rgb(255, 255, 255);
+    margin: 10px 0;
+    padding: 0;
+}
+.no-page-found p a{
+    color: rgb(255, 255, 0);
+	text-decoration: underline;    
+}
+.no-page-found p a:hover{    
+	text-decoration: none;    
+}
+
+/*Template color option start here*/
+
+.template-colors {
+    margin: 40px 0 0 0;
+    padding: 0;
+    list-style: none;
+    display: block;
+}
+.template-colors li {
+    margin: 0 2px;
+    padding: 0;
+    display: inline-block;
+    font-size: 26px;
+}
+.template-colors li a {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    display: block;
+    width: 42px;
+    height: 42px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+.template-colors li a:hover {
+    border: 1px solid #999;
+}
+.template-colors li a.blue {
+    background-color: #00d2ff;
+}
+.template-colors li a.green {
+    background-color: #aaee06;
+}
+.template-colors li a.yellow {
+    background-color: #ffcc00;
+}
+/*Template color option end here*/
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .count-down li input {
+        margin-top: 60px !important;
+    }
+}
+/*Responsive css start here*/
+
+@media only screen and (max-device-width: 1150px) {
+    .about-us a {
+        top: 2%;
+        margin-left: -20px;
+        left: 47.5%;
+    }
+    .contact-us a {
+        top: 2%;
+        margin-right: -20px;
+        right: 47.5%;
+    }
+    .about-us .tooltip,
+    .contact-us .tooltip {
+        display: none !important;
+    }
+    .about-us .tooltip-arrow,
+    .contact-us .tooltip-arrow {
+        display: none;
+    }
+}
+@media only screen and (max-width: 1024px) {
+    .count-down li div,
+    .count-down li canvas {
+        width: 230px !important;
+        height: 230px !important;
+    }
+    .contact-form input {
+        padding: 0 26% 0 17%;
+    }
+    .count-down li input {
+        margin: 36px 0 0 -187px !important;
+    }
+    .hide-med {
+        display: none !important;
+    }
+    .contact-form .btn-submit {
+        font-size: 18px;
+    }
+    .features li {
+        width: 50%;
+    }
+}
+@media only screen and (max-device-width: 767px) {
+    .about-us a {
+        left: 46%;
+    }
+    .contact-us a {
+        right: 46%;
+    }
+}
+@media only screen and (max-device-width: 600px) {
+    .about-us a {
+        left: 44%;
+    }
+    .contact-us a {
+        right: 44%;
+    }
+    .features li {
+        width: 100%;
+        float: none;
+    }
+}
+@media only screen and (max-device-width: 568px) {
+    .contact-form input {
+        padding: 0 40% 0 24%;
+    }
+    .paw-carousel-item {
+        height: 320px !important;
+    }
+    .contact-form .btn-submit {
+        font-size: 15px;
+        padding: 0;
+        margin: 0;
+        width: 80px;
+    }
+}
+/*Responsive css end here*/
