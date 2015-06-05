@@ -1,0 +1,14 @@
+#!/bin/bash
+#this bash magic (level 100) is taken from arcanist
+SOURCE="${BASH_SOURCE[0]}";
+while [ -h "$SOURCE" ]; do
+  LINK="$(readlink "$SOURCE")";
+  if [ "${LINK:0:1}" == "/" ]; then
+    SOURCE="$LINK"
+  else
+    SOURCE="$(cd -P "$(dirname "$SOURCE")" && pwd)/$LINK"
+  fi
+done;
+DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+
+python "$DIR/../Powdernote/powdernote.py" "$@"
