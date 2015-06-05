@@ -47,7 +47,6 @@ docs/_build/
 .idea
 
 .DS_Store
-powdernote/Configuration.py
 powdernoterc
 
 reinstall.sh
