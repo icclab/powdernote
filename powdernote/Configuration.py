@@ -25,8 +25,8 @@ class Configuration(object):
     username = ""
     password = ""
     container_name = ""
-
-    #do not edit these
-    tenant_name = username
     auth_url = ""
+
+    #do not edit this one
+    tenant_name = username
 
