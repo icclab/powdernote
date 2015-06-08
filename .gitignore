@@ -48,6 +48,7 @@ docs/_build/
 
 .DS_Store
 powdernoterc
+powdernote/Configuration.py
 
 reinstall.sh
 
