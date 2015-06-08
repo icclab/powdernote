@@ -24,7 +24,6 @@ class Configuration(object):
     #insert your credentials
     username = ""
     password = ""
-    tenant_id = ""
     container_name = ""
 
     #do not edit these
