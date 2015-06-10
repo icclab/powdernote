@@ -28,8 +28,8 @@ class Note(object):
         self._objiectId = ""
 
     def getContent(self):
-            content = self._mushroom
-            return content
+        content = self._mushroom
+        return content
 
     def setContent(self, content):
         '''

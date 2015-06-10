@@ -23,6 +23,7 @@ from datetime import datetime
 import re
 from collections import defaultdict
 
+
 class VersionManager(object):
 
     VERSIONIDENTIFIER = "v"
@@ -119,7 +120,6 @@ class VersionManager(object):
         regex = VersionManager.VERSION_ID_REGEX
         return re.match(regex, objectId).group(1) + newid
 
-
     def historyList(self, noteId, allVersions, title):
         '''
         creates a list of the versions of the given note
@@ -158,7 +158,8 @@ class VersionManager(object):
         :param noteId:
         :return:
         '''
-        note, title, versions, noteList = self._getVersionInfo(noteId, output=False)
+        note, title, versions, noteList = self._getVersionInfo(
+            noteId, output=False)
         for _, value in versions.iteritems():
             # delete a note by ObjectId
             self._swiftMngr._deleteNoteByObjectId(value[1])
@@ -179,7 +180,8 @@ class VersionManager(object):
 
         # support legacy notes
         if len(metaTime) == 17:
-            # legacy notes don't have seconds or microseconds, here they are added
+            # legacy notes don't have seconds or microseconds, here they are
+            # added
             metaTime = metaTime[:5] + VersionManager.ZEROPAD + metaTime[5:]
 
         # transform the timestamp, to the right format
@@ -191,13 +193,13 @@ class VersionManager(object):
         oldTitle = objectId
         if versionType == VersionManager.VERSIONIDENTIFIER:
             # compose the new title if it is a version, so with the "v-"
-            newTitle = VersionManager.VERSIONIDENTIFIER + OutputManager.DASH + versionTime + OutputManager.DASH \
-                   + self._swiftMngr.objIdToId(oldTitle)
+            newTitle = VersionManager.VERSIONIDENTIFIER + OutputManager.DASH + \
+                versionTime + OutputManager.DASH + self._swiftMngr.objIdToId(oldTitle)
 
         elif versionType == VersionManager.DELETEIDENTIFIER:
             # compose new title if it is a back up, so with the "vd-"
-            newTitle = VersionManager.DELETEIDENTIFIER + OutputManager.DASH + versionTime + OutputManager.DASH \
-                   + VersionManager.DELETEID + OutputManager.ID_TITLE_SEPERATOR + title
+            newTitle = VersionManager.DELETEIDENTIFIER + OutputManager.DASH + versionTime + \
+                OutputManager.DASH + VersionManager.DELETEID + OutputManager.ID_TITLE_SEPERATOR + title
 
         self._swiftMngr.versionUpload(oldTitle, newTitle)
 
@@ -218,23 +220,26 @@ class VersionManager(object):
         note = self._swiftMngr.getNote(noteId)
         title = note.getTitle()
         # a list of all the versions with a continuos Id
-        versions = self.historyList(noteId, self.arrangeNoteVersions(allVersions), title)
+        versions = self.historyList(
+            noteId,
+            self.arrangeNoteVersions(allVersions),
+            title)
         # rearanges the ids so each note's versions start counting from 1
         # rearangedVersions = self.rearangeVersionID(versions)
 
-        if output == True:
+        if output:
             # nicely prints the versions list
             OutputManager.listPrint(versions, 3)
 
         return note, title, versions, noteList
 
-    def getDeletedInfo(self, output = True):
+    def getDeletedInfo(self, output=True):
         '''
         prints and returns a list of backed up notes
         :param output:
         :return:
         '''
-        allDeleted= self._downloadAllDeleted()
+        allDeleted = self._downloadAllDeleted()
 
         deletedList = {}
         deletedId = 0
@@ -244,7 +249,7 @@ class VersionManager(object):
             deletedId = deletedId + 1
             deletedList[deletedId] = [deletedId, element]
 
-        if output == True:
+        if output:
             # nicely prints the backed up notes list
             OutputManager.listPrint(deletedList, 4)
 

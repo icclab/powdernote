@@ -22,6 +22,7 @@ import unittest
 import os
 from Powdernote_impl.EditorManager import EditorManager
 
+
 class EditorManager_test(unittest.TestCase):
 
     def test_no_initial_content_no_update(self):

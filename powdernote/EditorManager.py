@@ -26,8 +26,8 @@ import subprocess
 import re
 
 
-
 class EditorManager(object):
+
     '''
     Handles an editing session: starts an editor and collect input from the user.
     Editors can also have an initial existing content.
@@ -43,7 +43,6 @@ class EditorManager(object):
         self._content = None
         self._existingContent = None
 
-
     def _setExistingContent(self, content):
         '''
         :param content: initial content to be used when the editing session will start
@@ -51,14 +50,12 @@ class EditorManager(object):
         if len(content) > 0:
             self._existingContent = content
 
-
     def getContent(self):
         '''
         :return: the content of the editor manager, can be empty, not-initialized, un-updated, ...
         '''
         # print "getContent: {}".format(self._content)
         return self._content
-
 
     def _editContent(self):
         '''
@@ -85,7 +82,6 @@ class EditorManager(object):
         else:
             return self.NEW_CONTENT_AVAILABLE
 
-
     def editNote(self, note):
         '''
         Starts an editing session on a note object (initial content will be the note content)
@@ -101,7 +97,6 @@ class EditorManager(object):
             note.setContent(content)
 
         return ret
-
 
     def _getEditor(self):
         '''return editor to use'''
@@ -121,7 +116,10 @@ class EditorManager(object):
         '''
         editorCmd = self._getEditor()
         if re.match(self.TEST_CMD_PATTERN, editorCmd):
-            text = re.match(self.TEST_CMD_PATTERN + "---(.*)$", editorCmd).group(1)
+            text = re.match(
+                self.TEST_CMD_PATTERN +
+                "---(.*)$",
+                editorCmd).group(1)
             cmd = 'echo ' + text + ' > ' + filename
             if len(text) > 0:
                 with open(filename, "w") as fn:

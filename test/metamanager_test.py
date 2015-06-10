@@ -28,10 +28,11 @@ meta = {
     'header2': 'value2',
 }
 
+
 class MetaManager_test(unittest.TestCase):
 
     def test_get_metadata(self):
-        get_object = MagicMock(return_value = [meta])
+        get_object = MagicMock(return_value=[meta])
         with patch('powdernote.MetaManager.get_object', get_object):
             mm = MetaManager('url', 'token', 'objectid')
             print mm._meta

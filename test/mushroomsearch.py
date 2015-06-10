@@ -19,6 +19,7 @@ limitations under the License.
 import unittest
 from Powdernote_impl.Powdernote_impl import Powdernote
 
+
 class MushroomSearch_Test(unittest.TestCase):
 
     marginLeft = 10

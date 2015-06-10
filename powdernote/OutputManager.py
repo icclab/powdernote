@@ -21,13 +21,19 @@ __author__ = 'gank'
 from tabulate import tabulate
 from difflib import ndiff
 
+
 class OutputManager(object):
 
     DASH = "-"
     BREAK = "\n"
     DOTDOTDOT = "..."
-    HEADER = [["ID", "Note", "Creation Date", "Last Modified", "Tags"],["ID", "Note", "Tags"], ["ID", "Note"],
-              ["ID", "Version", "Title"], ["ID", "Deleted Note"]]
+    HEADER = [
+        [
+            "ID", "Note", "Creation Date", "Last Modified", "Tags"], [
+            "ID", "Note", "Tags"], [
+                "ID", "Note"], [
+                    "ID", "Version", "Title"], [
+                        "ID", "Deleted Note"]]
     HEADER_FULL = 0
     HEADER_TAG = 1
     HEADER_TITLEID = 2
@@ -47,7 +53,7 @@ class OutputManager(object):
     @staticmethod
     def _markdownPrint(title, content):
         print title + OutputManager.BREAK + OutputManager.DASH * len(title) + OutputManager.BREAK + content + \
-              OutputManager.BREAK
+            OutputManager.BREAK
 
     @staticmethod
     def markdownPrint(title, content):
@@ -57,7 +63,8 @@ class OutputManager(object):
     def searchMDPrint(title, content):
         string = ""
         for match in content:
-            string = string + OutputManager.DOTDOTDOT + match.replace("\n", " ") + OutputManager.DOTDOTDOT + OutputManager.BREAK
+            string = string + OutputManager.DOTDOTDOT + \
+                match.replace("\n", " ") + OutputManager.DOTDOTDOT + OutputManager.BREAK
         OutputManager._markdownPrint(title, string)
 
     @staticmethod
@@ -66,7 +73,7 @@ class OutputManager(object):
             print id + OutputManager.ID_TITLE_SEPERATOR + title
 
     @staticmethod
-    def searchEverythingPrint(id, title, tag = None, content = None):
+    def searchEverythingPrint(id, title, tag=None, content=None):
 
         if tag is None and content is None:
             print id + OutputManager.ID_TITLE_SEPERATOR + title
@@ -82,7 +89,6 @@ class OutputManager(object):
             title = id + OutputManager.ID_TITLE_SEPERATOR + title
             OutputManager.searchMDPrint(title, content)
             print "Tags: " + str(tag[id][1]) + OutputManager.BREAK
-
 
     @staticmethod
     def printDiff(content1, content2):

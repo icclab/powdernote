@@ -28,6 +28,7 @@ from MetaManager import MetaManager
 from OutputManager import OutputManager
 from VersionManager import VersionManager
 
+
 class SwiftManager(object):
 
     IDREGEX = "^([0-9]+)\s-\s"
@@ -80,7 +81,6 @@ class SwiftManager(object):
         else:
             return None
 
-
     def getNote(self, noteId):
         objectIds = self.downloadObjectIds()
         for objectId in objectIds:
@@ -97,8 +97,12 @@ class SwiftManager(object):
             title = self._generateObjectTitle(note.getTitle())
         metaManager = MetaManager(self._storage_url, self._token, title)
         currentCreateDate = metaManager.getCreateDate()
-        put_object(self._storage_url, self._token, Configuration.container_name, title,
-                   note.getContent().encode('utf-8'))
+        put_object(
+            self._storage_url,
+            self._token,
+            Configuration.container_name,
+            title,
+            note.getContent().encode('utf-8'))
         lastModifiedDate = MetaManager.dateNow()
         # currentCreateDate may be None because note may be new
         # this comment is just a companion for the one above, he felt lonely
@@ -114,9 +118,16 @@ class SwiftManager(object):
         return title
 
     def _renameNote(self, newTitle, oldTitle):
-        put_object(self._storage_url, self._token, Configuration.container_name, newTitle, headers={"X-Copy-From":Configuration.container_name + "/" + oldTitle})
+        put_object(
+            self._storage_url,
+            self._token,
+            Configuration.container_name,
+            newTitle,
+            headers={
+                "X-Copy-From": Configuration.container_name +
+                "/" +
+                oldTitle})
         self._deleteNoteByObjectId(oldTitle)
-
 
         metaManager = MetaManager(self._storage_url, self._token, newTitle)
         currentCreateDate = metaManager.getCreateDate()
@@ -136,23 +147,37 @@ class SwiftManager(object):
         :param newTitle:
         :return:
         '''
-        put_object(self._storage_url, self._token, Configuration.container_name, newTitle, headers={"X-Copy-From":Configuration.container_name + "/" + oldTitle})
+        put_object(
+            self._storage_url,
+            self._token,
+            Configuration.container_name,
+            newTitle,
+            headers={
+                "X-Copy-From": Configuration.container_name +
+                "/" +
+                oldTitle})
 
-
-    def deleteNote(self, id, force = False):
+    def deleteNote(self, id, force=False):
         _, objects = self._downloadContainer()
         for object in objects:
             if str(id) == SwiftManager.objIdToId(object['name']):
-                if force or self.confirmation("delete note \'" + object['name'] + "\'"):
+                if force or self.confirmation(
+                        "delete note \'" +
+                        object['name'] +
+                        "\'"):
                     self._deleteNoteByObjectId(object['name'])
-                    if force == False:
+                    if not force:
                         print "Ok"
                 else:
                     print "Abort"
                 return
 
     def _deleteNoteByObjectId(self, objectId):
-        delete_object(self._storage_url, self._token, Configuration.container_name, objectId)
+        delete_object(
+            self._storage_url,
+            self._token,
+            Configuration.container_name,
+            objectId)
 
     def downloadObjectIds(self):
         containerInfo, objects = self._downloadContainer()
@@ -167,7 +192,9 @@ class SwiftManager(object):
             noteContent = self._downloadNote(noteName)
             self._downloadedNotesList[noteName] = noteContent
 
-        self._downloadedNotesList = collections.OrderedDict(sorted(self._downloadedNotesList.items()))
+        self._downloadedNotesList = collections.OrderedDict(
+            sorted(
+                self._downloadedNotesList.items()))
 
     def getDownloadedNotes(self):
         return self._downloadedNotesList
@@ -191,7 +218,7 @@ class SwiftManager(object):
 
         for id in objectsIds:
             if id - left > 1:
-                return str (left + 1)
+                return str(left + 1)
             left = id
         return (id + 1)
 
@@ -201,10 +228,17 @@ class SwiftManager(object):
         return objectTitleId
 
     def _downloadNote(self, noteId):
-        return get_object(self._storage_url, self._token, Configuration.container_name, noteId)[1]
+        return get_object(
+            self._storage_url,
+            self._token,
+            Configuration.container_name,
+            noteId)[1]
 
     def _downloadContainer(self):
-        return get_container(self._storage_url, self._token, Configuration.container_name)
+        return get_container(
+            self._storage_url,
+            self._token,
+            Configuration.container_name)
 
     def confirmation(self, action):
         '''
@@ -213,9 +247,12 @@ class SwiftManager(object):
         :return:
         '''
         confirm = None
-        while confirm == None:
+        while confirm is None:
             try:
-                answer = raw_input("Are you sure you want to " + action + "? (y/n) ")
+                answer = raw_input(
+                    "Are you sure you want to " +
+                    action +
+                    "? (y/n) ")
                 confirm = util.strtobool(answer)
             except ValueError:
                 print "Try again"
@@ -266,7 +303,8 @@ class SwiftManager(object):
         list = self.downloadObjectIds()
         idList = []
         for element in list:
-            if VersionManager.isAnoteVersion(element) or VersionManager.isAnoteDeleted(element):
+            if VersionManager.isAnoteVersion(
+                    element) or VersionManager.isAnoteDeleted(element):
                 continue
             oId = SwiftManager.objIdToId(element)
             idList.append(int(oId))
@@ -276,8 +314,12 @@ class SwiftManager(object):
             return True
 
     def rawupload(self, objectid, content, metadict):
-        put_object(self._storage_url, self._token, Configuration.container_name, objectid,
-                   content.encode('utf-8'))
+        put_object(
+            self._storage_url,
+            self._token,
+            Configuration.container_name,
+            objectid,
+            content.encode('utf-8'))
         mm = self.metaManagerFactory(objectid)
         mm.setRawMetaDictionary(metadict)
         mm.commitMeta()

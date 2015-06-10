@@ -26,6 +26,7 @@ from Powdernote_impl.SwiftManager import SwiftManager
 from Powdernote_impl.SwiftAuthManager import SwiftAuthManager
 import os
 
+
 class NeverNote_test(unittest.TestCase):
 
     def test_newNote(self):

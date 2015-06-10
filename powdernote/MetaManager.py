@@ -25,6 +25,7 @@ from Configuration import Configuration
 from VersionManager import VersionManager
 import re
 
+
 class MetaManager(object):
 
     CRDATE_META_KEY = 'x-object-meta-crdate'
@@ -47,9 +48,15 @@ class MetaManager(object):
         return nowDate.strftime('%H:%M:%S.%f, %d/%m/%Y')
 
     def loadData(self):
-        self._commitList[MetaManager.CRDATE_META_KEY] = self._getMeta(MetaManager.CRDATE_META_KEY)
-        self._commitList[MetaManager.LASTMOD_META_KEY] = self._getMeta(MetaManager.LASTMOD_META_KEY)
-        self._commitList[MetaManager.TAGS_META_KEY] = self._getMeta(MetaManager.TAGS_META_KEY)
+        self._commitList[
+            MetaManager.CRDATE_META_KEY] = self._getMeta(
+            MetaManager.CRDATE_META_KEY)
+        self._commitList[
+            MetaManager.LASTMOD_META_KEY] = self._getMeta(
+            MetaManager.LASTMOD_META_KEY)
+        self._commitList[
+            MetaManager.TAGS_META_KEY] = self._getMeta(
+            MetaManager.TAGS_META_KEY)
 
     def _cutTimestampStringToSeconds(self, timestamp):
         '''
@@ -63,7 +70,7 @@ class MetaManager(object):
         # support legacy notes that do not have the new timestamp
         if cut is None:
             return timestamp
-        cutSeconds = cut.group(1)+cut.group(2)
+        cutSeconds = cut.group(1) + cut.group(2)
         return cutSeconds
 
     def getCreateDate(self, cutToSeconds=True):
@@ -94,7 +101,7 @@ class MetaManager(object):
         :return: None if no metadata is available for this object or the value is not available,
         the value for this metadata otherwise
         '''
-        if self._meta == None:
+        if self._meta is None:
             return None
         return self._meta.get(metaHeader)
 
@@ -104,7 +111,11 @@ class MetaManager(object):
         :return:
         '''
         try:
-            self._meta = get_object(self._url, self._token, Configuration.container_name, self._objId)[0]
+            self._meta = get_object(
+                self._url,
+                self._token,
+                Configuration.container_name,
+                self._objId)[0]
         except ClientException:
             self._meta = None
 
@@ -134,7 +145,12 @@ class MetaManager(object):
 
     def commitMeta(self):
         if self._commitList != {}:
-            post_object(self._url, self._token, Configuration.container_name, self._objId, self._commitList)
+            post_object(
+                self._url,
+                self._token,
+                Configuration.container_name,
+                self._objId,
+                self._commitList)
         self._commitList = {}
 
     def setRawMetaDictionary(self, metadict):

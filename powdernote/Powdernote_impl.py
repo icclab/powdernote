@@ -77,7 +77,10 @@ class Powdernote(object):
 
             id = SwiftManager.objIdToId(element)
             if id is None:
-                raise RuntimeError("Can not get the ID from " + element + " ... should not happen, really")
+                raise RuntimeError(
+                    "Can not get the ID from " +
+                    element +
+                    " ... should not happen, really")
             metamngr = self._swiftManager.metaManagerFactory(element)
             id = int(id)
             crdate = metamngr.getCreateDate()
@@ -87,16 +90,31 @@ class Powdernote(object):
             soDict[id] = [id, name, crdate, lastmod, tags]
 
         if sort == "name":
-            soDict = OrderedDict(sorted(soDict.items(), key=lambda (k, v): v[1]))
+            soDict = OrderedDict(
+                sorted(
+                    soDict.items(),
+                    key=lambda k_v: k_v[1][1]))
 
         elif sort == "crdate":
-            soDict = OrderedDict(sorted(soDict.items(), key=lambda (k, v): datetime.strptime(v[2], "%H:%M:%S, %d/%m/%Y").isoformat(), reverse=True))
+            soDict = OrderedDict(
+                sorted(
+                    soDict.items(),
+                    key=lambda k_v1: datetime.strptime(
+                        k_v1[1][2],
+                        "%H:%M:%S, %d/%m/%Y").isoformat(),
+                    reverse=True))
 
         elif sort == "id":
             sorted(soDict)
 
         else:
-            soDict = OrderedDict(sorted(soDict.items(), key=lambda (k, v): datetime.strptime(v[3], "%H:%M:%S, %d/%m/%Y").isoformat(), reverse=True))
+            soDict = OrderedDict(
+                sorted(
+                    soDict.items(),
+                    key=lambda k_v2: datetime.strptime(
+                        k_v2[1][3],
+                        "%H:%M:%S, %d/%m/%Y").isoformat(),
+                    reverse=True))
 
         OutputManager.listPrint(soDict, OutputManager.HEADER_FULL)
 
@@ -127,7 +145,9 @@ class Powdernote(object):
         oldNote = note
         if ret == EditorManager.NEW_CONTENT_AVAILABLE:
             # make a version of a note
-            self._versionMngr._versionUploader(oldNote.getObjectId(), versionType=VersionManager.VERSIONIDENTIFIER)
+            self._versionMngr._versionUploader(
+                oldNote.getObjectId(),
+                versionType=VersionManager.VERSIONIDENTIFIER)
             # upload the note with the new content to swift
             self._swiftManager.uploadNote(note, note.getObjectId())
             print "Note has been saved"
@@ -137,7 +157,7 @@ class Powdernote(object):
 
     def searchInTitle(self, subString):
         elementList = self._searchInTitleImpl(subString)
-        elementDict  = {}
+        elementDict = {}
         for elements in elementList:
             id = elements[0]
             elementDict[id] = elements
@@ -148,11 +168,15 @@ class Powdernote(object):
         elementList = []
         list = self._swiftManager.downloadObjectIds()
         for element in list:
-            if VersionManager.isAnoteDeleted(element) or VersionManager.isAnoteVersion(element):
+            if VersionManager.isAnoteDeleted(
+                    element) or VersionManager.isAnoteVersion(element):
                 continue
             noteId = SwiftManager.objIdToId(element)
             if noteId is None:
-                raise RuntimeError("Can not get the ID from " + element + " ... should not happen, really")
+                raise RuntimeError(
+                    "Can not get the ID from " +
+                    element +
+                    " ... should not happen, really")
             metamngr = self._swiftManager.metaManagerFactory(element)
             noteId = int(noteId)
             crdate = metamngr.getCreateDate()
@@ -170,7 +194,11 @@ class Powdernote(object):
     def searchInMushroom(self, substr):
         elementList = self._searchInMushroomImpl(substr)
         for element in elementList:
-            OutputManager.searchMDPrint(element[0] + " - " + element[1], element[2])
+            OutputManager.searchMDPrint(
+                element[0] +
+                " - " +
+                element[1],
+                element[2])
 
     def _searchInMushroomImpl(self, substr):
         '''
@@ -182,7 +210,8 @@ class Powdernote(object):
         self._swiftManager.downloadNotes()
         notes = self._swiftManager.getDownloadedNotes()
         for name, content in notes.items():
-            if VersionManager.isAnoteDeleted(name) or VersionManager.isAnoteVersion(name):
+            if VersionManager.isAnoteDeleted(
+                    name) or VersionManager.isAnoteVersion(name):
                 continue
             id = SwiftManager.objIdToId(name)
             name = SwiftManager.objIdToTitle(name)
@@ -232,7 +261,7 @@ class Powdernote(object):
                 beg = previous
                 prevMatch = match
 
-            if prevMatch+rightMargin >= current:
+            if prevMatch + rightMargin >= current:
                 previous = current
                 prevMatch = match
                 continue
@@ -252,9 +281,10 @@ class Powdernote(object):
         start = 0
         while True:
             start = content.find(sub, start)
-            if start == -1: return
+            if start == -1:
+                return
             yield start
-            start += len(sub) # use start += 1 to find overlapping matches
+            start += len(sub)  # use start += 1 to find overlapping matches
 
     def searchInTags(self, substr):
         '''
@@ -265,7 +295,7 @@ class Powdernote(object):
         '''
 
         elementList = self._searchInTagsImpl(substr)
-        dict  = {}
+        dict = {}
         for elements in elementList:
             id = elements[0]
             dict[id] = elements
@@ -276,11 +306,15 @@ class Powdernote(object):
         list = self._swiftManager.downloadObjectIds()
         elementList = []
         for element in list:
-            if VersionManager.isAnoteDeleted(element) or VersionManager.isAnoteVersion(element):
+            if VersionManager.isAnoteDeleted(
+                    element) or VersionManager.isAnoteVersion(element):
                 continue
             id = SwiftManager.objIdToId(element)
             if id is None:
-                raise RuntimeError("Can not get the ID from " + element + " ... should not happen, really")
+                raise RuntimeError(
+                    "Can not get the ID from " +
+                    element +
+                    " ... should not happen, really")
             metamngr = self._swiftManager.metaManagerFactory(element)
             id = int(id)
             tags = metamngr.getTags()
@@ -322,13 +356,24 @@ class Powdernote(object):
 
         for element in generalMatch:
             if element in tag.keys() and element in content.keys():
-                OutputManager.searchEverythingPrint(element, content[element][0], tag, content[element][1])
+                OutputManager.searchEverythingPrint(
+                    element,
+                    content[element][0],
+                    tag,
+                    content[element][1])
 
             elif element in content.keys():
-                 OutputManager.searchEverythingPrint(element, content[element][0], None, content[element][1])
+                OutputManager.searchEverythingPrint(
+                    element,
+                    content[element][0],
+                    None,
+                    content[element][1])
 
             elif element in tag.keys():
-                OutputManager.searchEverythingPrint(element, tag.values()[0][0], tag.values()[0][1])
+                OutputManager.searchEverythingPrint(
+                    element,
+                    tag.values()[0][0],
+                    tag.values()[0][1])
 
             elif element in title.keys():
                 OutputManager.searchEverythingPrint(element, title.values()[0])
@@ -384,11 +429,14 @@ class Powdernote(object):
         :return:
         '''
         if self._swiftManager.doesNoteExist(noteId) == True:
-            note, title, versions, noteList = self._versionMngr._getVersionInfo(noteId)
+            note, title, versions, noteList = self._versionMngr._getVersionInfo(
+                noteId)
 
-            # user input for id, if the input is not an integer the error message will be displayed
+            # user input for id, if the input is not an integer the error
+            # message will be displayed
             try:
-                readingVersion = int(raw_input("Which version do you wish to read (id)? >"))
+                readingVersion = int(
+                    raw_input("Which version do you wish to read (id)? >"))
             except (ValueError):
                 print "invalid input"
                 sys.exit(1)
@@ -399,8 +447,10 @@ class Powdernote(object):
                     versionTitle = versions[key][1]
                     # get the content of the object
                     content = noteList[versionTitle]
-                    # create the note title, composing from "vTIMESTAMP-id - title"
-                    noteTitle = versionTitle + OutputManager.ID_TITLE_SEPERATOR + title
+                    # create the note title, composing from "vTIMESTAMP-id -
+                    # title"
+                    noteTitle = versionTitle + \
+                        OutputManager.ID_TITLE_SEPERATOR + title
 
                     OutputManager.markdownPrint(noteTitle, content)
                 else:
@@ -420,12 +470,16 @@ class Powdernote(object):
         '''
 
         if self._swiftManager.doesNoteExist(noteId) == True:
-            note, title, versions, noteList = self._versionMngr._getVersionInfo(noteId)
+            note, title, versions, noteList = self._versionMngr._getVersionInfo(
+                noteId)
 
-            # user input for id, if the input is not an integer the error message will be displayed
+            # user input for id, if the input is not an integer the error
+            # message will be displayed
             try:
-                diff1 = int(raw_input("ID of base version? (0 is the current version) > "))
-                diff2 = int(raw_input("ID of target version? (0 is the current version) > "))
+                diff1 = int(
+                    raw_input("ID of base version? (0 is the current version) > "))
+                diff2 = int(
+                    raw_input("ID of target version? (0 is the current version) > "))
             except (ValueError):
                 print "invalid input"
                 sys.exit(1)
@@ -467,11 +521,14 @@ class Powdernote(object):
         '''
 
         if self._swiftManager.doesNoteExist(noteId) == True:
-            note, title, versions, noteList = self._versionMngr._getVersionInfo(noteId)
+            note, title, versions, noteList = self._versionMngr._getVersionInfo(
+                noteId)
 
-            # user input for id, if the input is not an integer the error message will be displayed
+            # user input for id, if the input is not an integer the error
+            # message will be displayed
             try:
-                retrieveVersion = int(raw_input("Which version do you wish to promote to the new one? > "))
+                retrieveVersion = int(
+                    raw_input("Which version do you wish to promote to the new one? > "))
             except (ValueError):
                 print "invalid input"
                 sys.exit(1)
@@ -481,10 +538,14 @@ class Powdernote(object):
                 if key == retrieveVersion:
                     versionTitle = versions[key][1]
                     # creating the objectId, which is used for the rename
-                    objId = str(noteId) + OutputManager.ID_TITLE_SEPERATOR + title
+                    objId = str(noteId) + \
+                        OutputManager.ID_TITLE_SEPERATOR + title
                     # create a version of the current note
-                    self._versionMngr._versionUploader(objId, versionType=VersionManager.VERSIONIDENTIFIER)
-                    # make a copy of the version and save it as the current one, also delete the version
+                    self._versionMngr._versionUploader(
+                        objId,
+                        versionType=VersionManager.VERSIONIDENTIFIER)
+                    # make a copy of the version and save it as the current
+                    # one, also delete the version
                     self._swiftManager._renameNote(objId, versionTitle)
                 else:
                     continue
@@ -511,7 +572,8 @@ class Powdernote(object):
         # display all the deleted notes
         deletedList = self._versionMngr.getDeletedInfo()
 
-        # user input for id, if the input is not an integer the error message will be displayed
+        # user input for id, if the input is not an integer the error message
+        # will be displayed
         try:
             undoId = int(raw_input("Which note do you wish to restore? > "))
         except (ValueError):
@@ -525,14 +587,17 @@ class Powdernote(object):
                 self._keyList.append(key)
                 objectId = value[1]
 
-                # catch the note title with the regex, to exclude "vd-timestamp-d - "
+                # catch the note title with the regex, to exclude
+                # "vd-timestamp-d - "
                 match = re.search(deleteRgx, objectId)
                 title = match.group(2)
 
                 # create the new title, with a new ID
-                newTitle = str(self._swiftManager._generateObjectId()) + OutputManager.ID_TITLE_SEPERATOR + title
+                newTitle = str(
+                    self._swiftManager._generateObjectId()) + OutputManager.ID_TITLE_SEPERATOR + title
 
-                # make a copy of the backup and save it with a new name and delete the back up
+                # make a copy of the backup and save it with a new name and
+                # delete the back up
                 self._swiftManager._renameNote(newTitle, objectId)
 
                 # as an information for the user

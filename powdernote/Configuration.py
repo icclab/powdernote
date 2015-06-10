@@ -21,12 +21,14 @@ __author__ = 'gank'
 from ConfigParser import ConfigParser
 from os.path import expanduser
 
+
 def settingsParser(section, option):
     if Configuration.cfgcontent == []:
         value = "empty"
     else:
         value = Configuration.config.get(section, option)
     return value
+
 
 class Configuration(object):
 

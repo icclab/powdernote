@@ -21,6 +21,7 @@ __author__ = 'gank'
 from swiftclient.client import Connection
 from Configuration import Configuration
 
+
 class SwiftAuthManager(object):
 
     def __init__(self):
@@ -28,11 +29,15 @@ class SwiftAuthManager(object):
         self._cnt = self._auth()
 
     def _auth(self):
-        cnt = Connection(authurl=Configuration.auth_url, user=Configuration.username, key=Configuration.password,
-                         tenant_name=Configuration.tenant_name, auth_version=2, insecure=False)
+        cnt = Connection(
+            authurl=Configuration.auth_url,
+            user=Configuration.username,
+            key=Configuration.password,
+            tenant_name=Configuration.tenant_name,
+            auth_version=2,
+            insecure=False)
         return cnt
 
     def getcredentials(self):
         storage_url, token = self._cnt.get_auth()
         return storage_url, token
-

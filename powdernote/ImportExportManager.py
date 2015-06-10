@@ -26,6 +26,7 @@ from powdernote.Note import Note
 from powdernote.VersionManager import VersionManager
 from powdernote.MetaManager import MetaManager
 
+
 class ImportExportManager(object):
 
     TITLE_MARK = 'title'
@@ -49,7 +50,8 @@ class ImportExportManager(object):
         self._swiftmanager = swiftmanager
         # Maps the old id of a note with the new one after it's been imported
         self._idmapping = {}
-        # List of note versions or backups to be processed after "original" notes have been imported
+        # List of note versions or backups to be processed after "original"
+        # notes have been imported
         self._versionordeleted = []
 
     def exportTo(self, filename):
@@ -60,7 +62,8 @@ class ImportExportManager(object):
         '''
         if os.path.isfile(filename):
             print "A file named \"{}\" already exists.".format(filename)
-            if not self._swiftmanager.confirmation("export notes to this file"):
+            if not self._swiftmanager.confirmation(
+                    "export notes to this file"):
                 print "Operation aborted"
                 return
         self._swiftmanager.downloadNotes()
@@ -84,7 +87,8 @@ class ImportExportManager(object):
                 if id_title is None or content is None:
                     break
                 if VersionManager.isVersionOrDeleted(id_title):
-                    self._versionordeleted.append([id_title, content, crdate, lmod, tags])
+                    self._versionordeleted.append(
+                        [id_title, content, crdate, lmod, tags])
                 else:
                     self.uploadnewnote(id_title, content, crdate, lmod, tags)
         self._processVersionsAndDeleted()
@@ -96,7 +100,8 @@ class ImportExportManager(object):
         '''
         for id_title, content, crdate, lmod, tags in self._versionordeleted:
             if VersionManager.isAnoteVersion(id_title):
-                # For versions, the id of the "source" may have changed, update the title before uploading
+                # For versions, the id of the "source" may have changed, update
+                # the title before uploading
                 oldid = VersionManager.extractId(id_title)
                 newid = self._idmapping[oldid]
                 id_title = VersionManager.changeId(id_title, newid)
@@ -128,13 +133,29 @@ class ImportExportManager(object):
         :param content:
         :return:
         '''
-        self._writegenericblock(fileobject, title, ImportExportManager.TITLE_MARK)
-        self._writegenericblock(fileobject, content, ImportExportManager.CONTENT_MARK)
+        self._writegenericblock(
+            fileobject,
+            title,
+            ImportExportManager.TITLE_MARK)
+        self._writegenericblock(
+            fileobject,
+            content,
+            ImportExportManager.CONTENT_MARK)
         mm = self._swiftmanager.metaManagerFactory(title)
-        self._writegenericblock(fileobject, mm.getCreateDate(cutToSeconds=False), ImportExportManager.CRDATE_MARK)
-        self._writegenericblock(fileobject, mm.getLastModifiedDate(cutToSeconds=False), ImportExportManager.LMOD_MARK)
-        self._writegenericblock(fileobject, mm.getTags(), ImportExportManager.TAGS_MARK)
-
+        self._writegenericblock(
+            fileobject,
+            mm.getCreateDate(
+                cutToSeconds=False),
+            ImportExportManager.CRDATE_MARK)
+        self._writegenericblock(
+            fileobject,
+            mm.getLastModifiedDate(
+                cutToSeconds=False),
+            ImportExportManager.LMOD_MARK)
+        self._writegenericblock(
+            fileobject,
+            mm.getTags(),
+            ImportExportManager.TAGS_MARK)
 
     def _writegenericblock(self, fileobject, content, marker):
         marker += "[{length}]\n".format(length=len(content))
@@ -153,11 +174,21 @@ class ImportExportManager(object):
 
         @:return: two items: "ID - title" of the note and "content" of the note
         '''
-        id_title = self._readgenericblock(fileobject, ImportExportManager.TITLE_MARK_RE)
-        content = self._readgenericblock(fileobject, ImportExportManager.CONTETN_MARK_RE)
-        crdate = self._readgenericblock(fileobject, ImportExportManager.CRDATE_MARK_RE)
-        lmod = self._readgenericblock(fileobject, ImportExportManager.LMOD_MARK_RE)
-        tags = self._readgenericblock(fileobject, ImportExportManager.TAGS_MARK_RE)
+        id_title = self._readgenericblock(
+            fileobject,
+            ImportExportManager.TITLE_MARK_RE)
+        content = self._readgenericblock(
+            fileobject,
+            ImportExportManager.CONTETN_MARK_RE)
+        crdate = self._readgenericblock(
+            fileobject,
+            ImportExportManager.CRDATE_MARK_RE)
+        lmod = self._readgenericblock(
+            fileobject,
+            ImportExportManager.LMOD_MARK_RE)
+        tags = self._readgenericblock(
+            fileobject,
+            ImportExportManager.TAGS_MARK_RE)
         return id_title, content, crdate, lmod, tags
 
     def _readgenericblock(self, fileobject, mark_regex):

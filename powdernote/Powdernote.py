@@ -21,6 +21,7 @@ __author__ = 'gank'
 import argparse
 from Powdernote_impl import Powdernote
 
+
 class ArgparseCommands(object):
 
     def __init__(self):
@@ -28,65 +29,139 @@ class ArgparseCommands(object):
 
     def commands(self):
 
-        parser = argparse.ArgumentParser(prog="powdernote", description="only integer values are allowed for IDs.")
+        parser = argparse.ArgumentParser(
+            prog="powdernote",
+            description="only integer values are allowed for IDs.")
 
         subparsers = parser.add_subparsers(help='powdernote Functions')
 
         parser_n = subparsers.add_parser('new', help='create a new note')
-        parser_n.add_argument('title', type=str, help='write the title of new note')
+        parser_n.add_argument(
+            'title',
+            type=str,
+            help='write the title of new note')
         parser_n.set_defaults(parser_n=True)
 
         parser_e = subparsers.add_parser('edit', help='edit a note')
-        parser_e.add_argument('e_id', type=int, help='id of note you want to edit')
+        parser_e.add_argument(
+            'e_id',
+            type=int,
+            help='id of note you want to edit')
         parser_e.set_defaults(parser_e=True)
 
         parser_l = subparsers.add_parser('list', help='lists all the notes')
-        parser_l.add_argument('n_id', type=int, nargs='?', help='list information for note with given id')
+        parser_l.add_argument(
+            'n_id',
+            type=int,
+            nargs='?',
+            help='list information for note with given id')
         parser_l.set_defaults(parser_l=True)
 
         parser_d = subparsers.add_parser('delete', help='delete a note')
-        parser_d.add_argument('idList', type=int, nargs='+', help='id of note you want to delete, '
-                                                                  'CAUTION is recommended')
+        parser_d.add_argument(
+            'idList',
+            type=int,
+            nargs='+',
+            help='id of note you want to delete, '
+            'CAUTION is recommended')
         parser_d.set_defaults(parser_d=True)
 
-        parser_s = subparsers.add_parser('search', help='search for a SubString inside a note (searches everywhere)')
-        parser_s.add_argument('-t', '--title', action='store_true', help='search in the titles of notes')
-        parser_s.add_argument('-p', '--tag', action='store_true', help='search for a note with this tag')
-        parser_s.add_argument('subStr', type=str, help='search for a word in a note')
+        parser_s = subparsers.add_parser(
+            'search',
+            help='search for a SubString inside a note (searches everywhere)')
+        parser_s.add_argument(
+            '-t',
+            '--title',
+            action='store_true',
+            help='search in the titles of notes')
+        parser_s.add_argument(
+            '-p',
+            '--tag',
+            action='store_true',
+            help='search for a note with this tag')
+        parser_s.add_argument(
+            'subStr',
+            type=str,
+            help='search for a word in a note')
         parser_s.set_defaults(parser_s=True)
 
         parser_r = subparsers.add_parser('read', help='display a note')
-        parser_r.add_argument('r_id', type=int, help='id of note you want to read')
+        parser_r.add_argument(
+            'r_id',
+            type=int,
+            help='id of note you want to read')
         parser_r.set_defaults(parser_r=True)
 
         parser_tag = subparsers.add_parser('tag', help='add tags to a note')
-        parser_tag.add_argument('t_id', type=int, help='id of note you want to add tags to')
-        parser_tag.add_argument('tagList', type=str, nargs='+', help='add tags, separate with spaces only')
+        parser_tag.add_argument(
+            't_id',
+            type=int,
+            help='id of note you want to add tags to')
+        parser_tag.add_argument(
+            'tagList',
+            type=str,
+            nargs='+',
+            help='add tags, separate with spaces only')
         parser_tag.set_defaults(parser_tag=True)
 
         parser_rename = subparsers.add_parser('rename', help='rename a note')
-        parser_rename.add_argument('r_id', type=int, help='id of note you want to rename')
-        parser_rename.add_argument('newTitle', type=str, help='how you want to name the note')
+        parser_rename.add_argument(
+            'r_id',
+            type=int,
+            help='id of note you want to rename')
+        parser_rename.add_argument(
+            'newTitle',
+            type=str,
+            help='how you want to name the note')
         parser_rename.set_defaults(parser_rename=True)
 
-        parser_history = subparsers.add_parser('history', help='versioning tools that help with checking versions, '
-                                                               'diffs or deleted notes')
-        parser_history.add_argument('h_id', type=int, help='list the previous versions of the note with the given ID')
-        parser_history.add_argument('--read', action='store_true', help='read an older version of a note')
-        parser_history.add_argument('--diff', action='store_true', help='see the diff of two notes')
-        parser_history.add_argument('--restore', action='store_true', help='promote a version to the current note')
+        parser_history = subparsers.add_parser(
+            'history',
+            help='versioning tools that help with checking versions, '
+            'diffs or deleted notes')
+        parser_history.add_argument(
+            'h_id',
+            type=int,
+            help='list the previous versions of the note with the given ID')
+        parser_history.add_argument(
+            '--read',
+            action='store_true',
+            help='read an older version of a note')
+        parser_history.add_argument(
+            '--diff',
+            action='store_true',
+            help='see the diff of two notes')
+        parser_history.add_argument(
+            '--restore',
+            action='store_true',
+            help='promote a version to the current note')
         parser_history.set_defaults(parser_history=True)
 
-        parser_deleted = subparsers.add_parser('deleted', help='see all the backed up deleted notes')
-        parser_deleted.add_argument('--undo', action='store_true', help='lets you restore a note')
+        parser_deleted = subparsers.add_parser(
+            'deleted',
+            help='see all the backed up deleted notes')
+        parser_deleted.add_argument(
+            '--undo',
+            action='store_true',
+            help='lets you restore a note')
         parser_deleted.set_defaults(parser_deleted=True)
 
-        parser_export = subparsers.add_parser('export', help='exports all the notes to a file on the local system')
-        parser_export.add_argument('filename', type=str, help='name of the output file')
+        parser_export = subparsers.add_parser(
+            'export',
+            help='exports all the notes to a file on the local system')
+        parser_export.add_argument(
+            'filename',
+            type=str,
+            help='name of the output file')
         parser_export.set_defaults(parser_export=True)
 
-        parser_import = subparsers.add_parser('import', help='imports notes from a previously exported file')
-        parser_import.add_argument('filename', type=str, help='filename from where to import notes')
+        parser_import = subparsers.add_parser(
+            'import',
+            help='imports notes from a previously exported file')
+        parser_import.add_argument(
+            'filename',
+            type=str,
+            help='filename from where to import notes')
         parser_import.set_defaults(parser_import=True)
 
         args = parser.parse_args()
@@ -114,9 +189,9 @@ class ArgparseCommands(object):
 
         elif args.__contains__("parser_s"):
             searchStr = args.subStr
-            if args.title == True:
+            if args.title:
                 pn.searchInTitle(searchStr)
-            elif args.tag == True:
+            elif args.tag:
                 pn.searchInTags(searchStr)
             else:
                 pn.searchEverything(searchStr)
@@ -137,17 +212,17 @@ class ArgparseCommands(object):
 
         elif args.__contains__("parser_history"):
             id = args.h_id
-            if args.read ==True:
+            if args.read:
                 pn.readVersion(id)
-            elif args.diff == True:
+            elif args.diff:
                 pn.diffVersions(id)
-            elif args.restore == True:
+            elif args.restore:
                 pn.restoreVersion(id)
             else:
                 pn.showHistory(id)
 
         elif args.__contains__("parser_deleted"):
-            if args.undo == True:
+            if args.undo:
                 pn.undoDelete()
             else:
                 pn.showDeleted()
