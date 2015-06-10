@@ -27,6 +27,10 @@ import re
 
 class MetaManager(object):
 
+    CRDATE_META_KEY = 'x-object-meta-crdate'
+    LASTMOD_META_KEY = 'x-object-meta-lastmod'
+    TAGS_META_KEY = 'x-object-meta-tags'
+
     def __init__(self, url, token, objectId):
         super(MetaManager, self).__init__()
         self._url = url
@@ -43,9 +47,9 @@ class MetaManager(object):
         return nowDate.strftime('%H:%M:%S.%f, %d/%m/%Y')
 
     def loadData(self):
-        self._commitList['x-object-meta-crdate'] = self._getMeta('x-object-meta-crdate')
-        self._commitList['x-object-meta-lastmod'] = self._getMeta('x-object-meta-lastmod')
-        self._commitList['x-object-meta-tags'] = self._getMeta('x-object-meta-tags')
+        self._commitList[MetaManager.CRDATE_META_KEY] = self._getMeta(MetaManager.CRDATE_META_KEY)
+        self._commitList[MetaManager.LASTMOD_META_KEY] = self._getMeta(MetaManager.LASTMOD_META_KEY)
+        self._commitList[MetaManager.TAGS_META_KEY] = self._getMeta(MetaManager.TAGS_META_KEY)
 
     def _cutTimestampStringToSeconds(self, timestamp):
         '''
@@ -63,31 +67,25 @@ class MetaManager(object):
         return cutSeconds
 
     def getCreateDate(self, cutToSeconds=True):
-        timestamp = self._getMeta('x-object-meta-crdate')
-        if timestamp:
-            # support legacy notes
-            if MetaManager.isLegacyTimestamp(timestamp):
-                timestamp = MetaManager.convertLegacyTimestamp(timestamp)
-
-            if cutToSeconds:
-                return self._cutTimestampStringToSeconds(timestamp)
-        else:
-            return timestamp
+        timestamp = self._getMeta(MetaManager.CRDATE_META_KEY)
+        return self._getTimestampInformation(timestamp, cutToSeconds)
 
     def getLastModifiedDate(self, cutToSeconds=True):
-        timestamp = self._getMeta('x-object-meta-lastmod')
-        if timestamp:
-            # support legacy notes
-            if MetaManager.isLegacyTimestamp(timestamp):
-                timestamp = MetaManager.convertLegacyTimestamp(timestamp)
+        timestamp = self._getMeta(MetaManager.LASTMOD_META_KEY)
+        return self._getTimestampInformation(timestamp, cutToSeconds)
 
-            if cutToSeconds:
-                timestamp = self._cutTimestampStringToSeconds(timestamp)
-
+    def _getTimestampInformation(self, timestamp, cutToSeconds):
+        if not timestamp:
+            return None
+        # support legacy notes
+        if MetaManager.isLegacyTimestamp(timestamp):
+            timestamp = MetaManager.convertLegacyTimestamp(timestamp)
+        if cutToSeconds:
+            timestamp = self._cutTimestampStringToSeconds(timestamp)
         return timestamp
 
     def getTags(self):
-        return self._getMeta('x-object-meta-tags')
+        return self._getMeta(MetaManager.TAGS_META_KEY)
 
     def _getMeta(self, metaHeader):
         '''
