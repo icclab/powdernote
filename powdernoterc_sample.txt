@@ -1,5 +1,5 @@
 [Settings]
 sort=id
 ;Choose how to sort your notes
-;id - sorts by id, lastmod - sorts by last modifaction date, crdate - sorts by date of creation, name - sort by name
-;It's lastmod by default
+;id - sorts by id, lastmod - sorts by last modification date, crdate - sorts by date of creation, name - sorts by name
+;default value is lastmod
