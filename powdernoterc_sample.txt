@@ -1,5 +1,12 @@
+[Auth]
+username=
+password=
+container_name=
+# eg: http://160.85.4.231:5000/v2.0
+auth_url=
+
 [Settings]
+# Choose how to sort your notes
+# id - sorts by id, lastmod - sorts by last modification date, crdate - sorts by date of creation, name - sorts by name
+# default value is lastmod
 sort=id
-;Choose how to sort your notes
-;id - sorts by id, lastmod - sorts by last modification date, crdate - sorts by date of creation, name - sorts by name
-;default value is lastmod

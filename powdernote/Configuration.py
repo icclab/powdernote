@@ -18,15 +18,40 @@ limitations under the License.
 
 __author__ = 'gank'
 
+from ConfigParser import ConfigParser
+from os.path import expanduser
+
+def settingsParser(section, option):
+    if Configuration.cfgcontent == []:
+        value = "empty"
+    else:
+        value = Configuration.config.get(section, option)
+    return value
 
 class Configuration(object):
 
-    #insert your credentials
+    CFG_FILE_NAME = '.powdernoterc'
+
+    # Auth parameters
     username = ""
     password = ""
     container_name = ""
     auth_url = ""
-
-    #do not edit this one
     tenant_name = username
 
+    # Other settings
+    entriessort = ""
+
+    config = ConfigParser()
+    cfgcontent = config.read(expanduser("~") + "/{}".format(CFG_FILE_NAME))
+
+    @staticmethod
+    def initialize():
+        Configuration.username = settingsParser('Auth', 'username')
+        Configuration.password = settingsParser('Auth', 'password')
+        Configuration.container_name = settingsParser('Auth', 'container_name')
+        Configuration.auth_url = settingsParser('Auth', 'auth_url')
+        Configuration.tenant_name = Configuration.username
+        Configuration.entriessort = settingsParser('Settings', 'sort')
+
+Configuration.initialize()

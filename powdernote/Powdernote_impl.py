@@ -19,17 +19,16 @@ limitations under the License.
 __author__ = 'gank'
 
 import sys
-from os.path import expanduser
 from EditorManager import EditorManager
 from SwiftManager import SwiftManager
 from SwiftAuthManager import SwiftAuthManager
 from Note import Note
 from OutputManager import OutputManager
-from ConfigParser import ConfigParser
 from datetime import datetime
 from collections import OrderedDict
 from VersionManager import VersionManager
 from ImportExportManager import ImportExportManager
+from powdernote.Configuration import Configuration
 import re
 
 
@@ -45,7 +44,6 @@ class Powdernote(object):
         sam = SwiftAuthManager()
         storage_url, token = sam.getcredentials()
         self._swiftManager = SwiftManager(storage_url, token)
-        self._path = expanduser("~")
         self._versionMngr = VersionManager(self._swiftManager)
         self._deletedNotes = []
         self._keyList = []
@@ -71,7 +69,7 @@ class Powdernote(object):
     def listNotesAndMeta(self):
         list = self._swiftManager.downloadObjectIds()
         soDict = {}
-        sort = self.settingsParser("Settings", "sort")
+        sort = Configuration.entriessort
         for element in list:
             # exclude versions and deleted notes, that always begin with 'v'
             if VersionManager.isVersionOrDeleted(element):
@@ -101,17 +99,6 @@ class Powdernote(object):
             soDict = OrderedDict(sorted(soDict.items(), key=lambda (k, v): datetime.strptime(v[3], "%H:%M:%S, %d/%m/%Y").isoformat(), reverse=True))
 
         OutputManager.listPrint(soDict, OutputManager.HEADER_FULL)
-
-    def settingsParser(self, section, option):
-        config = ConfigParser()
-        read = config.read(self._path + "/.powdernoterc")
-
-        if read == []:
-            value = "empty"
-        else:
-            value = config.get(section, option)
-
-        return value
 
     def deleteList(self, idList):
         nameList = []
