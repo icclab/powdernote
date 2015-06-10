@@ -109,10 +109,10 @@ class MetaManager(object):
             self._meta = None
 
     def setCreateDate(self, currentCreateDate):
-        self._commitList['x-object-meta-crdate'] = currentCreateDate
+        self._commitList[MetaManager.CRDATE_META_KEY] = currentCreateDate
 
     def setLastModifiedDate(self, lastModifiedDate):
-        self._commitList['x-object-meta-lastmod'] = lastModifiedDate
+        self._commitList[MetaManager.LASTMOD_META_KEY] = lastModifiedDate
 
     def setTags(self, tags):
         '''
@@ -120,7 +120,7 @@ class MetaManager(object):
         :param tags: list expected
         :return:
         '''
-        oldL = self._getMeta('x-object-meta-tags')
+        oldL = self._getMeta(MetaManager.TAGS_META_KEY)
         if oldL is None:
             oldL = []
         else:
@@ -130,12 +130,23 @@ class MetaManager(object):
         oldL = oldL + tags
         oldL = set(oldL)
         oldL = ' '.join(oldL)
-        self._commitList['x-object-meta-tags'] = oldL
+        self._commitList[MetaManager.TAGS_META_KEY] = oldL
 
     def commitMeta(self):
         if self._commitList != {}:
             post_object(self._url, self._token, Configuration.container_name, self._objId, self._commitList)
         self._commitList = {}
+
+    def setRawMetaDictionary(self, metadict):
+        self._commitList = metadict
+
+    @staticmethod
+    def getRawMetaDictionary(crdate, lastmoddate, tags):
+        d = {}
+        d[MetaManager.CRDATE_META_KEY] = crdate
+        d[MetaManager.LASTMOD_META_KEY] = lastmoddate
+        d[MetaManager.TAGS_META_KEY] = tags
+        return d
 
     @staticmethod
     def isLegacyTimestamp(timestamp):

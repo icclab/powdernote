@@ -29,6 +29,7 @@ from ConfigParser import ConfigParser
 from datetime import datetime
 from collections import OrderedDict
 from VersionManager import VersionManager
+from ImportExportManager import ImportExportManager
 import re
 
 
@@ -79,7 +80,7 @@ class Powdernote(object):
             id = SwiftManager.objIdToId(element)
             if id is None:
                 raise RuntimeError("Can not get the ID from " + element + " ... should not happen, really")
-            metamngr = self._swiftManager.metaMngrFactory(element)
+            metamngr = self._swiftManager.metaManagerFactory(element)
             id = int(id)
             crdate = metamngr.getCreateDate()
             lastmod = metamngr.getLastModifiedDate()
@@ -165,7 +166,7 @@ class Powdernote(object):
             noteId = SwiftManager.objIdToId(element)
             if noteId is None:
                 raise RuntimeError("Can not get the ID from " + element + " ... should not happen, really")
-            metamngr = self._swiftManager.metaMngrFactory(element)
+            metamngr = self._swiftManager.metaManagerFactory(element)
             noteId = int(noteId)
             crdate = metamngr.getCreateDate()
             lastmod = metamngr.getLastModifiedDate()
@@ -293,7 +294,7 @@ class Powdernote(object):
             id = SwiftManager.objIdToId(element)
             if id is None:
                 raise RuntimeError("Can not get the ID from " + element + " ... should not happen, really")
-            metamngr = self._swiftManager.metaMngrFactory(element)
+            metamngr = self._swiftManager.metaManagerFactory(element)
             id = int(id)
             tags = metamngr.getTags()
             name = SwiftManager.objIdToTitle(element)
@@ -555,3 +556,11 @@ class Powdernote(object):
         # as an information for the user, that the note doesn't exist
         if undoId not in self._keyList:
             print str(undoId) + " doesn't exist"
+
+    def exportToFile(self, filename):
+        iem = ImportExportManager(self._swiftManager)
+        iem.exportTo(filename)
+
+    def importFromFile(self, filename):
+        iem = ImportExportManager(self._swiftManager)
+        iem.importFrom(filename)

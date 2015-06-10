@@ -71,6 +71,9 @@ class SwiftManager(object):
 
     @staticmethod
     def objIdToTitle(objId):
+        '''
+        Example: 1 - a --> a
+        '''
         match = re.match(SwiftManager.TITLEREGEX, objId)
         if match is not None:
             return match.group(2)
@@ -95,7 +98,7 @@ class SwiftManager(object):
         metaManager = MetaManager(self._storage_url, self._token, title)
         currentCreateDate = metaManager.getCreateDate()
         put_object(self._storage_url, self._token, Configuration.container_name, title,
-                   note.getContent())
+                   note.getContent().encode('utf-8'))
         lastModifiedDate = MetaManager.dateNow()
         # currentCreateDate may be None because note may be new
         # this comment is just a companion for the one above, he felt lonely
@@ -108,6 +111,7 @@ class SwiftManager(object):
         metaManager.setTags(None)
         metaManager.commitMeta()
         print title
+        return title
 
     def _renameNote(self, newTitle, oldTitle):
         put_object(self._storage_url, self._token, Configuration.container_name, newTitle, headers={"X-Copy-From":Configuration.container_name + "/" + oldTitle})
@@ -230,7 +234,7 @@ class SwiftManager(object):
         '''
         dict = {}
         note = self.getNote(metaId)
-        mm = self.metaMngrFactory(note.getObjectId())
+        mm = self.metaManagerFactory(note.getObjectId())
         name = SwiftManager.objIdToTitle(note.getObjectId())
         crDate = mm.getCreateDate()
         lastmod = mm.getLastModifiedDate()
@@ -240,7 +244,7 @@ class SwiftManager(object):
 
         OutputManager.listPrint(dict, OutputManager.HEADER_FULL)
 
-    def metaMngrFactory(self, objId):
+    def metaManagerFactory(self, objId):
         # vince said factories are self explanatory, no need to further comment
         # I still don' really know what a factory does
         return MetaManager(self._storage_url, self._token, objId)
@@ -253,7 +257,7 @@ class SwiftManager(object):
         :return:
         '''
         note = self.getNote(tId)
-        mm = self.metaMngrFactory(note.getObjectId())
+        mm = self.metaManagerFactory(note.getObjectId())
         mm.loadData()
         mm.setTags(tags)
         mm.commitMeta()
@@ -270,3 +274,10 @@ class SwiftManager(object):
             return False
         else:
             return True
+
+    def rawupload(self, objectid, content, metadict):
+        put_object(self._storage_url, self._token, Configuration.container_name, objectid,
+                   content.encode('utf-8'))
+        mm = self.metaManagerFactory(objectid)
+        mm.setRawMetaDictionary(metadict)
+        mm.commitMeta()

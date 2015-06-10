@@ -59,7 +59,6 @@ class ArgparseCommands(object):
         parser_r.add_argument('r_id', type=int, help='id of note you want to read')
         parser_r.set_defaults(parser_r=True)
 
-
         parser_tag = subparsers.add_parser('tag', help='add tags to a note')
         parser_tag.add_argument('t_id', type=int, help='id of note you want to add tags to')
         parser_tag.add_argument('tagList', type=str, nargs='+', help='add tags, separate with spaces only')
@@ -82,6 +81,13 @@ class ArgparseCommands(object):
         parser_deleted.add_argument('--undo', action='store_true', help='lets you restore a note')
         parser_deleted.set_defaults(parser_deleted=True)
 
+        parser_export = subparsers.add_parser('export', help='exports all the notes to a file on the local system')
+        parser_export.add_argument('filename', type=str, help='name of the output file')
+        parser_export.set_defaults(parser_export=True)
+
+        parser_import = subparsers.add_parser('import', help='imports notes from a previously exported file')
+        parser_import.add_argument('filename', type=str, help='filename from where to import notes')
+        parser_import.set_defaults(parser_import=True)
 
         args = parser.parse_args()
 
@@ -145,6 +151,14 @@ class ArgparseCommands(object):
                 pn.undoDelete()
             else:
                 pn.showDeleted()
+
+        elif args.__contains__("parser_export"):
+            filename = args.filename
+            pn.exportToFile(filename)
+
+        elif args.__contains__("parser_import"):
+            filename = args.filename
+            pn.importFromFile(filename)
 
 
 def main():

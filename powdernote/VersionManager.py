@@ -33,6 +33,8 @@ class VersionManager(object):
     LEGACY_FORMAT_SAMPLE = "09:21, 03/12/2014"
     LEGACY_FORMAT_LENGTH = len(LEGACY_FORMAT_SAMPLE)
 
+    VERSION_ID_REGEX = "^(v-\d+-)(\d+)"
+
     def __init__(self, swiftManager):
         super(VersionManager, self).__init__()
         self._swiftMngr = swiftManager
@@ -72,7 +74,7 @@ class VersionManager(object):
         :param objectId:
         :return:
         '''
-        regex = "^(v-\d+-)(\d+)"
+        regex = VersionManager.VERSION_ID_REGEX
         return re.search(regex, objectId).group(2)
 
     @staticmethod
@@ -105,6 +107,18 @@ class VersionManager(object):
         if objectId.startswith("v"):
             return True
         return False
+
+    @staticmethod
+    def changeId(objectId, newid):
+        '''
+
+        :param objectId: the full object id (e.g., v-20150521151505633-17)
+        :param newid: the new id (e.g., 18)
+        :return: the full object id with the new id, e.g. v-20150521151505633-18
+        '''
+        regex = VersionManager.VERSION_ID_REGEX
+        return re.match(regex, objectId).group(1) + newid
+
 
     def historyList(self, noteId, allVersions, title):
         '''
@@ -160,7 +174,7 @@ class VersionManager(object):
             return
 
         # get the timestamps
-        metamngr = self._swiftMngr.metaMngrFactory(objectId)
+        metamngr = self._swiftMngr.metaManagerFactory(objectId)
         metaTime = metamngr.getLastModifiedDate(cutToSeconds=False)
 
         # support legacy notes
