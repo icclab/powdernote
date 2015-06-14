@@ -29,6 +29,7 @@ from collections import OrderedDict
 from VersionManager import VersionManager
 from ImportExportManager import ImportExportManager
 from powdernote.Configuration import Configuration
+from powdernote.KeystoneInterface import KeystoneInterface
 import re
 
 
@@ -616,3 +617,7 @@ class Powdernote(object):
     def importFromFile(self, filename):
         iem = ImportExportManager(self._swiftManager)
         iem.importFrom(filename)
+
+    def passwordupdate(self):
+        ki = KeystoneInterface()
+        ki.passwordupdate()

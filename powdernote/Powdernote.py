@@ -164,6 +164,10 @@ class ArgparseCommands(object):
             help='filename from where to import notes')
         parser_import.set_defaults(parser_import=True)
 
+        parser_update_pwd = subparsers.add_parser('pwd',
+            help='updates the user password')
+        parser_update_pwd.set_defaults(parser_update_pwd=True)
+
         args = parser.parse_args()
 
         pn = Powdernote()
@@ -234,6 +238,9 @@ class ArgparseCommands(object):
         elif args.__contains__("parser_import"):
             filename = args.filename
             pn.importFromFile(filename)
+
+        elif args.__contains__("parser_update_pwd"):
+            pn.passwordupdate()
 
 
 def main():
