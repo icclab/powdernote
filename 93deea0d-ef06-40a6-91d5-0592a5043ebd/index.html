@@ -19,12 +19,50 @@
   </section>
 
   <section class="main-content">
-    <h3>
-      <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>powdernote
-    </h3>
 
+    <h3>What is powdernote?</h3>
+    <p>Powdernote is a simple CLI-only note-taking application. It is based on
+      a Swift object storage backend.</p>
 
-    <iframe width="400" height="250" src="http://itsalmo.st/#powdernote:embed" scrolling="no" frameborder="0"></iframe>
+    <h3>Why use powdernote?</h3>
+    <p>It is very easy to use and features intuitive commands.
+      The simplicity of the powdernote will make your working days easier by
+      allowing you to access your notes from the command-line.</p>
+
+    <h3>Who is powdernote for?</h3>
+    <p>Powdernote is for advanced computer-users (power-users) who are
+      constantly working on the command-line and need to keep write down
+      something every now and then.</p>
+
+    <br>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/XrhJlsOUaOM" frameborder="0" allowfullscreen></iframe>
+
+    <h3> Your powdernote back-end.</h3>
+    <p>A back-end that that runs swift is a must for powdernote. We provide two
+      ways that allow you to have your own powdernote space.<br>If you want to create
+      your own local VM for powdernote, then go into the Vagrant folder inside the
+      powdernote repo. In the <code>user.sh</code> file you can change your
+      username and password, now just use <code>vagrant up</code> and the machine
+      will start up and configure itself. Now you only have to change your credentials
+      in the <code>.powdernoterc</code> file. Enter your username and password,
+      and 
+      <br>
+      </p>
+
+    <h3>Installation guide</h3>
+    <ol>
+      <li>First things first: download the repository.</li>
+
+      <li>Open the Configuration.py file and enter your credentials to the
+        corresponding parameters.</li>
+
+      <li>To install powdernote use <code> python setup.py sdist && sudo pip
+         install dist/powdernote-1.0.tar.gz </code> in the directory
+         of powdernote.</li>
+
+      <li>Now go ahead and use it. <code> powdernote -h </code></li>
+    </ol>
+
 
     <footer class="site-footer">
       <span class="site-footer-owner"><a href="https://github.com/icclab/powdernote">powdernote</a> is maintained by <a href="https://github.com/icclab">icclab</a>.</span>
