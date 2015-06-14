@@ -20,24 +20,55 @@
 
   <section class="main-content">
 
-    <h3>What is powdernote?</h3>
-    <p>Powdernote is a simple CLI-only note-taking application. It is based on
-      a Swift object storage backend.</p>
-
-    <h3>Why use powdernote?</h3>
-    <p>It is very easy to use and features intuitive commands.
-      The simplicity of the powdernote will make your working days easier by
-      allowing you to access your notes from the command-line.</p>
-
-    <h3>Who is powdernote for?</h3>
-    <p>Powdernote is for advanced computer-users (power-users) who are
-      constantly working on the command-line and need to keep write down
-      something every now and then.</p>
+    <div class="videoWrapper">
+      <iframe src="https://www.youtube.com/embed/XrhJlsOUaOM" frameborder="0" allowfullscreen class="video"></iframe>
+    </div>
 
     <br>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/XrhJlsOUaOM" frameborder="0" allowfullscreen></iframe>
 
-    <h3> Your powdernote back-end.</h3>
+    <h3>What is powdernote?</h3>
+    <p>Powdernote is a <b>note-taking</b>, <b>cloud-based</b> application for the <b>terminal</b>.</p>
+
+    <h3>Why powdernote?</h3>
+    <p>Because we never leave the terminal, not even to read our notes or create new ones.</p>
+
+    <p>This tool is for busy engineers, developers, power users, devops, ...</p>
+
+    <p>Our target is to have an <b>un-cluttered</b>, <b>distraction-free</b> application to solve the
+      simple task of taking notes and having them <b>available everywhere</b> (storage is on the cloud)!</p>
+
+    <h3>Main functions</h3>
+    <p><ul>
+        <li>Create, edit, delete, print, tag notes</li>
+        <li>Search content</li>
+        <li>Browse versions of notes</li>
+        <li>Export/import to/from powdernote files</li>
+      </ul>
+    </p>
+
+    <h3>Get it and try it</h3>
+    <p>powdernote is just a client application, you can grab it and install it easily, but then you need
+    an OpenStack Swift backend as your cloud storage.</p>
+
+    <p> For this you have three options:
+      <ol>
+        <li>Deploy your own Swift backend</li>
+        <li>Use our scripts to get a Swift all-in-one VM (see below)</li>
+        <li>Ask us for a free, no-sla, no-guarantees, test account from one of our clouds (see below)</li>
+      </ol>
+    </p>
+
+    <h3>Client installation</h3>
+    <ol>
+      <li>Download the repository (<a href="https://github.com/icclab/powdernote">clone</a> or get the <a href="https://github.com/icclab/powdernote/zipball/master">archive</a>)</li>
+      <li>Cd to the powdernote folder</li>
+      <li>Run the two commands below (note, you need <code>pip</code> and <code>python 2.7</code>): <br><code> python setup.py sdist</code><br><code> sudo pip
+         install dist/powdernote-1.0.tar.gz </code></li>
+      <li>Copy the sample configuration to your home directory and fill-in your credentials: <br><code>cp powdernoterc_sample.txt ~/.powdernoterc</code><br><code>vim ~/.powdernoterc</code></li>
+      <li>Now go ahead and use it: <br><code> powdernote -h </code></li>
+    </ol>
+
+    <h3>Get a all-in-one OpenStack Swift VM as storage back-end</h3>
     <p>A back-end that that runs swift is a must for powdernote. We provide two
       ways that allow you to have your own powdernote space.<br>If you want to create
       your own local VM for powdernote, then go into the Vagrant folder inside the
@@ -45,24 +76,28 @@
       username and password, now just use <code>vagrant up</code> and the machine
       will start up and configure itself. Now you only have to change your credentials
       in the <code>.powdernoterc</code> file. Enter your username and password,
-      and 
+      and
       <br>
       </p>
 
-    <h3>Installation guide</h3>
-    <ol>
-      <li>First things first: download the repository.</li>
+    <h3>Get some object storage from us (ICCLab)</h3>
+    <p>We can give you some Swift storage for powdernote, send us an email and we will
+    give you the credentials (you can then change your password with <code>powdernote pwd</code>).</p>
+    <p>This service comes for free, but with no warranties: we are happy to give you a bit of our clouds, but
+    if you choose so you will not consider us responsible for any loss or damage derived from the use of
+    our service (e.g., loss of data, downtimes, data exposure, ...).
+    </p>
+    <p>The bottom line is: do not use our Swift service for content-sensitive notes and frequently export your notes to files :).
+    To emphasize this, you will receive an HTTP (not HTTPS) endpoint for Swift.</p>
 
-      <li>Open the Configuration.py file and enter your credentials to the
-        corresponding parameters.</li>
+    <p>Contacts: <code>anke at zhaw dot ch</code> or <code>piiv at zhaw dot ch </code> </p>
 
-      <li>To install powdernote use <code> python setup.py sdist && sudo pip
-         install dist/powdernote-1.0.tar.gz </code> in the directory
-         of powdernote.</li>
-
-      <li>Now go ahead and use it. <code> powdernote -h </code></li>
-    </ol>
-
+    <h3>Made by</h3>
+    <p>
+      <a href="http://blog.zhaw.ch/icclab/" id="icclab_logo">
+        <img src="img/icclab.png" alt="icclab">
+      </a>
+    </p>
 
     <footer class="site-footer">
       <span class="site-footer-owner"><a href="https://github.com/icclab/powdernote">powdernote</a> is maintained by <a href="https://github.com/icclab">icclab</a>.</span>
