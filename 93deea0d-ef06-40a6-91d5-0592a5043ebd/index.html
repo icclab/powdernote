@@ -71,18 +71,16 @@
     <h3>Get a all-in-one OpenStack Swift VM as storage back-end</h3>
     <p>If you want to create your own local VM for powdernote, then go into the Vagrant folder inside the
       powdernote repo.
-      <p>In the <code>user.sh</code> file you can change your
-        username and password, now just use <code>vagrant up</code> and the machine
+      <p>Edit the <code>user.sh</code> file to set your
+        username and password, then just run <code>vagrant up</code> and the machine
         will start up and configure itself. Now you only have to change your credentials
-        in the <code>.powdernoterc</code> file. The standard credentials look like
-        this: </p>
+        in the <code>.powdernoterc</code> file.</p>
+        <p>The <code>[Auth]</code> section of the file will look like this (update username, password and container name):</p>
         <pre><code>
-          username = "username"
-          password = "password"
-          container_name = "powdernote-<i>username</i>"
-
-          tenant_name = username
-          auth_url = "http://192.168.33.10:5000/v2.0"
+          username=&ltusername&gt
+          password=&ltpassword&gt
+          container_name=powdernote-&ltusername&gt
+          auth_url=http://192.168.33.10:5000/v2.0
         </code></pre>
         <p>In case you shut down your VM with <code>vagrant halt</code>, don't worry.
           There is a script in the Vagrant folder that will boot your storage environment
