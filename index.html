@@ -67,6 +67,17 @@
       <li>Copy the sample configuration to your home directory and fill-in your credentials: <br><code>cp powdernoterc_sample.txt ~/.powdernoterc</code><br><code>vim ~/.powdernoterc</code></li>
       <li>Now go ahead and use it: <br><code> powdernote -h </code></li>
     </ol>
+    <p>
+    If you get this error:
+    <pre><code>
+      swiftclient.exceptions.ClientException:
+      Auth versions 2.0 and 3 require python-keystoneclient, install it or use Auth
+      version 1.0 which requires ST_AUTH, ST_USER, and ST_KEY environment
+      variables to be set or overridden with -A, -U, or -K.
+    </code></pre>
+    try <code>sudo –H pip uninstall six</code> and <code>sudo –H easy_install six</code> and everything should work again.
+
+    </p>
 
     <h3>Get a all-in-one OpenStack Swift VM as storage back-end</h3>
     <p>If you want to create your own local VM for powdernote, then go into the Vagrant folder inside the
