@@ -97,12 +97,13 @@ class SwiftManager(object):
             title = self._generateObjectTitle(note.getTitle())
         metaManager = MetaManager(self._storage_url, self._token, title)
         currentCreateDate = metaManager.getCreateDate()
+        content = note.getContent().encode('ascii', 'ignore')
         put_object(
             self._storage_url,
             self._token,
             Configuration.container_name,
             title,
-            note.getContent().encode('utf-8'))
+            content)
         lastModifiedDate = MetaManager.dateNow()
         # currentCreateDate may be None because note may be new
         # this comment is just a companion for the one above, he felt lonely
@@ -232,7 +233,7 @@ class SwiftManager(object):
             self._storage_url,
             self._token,
             Configuration.container_name,
-            noteId)[1]
+            noteId)[1].decode('utf-8')
 
     def _downloadContainer(self):
         return get_container(

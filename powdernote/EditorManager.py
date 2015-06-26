@@ -24,6 +24,7 @@ import os
 import sys
 import subprocess
 import re
+import codecs
 
 
 class EditorManager(object):
@@ -64,7 +65,7 @@ class EditorManager(object):
         '''
         tempnote = tempfile.NamedTemporaryFile()
         if self._existingContent is not None:
-            with open(tempnote.name, "w") as f:
+            with codecs.open(tempnote.name, "w", encoding='utf-8') as f:
                 f.write(self._existingContent)
             oldContent = self._existingContent
         else:
@@ -74,10 +75,11 @@ class EditorManager(object):
         # read file back
         with open(tempnote.name) as f:
             newContent = f.read()
+        newContent = unicode(newContent, 'utf-8')
 
         self._content = newContent
 
-        if (newContent == oldContent):
+        if newContent == oldContent:
             return self.NO_NEW_CONTENT_AVAILABLE
         else:
             return self.NEW_CONTENT_AVAILABLE
